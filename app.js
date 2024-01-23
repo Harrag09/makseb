@@ -6,6 +6,7 @@ const { connectToDatabase } = require('./config/dbConfig.js');
 const livestatsRoutes = require('./routes/livestatsRoutes.js');
 const authRoutes = require('./routes/auth.js');
 const usersRoutes = require('./routes/users.js');
+const cors = require("cors");
 
 
 const app = express();

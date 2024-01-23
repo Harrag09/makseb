@@ -45,27 +45,31 @@ const user = response;
 
      res.cookie("access_token", access_token, {
 httpOnly: true,
-  domain: '.localhost:3000',
+sameSite: 'None',
+
   secure: false,
 
 });
 
 res.cookie("loggedIn", "loggedIn", {
 httpOnly: true,
-   domain: '.localhost:3000',
+sameSite: 'None',
+
   secure: false,
 
 });
 
 res.cookie("idCRM", user.idCRM, {
 httpOnly: true,
-  domain: '.localhost:3000',
+sameSite: 'None',
+
   secure: false,
  
 });
 
 res.cookie("idUser", user._id.toString(), {
-    domain: '.localhost:3000',
+ sameSite: 'None',
+
 httpOnly: true,
   secure: false,
 

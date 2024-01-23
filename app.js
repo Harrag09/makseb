@@ -1,7 +1,7 @@
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
 const { connectToDatabase } = require('./config/dbConfig.js');
 const livestatsRoutes = require('./routes/livestatsRoutes.js');
 const authRoutes = require('./routes/auth.js');
@@ -15,10 +15,12 @@ app.use(cookieParser());
 
 // Enable CORS
 app.use(cors({
-    origin: ['https://harrag09.github.io/maksebfrontend/', 'http://localhost:3000'],
+    origin: ['https://harrag09.github.io', 'http://localhost:3000'],
     credentials: true,
 }));
 
+// Handle preflight requests
+app.options('*', cors());
 
 // Connect to MongoDB
 connectToDatabase();

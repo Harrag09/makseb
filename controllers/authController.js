@@ -56,7 +56,7 @@ res.cookie("loggedIn", "loggedIn", {
        secure: false,
   domain: ".localhost:3000", 
   path: "/",
-  sameSite: "none"
+  sameSite: "Lax"
 });
 
 res.cookie("idCRM", user.idCRM, {
@@ -64,7 +64,7 @@ res.cookie("idCRM", user.idCRM, {
        secure: false,
   domain: ".localhost:3000",
   path: "/",
-  sameSite: "None"
+  sameSite: "Lax"
 });
 
 res.cookie("idUser", user._id.toString(), {
@@ -72,7 +72,7 @@ res.cookie("idUser", user._id.toString(), {
        secure: false,
   domain: ".localhost:3000",
   path: "/",
-  sameSite: "None"
+  sameSite: "Lax"
 });
 
 

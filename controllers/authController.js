@@ -40,40 +40,43 @@ dotenv.config();
         const userRole = decodedToken.Role;
         console.log(userRole);
       }
-const user = response
-const domain = "makseb.onrender.com";
-     const secureFlag = false;
-      res.cookie("access_token", access_token, {
+const user = response;
+
+     const domain = "makseb.onrender.com"; // Set the correct domain for your application
+const secureFlag = false; // Set to true if using HTTPS, false otherwise
+
+res.cookie("access_token", access_token, {
   httpOnly: true,
   secure: secureFlag,
   domain: domain,
   path: "/",
-  sameSite: "Lax"
+  sameSite: "None" // Set to "None" if you need cross-origin access
 });
-console.log("me",access_token);
+
 res.cookie("loggedIn", "loggedIn", {
-  httpOnly: false,
+  httpOnly: true,
   secure: secureFlag,
   domain: domain,
   path: "/",
-  sameSite: "Lax"
+  sameSite: "None"
 });
 
 res.cookie("idCRM", user.idCRM, {
-  httpOnly: false,
+  httpOnly: true,
   secure: secureFlag,
   domain: domain,
   path: "/",
-  sameSite: "Lax"
+  sameSite: "None"
 });
 
 res.cookie("idUser", user._id.toString(), {
-  httpOnly: false,
+  httpOnly: true,
   secure: secureFlag,
   domain: domain,
   path: "/",
-  sameSite: "Lax"
+  sameSite: "None"
 });
+
 
 
       return res.status(200).json({

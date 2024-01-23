@@ -67,8 +67,7 @@ res.cookie("idCRM", user.idCRM, {
 });
 
 res.cookie("idUser", user._id.toString(), {
- httpOnly: true,
-    secure: true,
+
   domain: ".localhost:3000",
   path: "/",
   sameSite: "Lax"

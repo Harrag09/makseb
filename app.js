@@ -21,6 +21,11 @@ app.use('/', livestatsRoutes);
 app.use('/', authRoutes);
 app.use('/api',usersRoutes)
 
+app.use(cors({
+    origin: ['https://makseb.onrender.com',"http://localhost:3000"],
+    credentials: true,
+}))
+
 
 const PORT = 8002;
 

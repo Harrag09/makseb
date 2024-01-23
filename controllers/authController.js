@@ -44,16 +44,11 @@ const user = response;
 
 
      res.cookie("access_token", access_token, {
-  httpOnly: true,
-  secure: false, // Set to true in production, false in development
-  domain: "localhost",
-  path: "/",
-  sameSite: "Lax",
+
+
 });
 
 res.cookie("loggedIn", "loggedIn", {
-
-  domain: "localhost",
  
 
 });

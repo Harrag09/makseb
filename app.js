@@ -15,16 +15,10 @@ app.use(cookieParser());
 
 // Enable CORS
 app.use(cors({
-    origin: ['https://harrag09.github.io/maksebfrontend', 'http://localhost:3000'],
+    origin: ['https://harrag09.github.io/maksebfrontend/', 'http://localhost:3000'],
     credentials: true,
 }));
 
-app.options('*', cors());
-
-app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Credentials', true);
-    next();
-});
 
 // Connect to MongoDB
 connectToDatabase();

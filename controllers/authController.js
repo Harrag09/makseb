@@ -45,7 +45,7 @@ const user = response;
 
      res.cookie("access_token", access_token, {
 httpOnly: true,
-sameSite: 'None',
+sameSite: 'Lax',
 
   secure: false,
 
@@ -53,7 +53,7 @@ sameSite: 'None',
 
 res.cookie("loggedIn", "loggedIn", {
 httpOnly: true,
-sameSite: 'None',
+sameSite: 'Lax',
 
   secure: false,
 
@@ -61,14 +61,14 @@ sameSite: 'None',
 
 res.cookie("idCRM", user.idCRM, {
 httpOnly: true,
-sameSite: 'None',
+sameSite: 'Lax',
 
   secure: false,
  
 });
 
 res.cookie("idUser", user._id.toString(), {
- sameSite: 'None',
+ sameSite: 'Lax',
 
 httpOnly: true,
   secure: false,

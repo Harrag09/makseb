@@ -44,23 +44,23 @@ const user = response;
 
 
      res.cookie("access_token", access_token, {
-
+httpOnly: true, domain: '.onrender.com'
 
 });
 
 res.cookie("loggedIn", "loggedIn", {
- 
+ httpOnly: true, domain: '.onrender.com'
 
 });
 
 res.cookie("idCRM", user.idCRM, {
-  domain: "localhost",
+ httpOnly: true, domain: '.onrender.com'
  
 });
 
 res.cookie("idUser", user._id.toString(), {
   
-  domain: "localhost",
+httpOnly: true, domain: '.onrender.com'
 
 });
 

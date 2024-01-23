@@ -26,9 +26,9 @@ app.options('*', cors());
 connectToDatabase();
 
 // Routes
-app.use('/', livestatsRoutes);
-app.use('/', authRoutes);
-app.use('/api', usersRoutes);
+app.use('/', cors(),livestatsRoutes);
+app.use('/',cors(), authRoutes);
+app.use('/api',cors(), usersRoutes);
 
 const PORT = 8002;
 

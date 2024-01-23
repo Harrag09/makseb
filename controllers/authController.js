@@ -45,7 +45,7 @@ const user = response
       res.cookie("access_token", access_token, {
        httpOnly: true,
        secure: false,
-  domain: ".localhost:3000", // Corrected domain
+  domain: ".localhost:3000/maksebfronten", // Corrected domain
   path: "/",
   sameSite: "Lax"
 });
@@ -54,7 +54,7 @@ const user = response
 res.cookie("loggedIn", "loggedIn", {
   httpOnly: true,
        secure: false,
-  domain: ".localhost:3000", 
+  domain: ".localhost:3000/maksebfronten", 
   path: "/",
   sameSite: "Lax"
 });
@@ -62,7 +62,7 @@ res.cookie("loggedIn", "loggedIn", {
 res.cookie("idCRM", user.idCRM, {
    httpOnly: true,
        secure: false,
-  domain: ".localhost:3000",
+  domain: ".localhost:3000/maksebfronten",
   path: "/",
   sameSite: "Lax"
 });
@@ -70,7 +70,7 @@ res.cookie("idCRM", user.idCRM, {
 res.cookie("idUser", user._id.toString(), {
   httpOnly: true,
        secure: false,
-  domain: ".localhost:3000",
+  domain: ".localhost:3000/maksebfronten",
   path: "/",
   sameSite: "Lax"
 });

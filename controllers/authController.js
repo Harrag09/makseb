@@ -52,27 +52,21 @@ const user = response;
 });
 
 res.cookie("loggedIn", "loggedIn", {
-  httpOnly: true,
-  secure: true, // Set to true in production, false in development
+
   domain: "localhost",
-  path: "/",
-  sameSite: "none",
+ 
+
 });
 
 res.cookie("idCRM", user.idCRM, {
-  httpOnly: true,
-  secure: false, // Set to true in production, false in development
   domain: "localhost",
-  path: "/",
-  sameSite: "Lax",
+ 
 });
 
 res.cookie("idUser", user._id.toString(), {
-  httpOnly: true,
-  secure: true, // Set to true in production, false in development
+  
   domain: "localhost",
-  path: "/",
-  sameSite: "none",
+
 });
 
 

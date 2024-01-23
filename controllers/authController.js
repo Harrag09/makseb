@@ -40,37 +40,38 @@ dotenv.config();
         const userRole = decodedToken.Role;
         console.log(userRole);
       }
-
+const user = response
 
       res.cookie("access_token", access_token, {
-  httpOnly: true,
+       httpOnly: true,
+       secure: true,
   domain: ".localhost:3000", // Corrected domain
   path: "/",
-  sameSite: "Lax",
+  sameSite: "Lax"
 });
 
-const user = response;
+;
 res.cookie("loggedIn", "loggedIn", {
-  httpOnly: true,
-
-  domain: ".localhost:3000", // Corrected domain
+httpOnly: true,
+       secure: true,
+  domain: ".localhost:3000", 
   path: "/",
-  sameSite: "Lax",
+  sameSite: "Lax"
 });
 
 res.cookie("idCRM", user.idCRM, {
   httpOnly: true,
-
-  domain: ".localhost:3000", // Corrected domain
+  domain: ".localhost:3000",
   path: "/",
-  sameSite: "Lax",
+  sameSite: "Lax"
 });
 
 res.cookie("idUser", user._id.toString(), {
-
-  domain: ".localhost:3000", // Corrected domain
+ httpOnly: true,
+    secure: true,
+  domain: ".localhost:3000",
   path: "/",
-  sameSite: "Lax",
+  sameSite: "Lax"
 });
 
 

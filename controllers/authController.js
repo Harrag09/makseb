@@ -41,7 +41,7 @@ dotenv.config();
         console.log(userRole);
       }
 const user = response
-const domain = "localhost";
+const domain = "makseb.onrender.com";
      const secureFlag = false;
       res.cookie("access_token", access_token, {
   httpOnly: true,

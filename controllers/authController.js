@@ -39,13 +39,12 @@ dotenv.config();
       if (decodedToken) {
         const userRole = decodedToken.Role;
         console.log(userRole);
-        // Use the userRole as needed in your front-end code
       }
 
 
       res.cookie("access_token", access_token, {
   httpOnly: true,
-  secure: true,
+
   domain: ".localhost:3000", // Corrected domain
   path: "/",
   sameSite: "Lax",
@@ -54,7 +53,7 @@ dotenv.config();
 const user = response;
 res.cookie("loggedIn", "loggedIn", {
   httpOnly: true,
-  secure: true,
+
   domain: ".localhost:3000", // Corrected domain
   path: "/",
   sameSite: "Lax",
@@ -62,21 +61,20 @@ res.cookie("loggedIn", "loggedIn", {
 
 res.cookie("idCRM", user.idCRM, {
   httpOnly: true,
-  secure: true,
+
   domain: ".localhost:3000", // Corrected domain
   path: "/",
   sameSite: "Lax",
 });
 
 res.cookie("idUser", user._id.toString(), {
-  httpOnly: true,
-  secure: true,
+
   domain: ".localhost:3000", // Corrected domain
   path: "/",
   sameSite: "Lax",
 });
 res.cookie("access_token", access_token, {
-  httpOnly: true,
+
   secure: true,
   domain: ".localhost:3000", // Corrected domain
   path: "/",

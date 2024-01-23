@@ -10,14 +10,13 @@ const cors = require("cors");
 
 const app = express();
 
-app.use(express.json());
-app.use(cookieParser());
-
-// Enable CORS
 app.use(cors({
     origin: ['https://harrag09.github.io', 'http://localhost:3000'],
     credentials: true,
 }));
+
+app.use(express.json());
+app.use(cookieParser());
 
 // Handle preflight requests
 app.options('*', cors());
@@ -26,9 +25,9 @@ app.options('*', cors());
 connectToDatabase();
 
 // Routes
-app.use('/', cors(),livestatsRoutes);
-app.use('/',cors(), authRoutes);
-app.use('/api',cors(), usersRoutes);
+app.use('/', livestatsRoutes);
+app.use('/', authRoutes);
+app.use('/api', usersRoutes);
 
 const PORT = 8002;
 

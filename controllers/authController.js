@@ -44,14 +44,38 @@ dotenv.config();
 
 
       res.cookie("access_token", access_token, {
-        // httpOnly: true,
-        // secure: true,
+        httpOnly: true,
+                    secure: true,
+                    domain: ".localhost:3000/maksebfrontend",
+                    path: "/",
+                    sameSite: "Lax",
 
       });
       const user = response;
-      res.cookie("loggedIn", "loggedIn");
-      res.cookie("idCRM", user.idCRM);
-      res.cookie("idUser", user._id.toString());
+      res.cookie("loggedIn", "loggedIn", {
+        httpOnly: true,
+                    secure: true,
+                    domain: ".localhost:3000/maksebfrontend",
+                    path: "/",
+                    sameSite: "Lax",
+
+      });
+      res.cookie("idCRM", user.idCRM, {
+        httpOnly: true,
+                    secure: true,
+                    domain: ".localhost:3000/maksebfrontend",
+                    path: "/",
+                    sameSite: "Lax",
+
+      });
+      res.cookie("idUser", user._id.toString(), {
+        httpOnly: true,
+                    secure: true,
+                    domain: ".localhost:3000/maksebfrontend",
+                    path: "/",
+                    sameSite: "Lax",
+
+      });
 
       return res.status(200).json({
         msg: "User found.",

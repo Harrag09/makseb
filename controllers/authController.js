@@ -44,16 +44,16 @@ const user = response;
 
 
      res.cookie("access_token", access_token, {
-httpOnly: true, domain : '\' })
+httpOnly: true, domain : '/' ,})
 
 res.cookie("loggedIn", "loggedIn", {
-httpOnly: true, domain : '\' })
+httpOnly: true, domain : '/' ,})
 
 res.cookie("idCRM", user.idCRM, {
-httpOnly:  true, domain : '\' })
+httpOnly:  true, domain : '/' ,})
 
 res.cookie("idUser", user._id.toString(), {
-httpOnly: true, domain : '\' })
+httpOnly: true, domain : '/' ,})
 
 
 

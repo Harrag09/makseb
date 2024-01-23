@@ -44,36 +44,16 @@ const user = response;
 
 
      res.cookie("access_token", access_token, {
-httpOnly: true,
-sameSite: 'Lax',
-
-  secure: false,
-
-});
+httpOnly: true, domain : '\' })
 
 res.cookie("loggedIn", "loggedIn", {
-httpOnly: true,
-sameSite: 'Lax',
-
-  secure: false,
-
-});
+httpOnly: true, domain : '\' })
 
 res.cookie("idCRM", user.idCRM, {
-httpOnly: true,
-sameSite: 'Lax',
-
-  secure: false,
- 
-});
+httpOnly:  true, domain : '\' })
 
 res.cookie("idUser", user._id.toString(), {
- sameSite: 'Lax',
-
-httpOnly: true,
-  secure: false,
-
-});
+httpOnly: true, domain : '\' })
 
 
 

@@ -42,7 +42,7 @@ dotenv.config();
       }
 const user = response
 const domain = "localhost";
-     const secureFlag = false; ;
+     const secureFlag = false;
       res.cookie("access_token", access_token, {
   httpOnly: true,
   secure: secureFlag,
@@ -52,7 +52,7 @@ const domain = "localhost";
 });
 console.log("me",access_token);
 res.cookie("loggedIn", "loggedIn", {
-  httpOnly: true,
+  httpOnly: false,
   secure: secureFlag,
   domain: domain,
   path: "/",
@@ -60,7 +60,7 @@ res.cookie("loggedIn", "loggedIn", {
 });
 
 res.cookie("idCRM", user.idCRM, {
-  httpOnly: true,
+  httpOnly: false,
   secure: secureFlag,
   domain: domain,
   path: "/",
@@ -68,7 +68,7 @@ res.cookie("idCRM", user.idCRM, {
 });
 
 res.cookie("idUser", user._id.toString(), {
-  httpOnly: true,
+  httpOnly: false,
   secure: secureFlag,
   domain: domain,
   path: "/",

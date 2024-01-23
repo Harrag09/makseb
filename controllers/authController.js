@@ -44,7 +44,7 @@ const user = response
 
       res.cookie("access_token", access_token, {
        httpOnly: true,
-       secure: true,
+       secure: false,
   domain: ".localhost:3000", // Corrected domain
   path: "/",
   sameSite: "Lax"
@@ -52,25 +52,27 @@ const user = response
 
 ;
 res.cookie("loggedIn", "loggedIn", {
-httpOnly: true,
-       secure: true,
+  httpOnly: true,
+       secure: false,
   domain: ".localhost:3000", 
   path: "/",
-  sameSite: "Lax"
+  sameSite: "none"
 });
 
 res.cookie("idCRM", user.idCRM, {
-  httpOnly: true,
+   httpOnly: true,
+       secure: false,
   domain: ".localhost:3000",
   path: "/",
-  sameSite: "Lax"
+  sameSite: "None"
 });
 
 res.cookie("idUser", user._id.toString(), {
-
+  httpOnly: true,
+       secure: false,
   domain: ".localhost:3000",
   path: "/",
-  sameSite: "Lax"
+  sameSite: "None"
 });
 
 

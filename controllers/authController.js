@@ -45,7 +45,7 @@ const user = response;
 
      res.cookie("access_token", access_token, {
   httpOnly: true,
-  secure: process.env.NODE_ENV === 'production', // Set to true in production, false in development
+  secure: false, // Set to true in production, false in development
   domain: "localhost",
   path: "/",
   sameSite: "Lax",
@@ -53,7 +53,7 @@ const user = response;
 
 res.cookie("loggedIn", "loggedIn", {
   httpOnly: true,
-  secure: process.env.NODE_ENV === 'production', // Set to true in production, false in development
+  secure: true, // Set to true in production, false in development
   domain: "localhost",
   path: "/",
   sameSite: "Lax",
@@ -61,7 +61,7 @@ res.cookie("loggedIn", "loggedIn", {
 
 res.cookie("idCRM", user.idCRM, {
   httpOnly: true,
-  secure: process.env.NODE_ENV === 'production', // Set to true in production, false in development
+  secure: false, // Set to true in production, false in development
   domain: "localhost",
   path: "/",
   sameSite: "Lax",
@@ -69,7 +69,7 @@ res.cookie("idCRM", user.idCRM, {
 
 res.cookie("idUser", user._id.toString(), {
   httpOnly: true,
-  secure: process.env.NODE_ENV === 'production', // Set to true in production, false in development
+  secure: true, // Set to true in production, false in development
   domain: "localhost",
   path: "/",
   sameSite: "Lax",

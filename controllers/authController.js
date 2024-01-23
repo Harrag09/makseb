@@ -41,40 +41,39 @@ dotenv.config();
         console.log(userRole);
       }
 const user = response
-
+const domain = "localhost";
+     const secureFlag = false; ;
       res.cookie("access_token", access_token, {
-       httpOnly: true,
-       secure: false,
-  domain: ".localhost:3000/maksebfronten", // Corrected domain
+  httpOnly: true,
+  secure: secureFlag,
+  domain: domain,
   path: "/",
   sameSite: "Lax"
 });
-
-;
+console.log("me",access_token);
 res.cookie("loggedIn", "loggedIn", {
   httpOnly: true,
-       secure: false,
-  domain: ".localhost:3000/maksebfronten", 
+  secure: secureFlag,
+  domain: domain,
   path: "/",
   sameSite: "Lax"
 });
 
 res.cookie("idCRM", user.idCRM, {
-   httpOnly: true,
-       secure: false,
-  domain: ".localhost:3000/maksebfronten",
+  httpOnly: true,
+  secure: secureFlag,
+  domain: domain,
   path: "/",
   sameSite: "Lax"
 });
 
 res.cookie("idUser", user._id.toString(), {
   httpOnly: true,
-       secure: false,
-  domain: ".localhost:3000/maksebfronten",
+  secure: secureFlag,
+  domain: domain,
   path: "/",
   sameSite: "Lax"
 });
-
 
 
       return res.status(200).json({

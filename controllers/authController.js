@@ -42,40 +42,43 @@ dotenv.config();
       }
 const user = response;
 
-     const domain = "makseb.onrender.com"; // Set the correct domain for your application
-const secureFlag = false; // Set to true if using HTTPS, false otherwise
 
-res.cookie("access_token", access_token, {
+     res.cookie("access_token", access_token, {
   httpOnly: true,
-  secure: secureFlag,
-  domain: domain,
+  secure: process.env.NODE_ENV === 'production', // Set to true in production, false in development
+  domain: "localhost",
   path: "/",
-  sameSite: "None" // Set to "None" if you need cross-origin access
+  sameSite: "Lax",
 });
 
+const user = response;
 res.cookie("loggedIn", "loggedIn", {
   httpOnly: true,
-  secure: secureFlag,
-  domain: domain,
+  secure: process.env.NODE_ENV === 'production', // Set to true in production, false in development
+  domain: "localhost",
   path: "/",
-  sameSite: "None"
+  sameSite: "Lax",
 });
 
 res.cookie("idCRM", user.idCRM, {
   httpOnly: true,
-  secure: secureFlag,
-  domain: domain,
+  secure: process.env.NODE_ENV === 'production', // Set to true in production, false in development
+  domain: "localhost",
   path: "/",
-  sameSite: "None"
+  sameSite: "Lax",
 });
 
 res.cookie("idUser", user._id.toString(), {
   httpOnly: true,
-  secure: secureFlag,
-  domain: domain,
+  secure: process.env.NODE_ENV === 'production', // Set to true in production, false in development
+  domain: "localhost",
   path: "/",
-  sameSite: "None"
+  sameSite: "Lax",
 });
+
+
+
+
 
 
 

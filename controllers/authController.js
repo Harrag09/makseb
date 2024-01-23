@@ -44,17 +44,43 @@ const user = response;
 
 
      res.cookie("access_token", access_token, {
-httpOnly: true, domain : '/' ,})
+      
+httpOnly: true,
+                    secure: true,
+                    domain: ".makseb.onrender.com",
+                    path: "/",
+                    sameSite: "Lax"
+     }
+               )
 
-res.cookie("loggedIn", "loggedIn", {
-httpOnly: true, domain : '/' ,})
+res.cookie("loggedIn", "loggedIn",  {
+      
+httpOnly: true,
+                    secure: true,
+                    domain: ".makseb.onrender.com",
+                    path: "/",
+                    sameSite: "Lax"
+     }
+               )
 
-res.cookie("idCRM", user.idCRM, {
-httpOnly:  true, domain : '/' ,})
-
-res.cookie("idUser", user._id.toString(), {
-httpOnly: true, domain : '/' ,})
-
+res.cookie("idCRM", user.idCRM,  {
+      
+httpOnly: true,
+                    secure: true,
+                    domain: ".makseb.onrender.com",
+                    path: "/",
+                    sameSite: "Lax"
+     }
+               )
+res.cookie("idUser", user._id.toString(),  {
+      
+httpOnly: true,
+                    secure: true,
+                    domain: ".makseb.onrender.com",
+                    path: "/",
+                    sameSite: "Lax"
+     }
+               )
 
 
 

@@ -23,7 +23,7 @@ app.use('/', authRoutes);
 app.use('/api',usersRoutes)
 
 app.use(cors({
-    origin: ['https://makseb.onrender.com',"http://localhost:3000"],
+    origin: ['https://harrag09.github.io/maksebfrontend',"http://localhost:3000"],
     credentials: true,
 }))
 

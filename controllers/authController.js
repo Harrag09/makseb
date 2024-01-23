@@ -51,7 +51,6 @@ const user = response;
   sameSite: "Lax",
 });
 
-const user = response;
 res.cookie("loggedIn", "loggedIn", {
   httpOnly: true,
   secure: process.env.NODE_ENV === 'production', // Set to true in production, false in development

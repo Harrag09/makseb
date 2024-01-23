@@ -56,7 +56,7 @@ res.cookie("loggedIn", "loggedIn", {
   secure: true, // Set to true in production, false in development
   domain: "localhost",
   path: "/",
-  sameSite: "Lax",
+  sameSite: "none",
 });
 
 res.cookie("idCRM", user.idCRM, {
@@ -72,7 +72,7 @@ res.cookie("idUser", user._id.toString(), {
   secure: true, // Set to true in production, false in development
   domain: "localhost",
   path: "/",
-  sameSite: "Lax",
+  sameSite: "none",
 });
 
 

@@ -44,59 +44,60 @@ const user = response;
 
 
 res.cookie("access_token", access_token, {
-  httpOnly: true,
-  secure: true,
-  domain: ".harrag09.github.io/maksebfrontend",
-  path: "/",
-  sameSite: "Lax"
-}, (err) => {
-  if (err) {
-    console.error("Error setting access_token cookie:", err);
-  }
-});
+//   httpOnly: true,
+//   secure: true,
+//   domain: ".harrag09.github.io/maksebfrontend",
+//   path: "/",
+//   sameSite: "Lax"
+// }, (err) => {
+//   if (err) {
+//     console.error("Error setting access_token cookie:", err);
+//   }
+}
+ );
 
 // Repeat similar error handling for other cookies
 
 
 res.cookie("loggedIn", "loggedIn", {
-  httpOnly: true,
-  secure: true,
-  domain: ".harrag09.github.io/maksebfrontend",
-  path: "/",
-  sameSite: "Lax"
-}, (err) => {
-  if (err) {
-    console.error("Error setting loggedIn cookie:", err);
-    return  res.status(500).json({ msg: err?.message, success: false });
+//   httpOnly: true,
+//   secure: true,
+//   domain: ".harrag09.github.io/maksebfrontend",
+//   path: "/",
+//   sameSite: "Lax"
+// }, (err) => {
+//   if (err) {
+//     console.error("Error setting loggedIn cookie:", err);
+//     return  res.status(500).json({ msg: err?.message, success: false });
   
-  }
+//   }
 });
 
      
 res.cookie("idCRM", user.idCRM,  {
-  httpOnly: true,
-  secure: true,
-  domain: ".harrag09.github.io/maksebfrontend",
-  path: "/",
-  sameSite: "Lax"
-}, (err) => {
-  if (err) {
-    console.error("Error setting idCRM cookie:", err);
-  return res.status(500).json({ msg: err?.message, success: false });
-  }
+//   httpOnly: true,
+//   secure: true,
+//   domain: ".harrag09.github.io/maksebfrontend",
+//   path: "/",
+//   sameSite: "Lax"
+// }, (err) => {
+//   if (err) {
+//     console.error("Error setting idCRM cookie:", err);
+//   return res.status(500).json({ msg: err?.message, success: false });
+//   }
 });
      
 res.cookie("idUser", user._id.toString(), {
-  httpOnly: true,
-  secure: true,
-  domain: ".harrag09.github.io/maksebfrontend",
-  path: "/",
-  sameSite: "Lax"
-}, (err) => {
-  if (err) {
-    console.error("Error setting idUser cookie:", err);
-  return res.status(500).json({ msg: err?.message, success: false });
-  }
+//   httpOnly: true,
+//   secure: true,
+//   domain: ".harrag09.github.io/maksebfrontend",
+//   path: "/",
+//   sameSite: "Lax"
+// }, (err) => {
+//   if (err) {
+//     console.error("Error setting idUser cookie:", err);
+//   return res.status(500).json({ msg: err?.message, success: false });
+//   }
 });
 
 

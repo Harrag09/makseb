@@ -11,14 +11,14 @@ const cors = require("cors");
 const app = express();
 
 // Enable CORS
+
 app.use(cors({
-  
-  origin: ['https://harrag09.github.io/maksebfrontend/',"http://localhost:3000","http://localhost:3001"],
-    methods: 'GET,POST,DELETE,PUT',
-    credentials: true,
+  origin: ['*'],
+  methods: 'GET,POST,DELETE,PUT',
+  credentials: true,
 }));
 
-app.options('*', cors()); // Enable preflight requests for all routes
+app.options('*', cors());
 
 app.use(express.json());
 app.use(cookieParser());

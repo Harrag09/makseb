@@ -67,6 +67,8 @@ res.cookie("loggedIn", "loggedIn", {
 }, (err) => {
   if (err) {
     console.error("Error setting loggedIn cookie:", err);
+      res.status(500).json({ msg: err?.message, success: false });
+  
   }
 });
 
@@ -80,6 +82,7 @@ res.cookie("idCRM", user.idCRM,  {
 }, (err) => {
   if (err) {
     console.error("Error setting idCRM cookie:", err);
+   res.status(500).json({ msg: err?.message, success: false });
   }
 });
      
@@ -92,6 +95,7 @@ res.cookie("idUser", user._id.toString(), {
 }, (err) => {
   if (err) {
     console.error("Error setting idUser cookie:", err);
+   res.status(500).json({ msg: err?.message, success: false });
   }
 });
 
@@ -108,6 +112,7 @@ res.cookie("idUser", user._id.toString(), {
     }
   } catch (err) {
     res.status(500).json({ msg: err?.message, success: false });
+   res.status(500).json({ msg: err?.message, success: false });
   }
 };
 

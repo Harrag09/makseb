@@ -1,29 +1,29 @@
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+const express = require('express');
+const cookieParser = require('cookie-parser');
 const { connectToDatabase } = require('./config/dbConfig.js');
+const cors = require('cors');
 const livestatsRoutes = require('./routes/livestatsRoutes.js');
 const authRoutes = require('./routes/auth.js');
 const usersRoutes = require('./routes/users.js');
-const cors = require("cors");
 
 const app = express();
 
-// Enable CORS
-
+// Enable CORS for the specific origin
 app.use(cors({
-  origin: ['*'],
-  methods: 'GET,POST,DELETE,PUT',
+  origin: ['https://harrag09.github.io','http://localhost:3001'],
+  methods: 'GET, POST, OPTIONS, PUT, PATCH, DELETE',
   credentials: true,
 }));
 
+
+
 app.options('*', cors());
+
 
 app.use(express.json());
 app.use(cookieParser());
 
-// Connect to MongoDB
+// Connect to the database
 connectToDatabase();
 
 // Routes

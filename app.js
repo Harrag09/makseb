@@ -1,7 +1,7 @@
-const express = require('express');
-const path = require('path');
-const cookieParser = require('cookie-parser');
-const logger = require('morgan');
+var express = require('express');
+var path = require('path');
+var cookieParser = require('cookie-parser');
+var logger = require('morgan');
 const { connectToDatabase } = require('./config/dbConfig.js');
 const livestatsRoutes = require('./routes/livestatsRoutes.js');
 const authRoutes = require('./routes/auth.js');
@@ -10,23 +10,17 @@ const cors = require("cors");
 
 const app = express();
 
-// Middleware to set common headers for all routes
-// app.use(function(req, res, next) {
-//   res.header("Access-Control-Allow-Origin", "*");
-//   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-//   next();
-// });
-
+// Enable CORS
 app.use(cors({
-    origin: ['https://harrag09.github.io', 'http://localhost:3000'],
+    origin: '*', 
+    methods: 'GET,POST,DELETE,PUT',
     credentials: true,
 }));
 
+app.options('*', cors()); // Enable preflight requests for all routes
+
 app.use(express.json());
 app.use(cookieParser());
-
-// Handle preflight requests
-app.options('*', cors());
 
 // Connect to MongoDB
 connectToDatabase();
@@ -40,7 +34,7 @@ const PORT = 8002;
 
 // Start the server
 app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+  console.log(`Server is running on port ${PORT}`);
 });
 
 module.exports = app;

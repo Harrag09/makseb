@@ -7,7 +7,7 @@ const { verifyAccessToken } = verifyToken;
 
 const livestatsRoutes = express.Router();
 
-livestatsRoutes.get("/livestats", [verifyAccessToken], getLivestatById);
+livestatsRoutes.get("/livestats", getLivestatById);
 livestatsRoutes.post("/Update", updateLivestat);
 livestatsRoutes.post("/Update2", updateLivestat2);
 livestatsRoutes.get("/livestats2", getLivestat);

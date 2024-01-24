@@ -46,7 +46,7 @@ const user = response;
 res.cookie("access_token", access_token, {
   httpOnly: true,
   secure: true,
-  domain: ".makseb.onrender.com",
+  domain: ".harrag09.github.io/maksebfrontend",
   path: "/",
   sameSite: "Lax"
 }, (err) => {
@@ -61,7 +61,7 @@ res.cookie("access_token", access_token, {
 res.cookie("loggedIn", "loggedIn", {
   httpOnly: true,
   secure: true,
-  domain: ".makseb.onrender.com",
+  domain: ".harrag09.github.io/maksebfrontend",
   path: "/",
   sameSite: "Lax"
 }, (err) => {
@@ -74,7 +74,7 @@ res.cookie("loggedIn", "loggedIn", {
 res.cookie("idCRM", user.idCRM,  {
   httpOnly: true,
   secure: true,
-  domain: ".makseb.onrender.com",
+  domain: ".harrag09.github.io/maksebfrontend",
   path: "/",
   sameSite: "Lax"
 }, (err) => {
@@ -86,7 +86,7 @@ res.cookie("idCRM", user.idCRM,  {
 res.cookie("idUser", user._id.toString(), {
   httpOnly: true,
   secure: true,
-  domain: ".makseb.onrender.com",
+  domain: ".harrag09.github.io/maksebfrontend",
   path: "/",
   sameSite: "Lax"
 }, (err) => {

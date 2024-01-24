@@ -4,7 +4,7 @@ const { connectToDatabase, client } = require('../config/dbConfig.js');
 const { ObjectId } = require('mongodb');
 
 const getLivestat = async (req, res) => {
-  const idCRM = req.cookies.idCRM;
+  const idCRM = req.query.idCRM;
 
   try {
     const db = await connectToDatabase();
@@ -24,7 +24,7 @@ const getLivestat = async (req, res) => {
 };
 
 const getLivestatById = async (req, res) => {
-  const idCRM = req.cookies.idCRM;
+  const idCRM = req.query.idCRM;
 
   try {
     const db = await connectToDatabase();
@@ -45,7 +45,6 @@ const getLivestatById = async (req, res) => {
 
 const updateLivestat = async (req, res) => {
   const data = req.body;
-  console.log(data)
   try {
     const db = await connectToDatabase();
     const collection = db.collection('livestats');
@@ -104,12 +103,10 @@ const updateLivestat = async (req, res) => {
 
 const updateLivestat2 = async (req, res) => {
   const data = req.body;
-  console.log(data)
 
   try {
     const db = await connectToDatabase();
     const collection = db.collection('livestats2');
-    console.log("livestats 2 : ", data);
 
     for (const livestat of data) {
       const result = await collection.findOne({ IdCRM: livestat.IdCRM, date: livestat.date });
@@ -166,7 +163,9 @@ const updateLivestat2 = async (req, res) => {
 };
 
 const getLivestatByIdandDate = async (req, res) => {
-  const idCRM = req.cookies.idCRM;
+
+
+  const idCRM = req.query.idCRM;
   const { date1, date2 } = req.query;
   try {
     const db = await connectToDatabase();

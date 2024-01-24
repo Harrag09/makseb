@@ -48,7 +48,7 @@ res.cookie("access_token", access_token, {
   secure: true,
   domain: ".harrag09.github.io/maksebfrontend",
   path: "/",
-  sameSite: "Lax"
+  sameSite: "strict"
 }, (err) => {
   if (err) {
     console.error("Error setting access_token cookie:", err);
@@ -63,11 +63,11 @@ res.cookie("loggedIn", "loggedIn", {
   secure: true,
   domain: ".harrag09.github.io/maksebfrontend",
   path: "/",
-  sameSite: "Lax"
+  sameSite: "strict"
 }, (err) => {
   if (err) {
     console.error("Error setting loggedIn cookie:", err);
-      res.status(500).json({ msg: err?.message, success: false });
+    return  res.status(500).json({ msg: err?.message, success: false });
   
   }
 });
@@ -78,11 +78,11 @@ res.cookie("idCRM", user.idCRM,  {
   secure: true,
   domain: ".harrag09.github.io/maksebfrontend",
   path: "/",
-  sameSite: "Lax"
+  sameSite: "strict"
 }, (err) => {
   if (err) {
     console.error("Error setting idCRM cookie:", err);
-   res.status(500).json({ msg: err?.message, success: false });
+  return res.status(500).json({ msg: err?.message, success: false });
   }
 });
      
@@ -91,11 +91,11 @@ res.cookie("idUser", user._id.toString(), {
   secure: true,
   domain: ".harrag09.github.io/maksebfrontend",
   path: "/",
-  sameSite: "Lax"
+  sameSite: "strict"
 }, (err) => {
   if (err) {
     console.error("Error setting idUser cookie:", err);
-   res.status(500).json({ msg: err?.message, success: false });
+  return res.status(500).json({ msg: err?.message, success: false });
   }
 });
 
@@ -111,8 +111,7 @@ res.cookie("idUser", user._id.toString(), {
       });
     }
   } catch (err) {
-    res.status(500).json({ msg: err?.message, success: false });
-   res.status(500).json({ msg: err?.message, success: false });
+  return  res.status(500).json({ msg: err?.message, success: false });
   }
 };
 

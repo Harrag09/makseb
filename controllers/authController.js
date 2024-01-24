@@ -7,7 +7,7 @@ const UsersModel = require('../models/UsersModel.js');
 
 dotenv.config();
 
- const signin = async (req, res) => {
+const signin = async (req, res) => {
   const secretKey = process.env.ACCESS_TOKEN2;
 
   try {
@@ -22,92 +22,58 @@ dotenv.config();
         msg: "User does not exist.",
         success: false,
       });
-    }
-
-    else {
-
+    } else {
       const access_token = jwt.sign(
         { id: response._id, Role: response.Role },
         secretKey,
-
         {}
-
       );
 
       const decodedToken = jwt.decode(access_token);
-
       if (decodedToken) {
         const userRole = decodedToken.Role;
         console.log(userRole);
+        // Use the userRole as needed in your front-end code
       }
-const user = response;
 
 
-res.cookie("access_token", access_token, {
-  httpOnly: true,
-  secure: true,
-  domain: ".harrag09.github.io",
-  path: "/",
-  sameSite: "Lax"
- );
+      res.cookie("access_token", access_token, {
+        // httpOnly: true,
+        // secure: true,
 
-
-
-res.cookie("loggedIn", "loggedIn", {
-  httpOnly: true,
-  secure: true,
-  domain: ".harrag09.github.io",
-  path: "/",
-  sameSite: "Lax"
-});
-
-     
-res.cookie("idCRM", user.idCRM,  {
-  httpOnly: true,
-  secure: true,
-  domain: ".harrag09.github.io",
-  path: "/",
-  sameSite: "Lax"
-});
-     
-res.cookie("idUser", user._id.toString(), {
-  httpOnly: true,
-  secure: true,
-  domain: ".harrag09.github.io",
-  path: "/",
-  sameSite: "Lax"
-});
-
-
-
-
-
+      });
+      const user = response;
+      res.cookie("loggedIn", "loggedIn");
+      res.cookie("idCRM", user.idCRM);
+      res.cookie("idUser", user._id.toString());
 
       return res.status(200).json({
         msg: "User found.",
         success: true,
-        data: response[0],
+        data: user2,
       });
     }
   } catch (err) {
-  return  res.status(500).json({ msg: err?.message, success: false });
+    res.status(500).json({ msg: err?.message, success: false });
   }
 };
 
 
 
 
- const getUserById = async (req, res) => {
-  const userId = req.cookies.idUser;
 
+ const getUserById = async (req, res) => {
+  const userId = req.query.idUser;
   const _id = new ObjectId(userId); //
-  const db = await connectToDatabase();
+   const db = await connectToDatabase();
   const collection = db.collection('user');
+
   try {
 
 
 
     const response = await collection.findOne({ _id });
+    
     if (!response) {
       console.log("User not found");
       return res.status(404).json({
@@ -178,7 +144,6 @@ res.cookie("idUser", user._id.toString(), {
       });
     }
 
-    console.log(user);
 
     return res.status(200).json({
       msg: "Users found.",

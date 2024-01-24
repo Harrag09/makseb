@@ -43,44 +43,57 @@ dotenv.config();
 const user = response;
 
 
-     res.cookie("access_token", access_token, {
-      
-httpOnly: true,
-                    secure: true,
-                    domain: ".makseb.onrender.com",
-                    path: "/",
-                    sameSite: "Lax"
-     }
-               )
+res.cookie("access_token", access_token, {
+  httpOnly: true,
+  secure: true,
+  domain: ".makseb.onrender.com",
+  path: "/",
+  sameSite: "Lax"
+}, (err) => {
+  if (err) {
+    console.error("Error setting access_token cookie:", err);
+  }
+});
 
-res.cookie("loggedIn", "loggedIn",  {
-      
-httpOnly: true,
-                    secure: true,
-                    domain: ".makseb.onrender.com",
-                    path: "/",
-                    sameSite: "Lax"
-     }
-               )
+// Repeat similar error handling for other cookies
 
+
+res.cookie("loggedIn", "loggedIn", {
+  httpOnly: true,
+  secure: true,
+  domain: ".makseb.onrender.com",
+  path: "/",
+  sameSite: "Lax"
+}, (err) => {
+  if (err) {
+    console.error("Error setting loggedIn cookie:", err);
+  }
+});
+
+     
 res.cookie("idCRM", user.idCRM,  {
-      
-httpOnly: true,
-                    secure: true,
-                    domain: ".makseb.onrender.com",
-                    path: "/",
-                    sameSite: "Lax"
-     }
-               )
-res.cookie("idUser", user._id.toString(),  {
-      
-httpOnly: true,
-                    secure: true,
-                    domain: ".makseb.onrender.com",
-                    path: "/",
-                    sameSite: "Lax"
-     }
-               )
+  httpOnly: true,
+  secure: true,
+  domain: ".makseb.onrender.com",
+  path: "/",
+  sameSite: "Lax"
+}, (err) => {
+  if (err) {
+    console.error("Error setting idCRM cookie:", err);
+  }
+});
+     
+res.cookie("idUser", user._id.toString(), {
+  httpOnly: true,
+  secure: true,
+  domain: ".makseb.onrender.com",
+  path: "/",
+  sameSite: "Lax"
+}, (err) => {
+  if (err) {
+    console.error("Error setting idUser cookie:", err);
+  }
+});
 
 
 

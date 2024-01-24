@@ -32,20 +32,10 @@ const signin = async (req, res) => {
       const decodedToken = jwt.decode(access_token);
       if (decodedToken) {
         const userRole = decodedToken.Role;
-        console.log(userRole);
         // Use the userRole as needed in your front-end code
       }
-
-
-      res.cookie("access_token", access_token, {
-        // httpOnly: true,
-        // secure: true,
-
-      });
       const user = response;
-      res.cookie("loggedIn", "loggedIn");
-      res.cookie("idCRM", user.idCRM);
-      res.cookie("idUser", user._id.toString());
+      const user2 = {access_token:access_token,idCRM: user.idCRM,userid:user._id}
 
       return res.status(200).json({
         msg: "User found.",
@@ -54,6 +44,7 @@ const signin = async (req, res) => {
       });
     }
   } catch (err) {
+    console.error("Error during signin:", err);
     res.status(500).json({ msg: err?.message, success: false });
   }
 };

@@ -215,4 +215,34 @@ const getLivestatByIdandDate = async (req, res) => {
   }
 };
 
-module.exports = { getLivestat, getLivestatById, updateLivestat, updateLivestat2, getLivestatByIdandDate };
+ const updateStatusStores = async (req, res) => {
+  const data = req.body;
+  console.log(data)
+  try {
+    const db = await connectToDatabase();
+    const collection = db.collection('user');
+
+    const response = await collection.findOne({ idCRM: data.IdCRM });
+   console.log(response);
+    if (response) {
+
+      await collection.updateOne(
+        { _id: response._id },
+        {
+          $set: {
+            Status: data.statusStores,
+           
+          }
+        }
+      );
+
+      console.log("Updated  status successfully");
+    } 
+
+    res.sendStatus(200);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+module.exports = { getLivestat, getLivestatById, updateLivestat, updateLivestat2, getLivestatByIdandDate,updateStatusStores };

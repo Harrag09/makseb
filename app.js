@@ -10,7 +10,7 @@ const app = express();
 
 // Enable CORS for the specific origin
 app.use(cors({
-  origin: ['https://harrag09.github.io','http://localhost:3001','http://localhost:3000'],
+  origin: ['https://harrag09.github.io','http://localhost:3001','http://statistics.sc3makseb.universe.wf','http://localhost:3000'],
   methods: 'GET, POST, OPTIONS, PUT, PATCH, DELETE',
   credentials: true,
 }));

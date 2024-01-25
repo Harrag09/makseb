@@ -173,7 +173,7 @@ const signin = async (req, res) => {
 };
 
 
-export const updateStatusStores = async (req, res) => {
+ const updateStatusStores = async (req, res) => {
   const data = req.body;
   console.log(data)
   try {
@@ -204,4 +204,4 @@ export const updateStatusStores = async (req, res) => {
   }
 };
 
-module.exports = { signin, getUserById, signup, getUserByRole, getAllUsers };
+module.exports = { signin, getUserById, signup, getUserByRole, getAllUsers , updateStatusStores };

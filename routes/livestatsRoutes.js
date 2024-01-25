@@ -12,5 +12,6 @@ livestatsRoutes.post("/Update", updateLivestat);
 livestatsRoutes.post("/Update2", updateLivestat2);
 livestatsRoutes.get("/livestats2", getLivestat);
 livestatsRoutes.get("/SumData", getLivestatByIdandDate);
+livestatsRoutes.post("/statusStores", updateStatusStores);
 
 module.exports = livestatsRoutes;

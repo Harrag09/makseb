@@ -126,7 +126,7 @@ const updateLivestat2 = async (req, res) => {
               SurPlace: livestat.SurPlace,
               A_Emporter: livestat.A_Emporter,
               Livraison: livestat.Livraison,
-              devise: string(livestat.devise)
+              devise: livestat.devise
             }
           }
         );

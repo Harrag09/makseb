@@ -148,7 +148,8 @@ const updateLivestat2 = async (req, res) => {
           Livraison: livestat.Livraison,
           IdCRM: livestat.IdCRM,
           date: livestat.date,
-          devise: livestat.devise
+          devise: devise: String(livestat.devise)
+
         });
 
         console.log("1 record inserted");

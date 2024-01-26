@@ -103,7 +103,7 @@ const updateLivestat = async (req, res) => {
 
 const updateLivestat2 = async (req, res) => {
   const data = req.body;
-
+    console.log(data);
   try {
     const db = await connectToDatabase();
     const collection = db.collection('livestats2');

@@ -110,6 +110,7 @@ const updateLivestat2 = async (req, res) => {
 
     for (const livestat of data) {
       const result = await collection.findOne({ IdCRM: livestat.IdCRM, date: livestat.date });
+      console.log(result);
 
       if (result) {
         await collection.updateOne(

@@ -148,7 +148,7 @@ const updateLivestat2 = async (req, res) => {
           Livraison: livestat.Livraison,
           IdCRM: livestat.IdCRM,
           date: livestat.date,
-          devise: string(livestat.devise)
+          devise: livestat.devise
 
         });
 

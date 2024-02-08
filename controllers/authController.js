@@ -231,4 +231,4 @@ const modifyUser = async (req, res) => {
 
  
 
-module.exports = { signin, getUserById, signup, getUserByRole, getAllUsers  };
+module.exports = { signin, getUserById, signup, getUserByRole, getAllUsers,deleteIdUser,modifyUser };

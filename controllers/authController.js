@@ -2,6 +2,7 @@ const jwt = require("jsonwebtoken");
 const { connectToDatabase, client: dbConfig } = require("../config/dbConfig.js");
 const dotenv = require("dotenv");
 const { ObjectId } = require('mongodb');
+const mongoose = require("mongoose");
 
 const UsersModel = require('../models/UsersModel.js');
 

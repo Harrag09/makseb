@@ -2,7 +2,7 @@ const express = require("express");
 const authController = require("../controllers/authController.js");
 const verifyToken = require("../utils/verifyToken.js");
 
-const { getAllUsers, getUserById, signin, signup } = authController;
+const { getAllUsers, getUserById, signin, signup,deleteIdUser,modifyUser } = authController;
 const { verifyAccessToken } = verifyToken;
 
 const authRoutes = express.Router();

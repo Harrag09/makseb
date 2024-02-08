@@ -51,6 +51,62 @@ const signin = async (req, res) => {
 
 
 
+const deleteIdUser = async (req, res) => {
+  const userId = req.params.id; 
+  const id =new mongoose.Types.ObjectId(userId)
+  console.log(userId);
+  try {
+    const db = await connectToDatabase();
+    const collection = db.collection('user');
+    const response = await collection.findOne({ _id:id });
+
+    if (!response) {
+      console.log("User not found");
+      return res.status(200).json({
+        msg: "User does not exist.",
+        success: false,
+      });
+    }
+
+    await collection.deleteOne({  _id:id });
+
+    res.status(200).json({ message: 'User deleted successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'An error occurred while deleting the user' });
+  }
+};
+
+const modifyUser = async (req, res) => {
+  try {
+    const userId = req.params.id; 
+    const id =new mongoose.Types.ObjectId(userId)
+    console.log(userId);
+
+    
+
+    const db = await connectToDatabase();
+    const collection = db.collection('user');
+    const existingUser = await collection.findOne({ _id: id });
+    if (!existingUser) {
+      console.log("User does not exist");
+      return res.status(404).json({
+        msg: "User does not exist.",
+        success: false,
+      });
+    }
+    const { Nom, Login, Password, idCRM } = req.body;
+    await collection.updateOne({ _id: id }, { $set: { Login, Password, idCRM } });
+
+    return res.status(200).json({
+      msg: "User modified successfully.",
+      success: true,
+    });
+  } catch (err) {
+    console.error("An error occurred while modifying the user:", err);
+    res.status(500).json({ msg: "An error occurred while modifying the user", success: false });
+  }
+};
 
 
  const getUserById = async (req, res) => {

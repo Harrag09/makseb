@@ -2,7 +2,7 @@ const { MongoClient } = require("mongodb");
 const dotenv = require("dotenv");
 dotenv.config();
 
-const mongoUri = process.env.MONGODB_URI;
+const mongoUri ='mongodb+srv://maksebstatistique:Makseb123.@cluster0.7879moy.mongodb.net/statistiques?retryWrites=true&w=majority';
 console.log(mongoUri);
 
 const client = new MongoClient(mongoUri);

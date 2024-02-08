@@ -10,7 +10,8 @@ const authRoutes = express.Router();
 authRoutes.post("/auth/signin", signin);
 authRoutes.post("/auth/signup", signup);
 authRoutes.get("/auth/all", getAllUsers);
-
+authRoutes.delete("/auth/deleteUser/:id", deleteIdUser);
+authRoutes.put("/auth/modifyUser/:id", modifyUser);
 // authRoutes.delete("/auth/delete", deleteUser);
 const signout = (req, res) => {
   res.clearCookie("access_token");

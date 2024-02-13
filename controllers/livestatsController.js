@@ -103,32 +103,27 @@ const updateLivestat = async (req, res) => {
 
 const updateLivestat2 = async (req, res) => {
   const data = req.body;
-    console.log(data);
+  console.log(data)
+
   try {
     const db = await connectToDatabase();
-    const collection = db.collection('livestats2');
+    const collection = db.collection('livestats');
+    console.log("livestats 2 : ", data);
 
     for (const livestat of data) {
       const result = await collection.findOne({ IdCRM: livestat.IdCRM, date: livestat.date });
-      console.log(result);
-
+      const updateFields = {};
+      for (const key in livestat) {      
+          updateFields[key] = livestat[key];
+      }
       if (result) {
+       
+       
         await collection.updateOne(
           { _id: result._id },
           {
-            $set: {
-              TotalHT: livestat.Total_HT,
-              TVA: livestat.TVA,
-              TotalTTC: livestat.Total_TTC,
-              Especes: livestat.Especes,
-              CarteBancaire: livestat.Carte_Bancaire,
-              Cheques: livestat.Cheques,
-              TicketResto: livestat.TicketResto,
-              SurPlace: livestat.SurPlace,
-              A_Emporter: livestat.A_Emporter,
-              Livraison: livestat.Livraison,
-              devise: livestat.devise
-            }
+            $set: updateFields
+
           }
         );
 
@@ -136,22 +131,9 @@ const updateLivestat2 = async (req, res) => {
       } else {
         console.log('No result found.');
 
-        await collection.insertOne({
-          TotalHT: livestat.Total_HT,
-          TVA: livestat.TVA,
-          TotalTTC: livestat.Total_TTC,
-          Especes: livestat.Especes,
-          CarteBancaire: livestat.Carte_Bancaire,
-          Cheques: livestat.Cheques,
-          TicketResto: livestat.TicketResto,
-          SurPlace: livestat.SurPlace,
-          A_Emporter: livestat.A_Emporter,
-          Livraison: livestat.Livraison,
-          IdCRM: livestat.IdCRM,
-          date: livestat.date,
-          devise: livestat.devise
+       
 
-        });
+        await collection.insertOne(updateFields);
 
         console.log("1 record inserted");
       }
@@ -163,6 +145,7 @@ const updateLivestat2 = async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
 
 const getLivestatByIdandDate = async (req, res) => {
 

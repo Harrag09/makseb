@@ -107,7 +107,7 @@ const updateLivestat2 = async (req, res) => {
 
   try {
     const db = await connectToDatabase();
-    const collection = db.collection('livestats2');
+    const collection = db.collection('livestats');
     console.log("livestats 2 : ", data);
 
     for (const livestat of data) {

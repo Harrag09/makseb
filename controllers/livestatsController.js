@@ -8,7 +8,7 @@ const getLivestat = async (req, res) => {
 
   try {
     const db = await connectToDatabase();
-    const collection = db.collection('livestats');
+    const collection = db.collection('livestats2');
 
     const livestatArray = await collection.find({ IdCRM: idCRM }).toArray();
 

@@ -28,7 +28,7 @@ const getLivestatById = async (req, res) => {
 
   try {
     const db = await connectToDatabase();
-    const collection = db.collection('livestats');
+    const collection = db.collection('livestats2');
 
     const livestat = await collection.findOne({ IdCRM: idCRM });
 
@@ -47,7 +47,7 @@ const updateLivestat = async (req, res) => {
   const data = req.body;
   try {
     const db = await connectToDatabase();
-    const collection = db.collection('livestats');
+    const collection = db.collection('livestats2');
 
     const result = await collection.findOne({ IdCRM: data.IdCRM });
     // console.log(data);
@@ -107,7 +107,7 @@ const updateLivestat2 = async (req, res) => {
 
   try {
     const db = await connectToDatabase();
-    const collection = db.collection('livestats2');
+    const collection = db.collection('livestats');
     console.log("livestats 2 : ", data);
 
     for (const livestat of data) {

@@ -107,6 +107,50 @@ const updateLivestat2 = async (req, res) => {
 
   try {
     const db = await connectToDatabase();
+    const collection = db.collection('livestats2');
+    console.log("livestats 2 : ", data);
+
+    for (const livestat of data) {
+      const result = await collection.findOne({ IdCRM: livestat.IdCRM, date: livestat.date });
+      const updateFields = {};
+      for (const key in livestat) {      
+          updateFields[key] = livestat[key];
+      }
+      if (result) {
+       
+       
+        await collection.updateOne(
+          { _id: result._id },
+          {
+            $set: updateFields
+
+          }
+        );
+
+        console.log("Updated successfully");
+      } else {
+        console.log('No result found.');
+
+       
+
+        await collection.insertOne(updateFields);
+
+        console.log("1 record inserted");
+      }
+    }
+
+    res.sendStatus(200);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+const updateLivestat3 = async (req, res) => {
+  const data = req.body;
+  console.log(data)
+
+  try {
+    const db = await connectToDatabase();
     const collection = db.collection('livestats');
     console.log("livestats 2 : ", data);
 
@@ -230,4 +274,4 @@ const getLivestatByIdandDate = async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
-module.exports = { getLivestat, getLivestatById, updateLivestat, updateLivestat2, getLivestatByIdandDate,updateStatusStores };
+module.exports = { getLivestat, getLivestatById, updateLivestat, updateLivestat2,updateLivestat3, getLivestatByIdandDate,updateStatusStores };

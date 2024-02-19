@@ -4,11 +4,11 @@ const { connectToDatabase, client } = require('../config/dbConfig.js');
 const { ObjectId } = require('mongodb');
 
 const getLivestat = async (req, res) => {
-  const idCRM = req.query.idCRM;
+  const idCRM = '54314010';
 
   try {
     const db = await connectToDatabase();
-    const collection = db.collection('livestats2');
+    const collection = db.collection('livestats');
 
     const livestatArray = await collection.find({ IdCRM: idCRM }).toArray();
 
@@ -113,12 +113,12 @@ const updateLivestat2 = async (req, res) => {
     for (const livestat of data) {
       const result = await collection.findOne({ IdCRM: livestat.IdCRM, date: livestat.date });
       const updateFields = {};
-      for (const key in livestat) {      
-          updateFields[key] = livestat[key];
+      for (const key in livestat) {
+        updateFields[key] = livestat[key];
       }
       if (result) {
-       
-       
+
+
         await collection.updateOne(
           { _id: result._id },
           {
@@ -131,7 +131,7 @@ const updateLivestat2 = async (req, res) => {
       } else {
         console.log('No result found.');
 
-       
+
 
         await collection.insertOne(updateFields);
 
@@ -157,12 +157,13 @@ const updateLivestat3 = async (req, res) => {
     for (const livestat of data) {
       const result = await collection.findOne({ IdCRM: livestat.IdCRM, date: livestat.date });
       const updateFields = {};
-      for (const key in livestat) {      
-          updateFields[key] = livestat[key];
+      for (const key in livestat) {
+
+        updateFields[key] = livestat[key];
       }
       if (result) {
-       
-       
+
+
         await collection.updateOne(
           { _id: result._id },
           {
@@ -175,7 +176,7 @@ const updateLivestat3 = async (req, res) => {
       } else {
         console.log('No result found.');
 
-       
+
 
         await collection.insertOne(updateFields);
 
@@ -191,60 +192,66 @@ const updateLivestat3 = async (req, res) => {
 };
 
 
-const getLivestatByIdandDate = async (req, res) => {
 
 
-  const idCRM = req.query.idCRM;
-  const { date1, date2 } = req.query;
-  try {
-    const db = await connectToDatabase();
-    const collection = db.collection('livestats2');
-
-    const startDateString = date1.toString();
-    const endDateString = date2.toString();
-
-    const livestats = await collection.aggregate([
-      {
-        $match: {
-          IdCRM: idCRM,
-          date: { $gte: startDateString, $lte: endDateString }
-        }
-      },
-      {
-        $group: {
-          _id: null,
-          TotalHT: { $sum: { $toDouble: "$TotalHT" } },
-          TVA: { $sum: { $toDouble: "$TVA" } },
-          TotalTTC: { $sum: { $toDouble: "$TotalTTC" } },
-          Especes: { $sum: { $toDouble: "$Especes" } },
-          CarteBancaire: { $sum: { $toDouble: "$CarteBancaire" } },
-          Cheques: { $sum: { $toDouble: "$Cheques" } },
-          TicketResto: { $sum: { $toDouble: "$TicketResto" } },
-          SurPlace: { $sum: { $toDouble: "$SurPlace" } },
-          A_Emporter: { $sum: { $toDouble: "$A_Emporter" } },
-          Livraison: { $sum: { $toDouble: "$Livraison" } },
-          devise: { $first: "$devise" } 
-        }
-      },
-      {
-        $project: {
-          _id: 0
-        }
+const calculateSumsForEachLine = (objects, sumsForEachLine = {}) => {
+  objects.forEach(obj => {
+      for (const key in obj) {
+          if (typeof obj[key] === 'object' && obj[key] !== null) {
+              sumsForEachLine[key] = calculateSumsForEachLine([obj[key]], sumsForEachLine[key] || {});
+          }  
+         if (typeof obj[key] === 'number') 
+          {
+              // If the value is a number, add it to the sum
+              const result = (sumsForEachLine[key] || 0) + obj[key];
+              sumsForEachLine[key] = Math.round(result * 100) / 100;           }
       }
-    ]).toArray();
+  });
 
-    if (livestats.length === 0) {
-      return res.status(404).json({ error: "Livestats not found within the specified date range" });
-    }
+  return sumsForEachLine;
+};
 
-    res.json(livestats);
+const getLivestatByIdandDate = async (req, res) => {
+  try {
+      const idCRM = '54314010';
+      const startDateString = '20240210';
+      const endDateString = '20240216';
+
+      // Connect to the database
+      const db = await connectToDatabase();
+      const collection = db.collection('livestats');
+
+      // Aggregate query to calculate live stats
+      const livestats = await collection.aggregate([
+          {
+              // Match documents based on IdCRM and date range
+              $match: {
+                  IdCRM: idCRM,
+                  date: { $gte: startDateString, $lte: endDateString }
+              }
+          },
+      ]).toArray();
+
+      if (livestats.length === 0) {
+          return res.status(404).json({ error: "Livestats not found within the specified date range" });
+      } else {
+          const sumsForEachLine = calculateSumsForEachLine(livestats);
+          sumsForEachLine.devise = livestats[1].devise
+          sumsForEachLine.IdCRM = livestats[1].IdCRM
+        console.log(livestats)
+          res.json(sumsForEachLine);
+      }
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Internal Server Error" });
+      console.error(error);
+      res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
- const updateStatusStores = async (req, res) => {
+
+
+
+
+const updateStatusStores = async (req, res) => {
   const data = req.body;
   console.log(data)
   try {
@@ -252,7 +259,7 @@ const getLivestatByIdandDate = async (req, res) => {
     const collection = db.collection('user');
 
     const response = await collection.findOne({ idCRM: data.IdCRM });
-   console.log(response);
+    console.log(response);
     if (response) {
 
       await collection.updateOne(
@@ -260,13 +267,13 @@ const getLivestatByIdandDate = async (req, res) => {
         {
           $set: {
             Status: data.statusStores,
-           
+
           }
         }
       );
 
       console.log("Updated  status successfully");
-    } 
+    }
 
     res.sendStatus(200);
   } catch (error) {
@@ -274,4 +281,4 @@ const getLivestatByIdandDate = async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
-module.exports = { getLivestat, getLivestatById, updateLivestat, updateLivestat2,updateLivestat3, getLivestatByIdandDate,updateStatusStores };
+module.exports = { getLivestat, getLivestatById, updateLivestat, updateLivestat2, updateLivestat3, getLivestatByIdandDate, updateStatusStores };

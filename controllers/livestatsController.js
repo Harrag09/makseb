@@ -216,9 +216,9 @@ const calculateSumsForEachLine = (objects, sumsForEachLine = {}) => {
 
 const getLivestatByIdandDate = async (req, res) => {
   try {
-      const idCRM = req.body.idCRM;
-      const startDateString = req.body.date1;
-      const endDateString = req.body.date2;
+      const idCRM = req.query.idCRM; // Access query parameters using req.query
+      const startDateString = req.query.date1;
+      const endDateString = req.query.date2;
 
       // Connect to the database
       const db = await connectToDatabase();
@@ -239,9 +239,6 @@ const getLivestatByIdandDate = async (req, res) => {
           return res.status(404).json({ error: "Livestats not found within the specified date range" });
       } else {
           const sumsForEachLine = calculateSumsForEachLine(livestats);
-      
-      
-
           res.json(sumsForEachLine);
       }
   } catch (error) {
@@ -249,6 +246,7 @@ const getLivestatByIdandDate = async (req, res) => {
       res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
 
 
 
@@ -284,4 +282,30 @@ const updateStatusStores = async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
-module.exports = { getLivestat, getLivestatById, updateLivestat, updateLivestat2, updateLivestat3, getLivestatByIdandDate, updateStatusStores };
+
+
+const GetLicence = async (req, res) => {
+  
+  try {
+    const db = await connectToDatabase();
+    const collection = db.collection('user');
+    const idCRM = req.params.idCRM;
+    console.log(idCRM);
+        const user = await collection.findOne({ idCRM: idCRM });
+     
+        let hasLicense = false; 
+    
+        if (user) {
+          hasLicense = user.Licence === true; 
+        }
+        
+        res.json({hasLicense });
+  
+
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+module.exports = { getLivestat, getLivestatById, updateLivestat, updateLivestat2, updateLivestat3, getLivestatByIdandDate, updateStatusStores,GetLicence };

@@ -204,7 +204,10 @@ const calculateSumsForEachLine = (objects, sumsForEachLine = {}) => {
           {
               // If the value is a number, add it to the sum
               const result = (sumsForEachLine[key] || 0) + obj[key];
-              sumsForEachLine[key] = Math.round(result * 100) / 100;           }
+              sumsForEachLine[key] = Math.round(result * 100) / 100;}
+              if (typeof obj[key] === 'string') 
+          {  if (key != 'date') { sumsForEachLine[key] =  obj[key];  }
+                        }
       }
   });
 
@@ -237,8 +240,7 @@ const getLivestatByIdandDate = async (req, res) => {
       } else {
           const sumsForEachLine = calculateSumsForEachLine(livestats);
       
-          sumsForEachLine.IdCRM = livestats[0].IdCRM
-          sumsForEachLine.devise = livestats[0].devise
+      
 
           res.json(sumsForEachLine);
       }

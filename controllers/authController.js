@@ -161,8 +161,10 @@ const modifyUser = async (req, res) => {
         success: false,
       });
     }
+        const Licence = "Enable";
+
     const Role = "store";
-    const newUser = { Nom, Login, Password, Tel, idCRM, Role,Prenom,Email,Address };
+    const newUser = { Nom, Login, Password, Tel, idCRM, Role,Prenom,Email,Address , Licence };
     const response = await collection.insertOne(newUser);
 
     return res.status(200).json({

@@ -4,7 +4,7 @@ const { connectToDatabase, client } = require('../config/dbConfig.js');
 const { ObjectId } = require('mongodb');
 
 const getLivestat = async (req, res) => {
-  const idCRM = req.query.idCRM;
+  const idCRM = req.body.idCRM;
 
   try {
     const db = await connectToDatabase();
@@ -24,7 +24,7 @@ const getLivestat = async (req, res) => {
 };
 
 const getLivestatById = async (req, res) => {
-  const idCRM = req.query.idCRM;
+  const idCRM = req.body.idCRM;
 
   try {
     const db = await connectToDatabase();
@@ -213,9 +213,9 @@ const calculateSumsForEachLine = (objects, sumsForEachLine = {}) => {
 
 const getLivestatByIdandDate = async (req, res) => {
   try {
-      const idCRM = req.query.idCRM;
-      const startDateString = req.query.date1;
-      const endDateString = req.query.date2;
+      const idCRM = req.body.idCRM;
+      const startDateString = req.body.date1;
+      const endDateString = req.body.date2;
 
       // Connect to the database
       const db = await connectToDatabase();

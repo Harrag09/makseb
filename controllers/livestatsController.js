@@ -308,4 +308,35 @@ const GetLicence = async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
-module.exports = { getLivestat, getLivestatById, updateLivestat, updateLivestat2, updateLivestat3, getLivestatByIdandDate, updateStatusStores,GetLicence };
+
+
+const UpdateLicence = async (req, res) => {
+  
+  try {
+    const db = await connectToDatabase();
+    const collection = db.collection('user');
+    const idCRM = req.params.idCRM;
+    const action = req.params.action;
+    console.log(idCRM,action);
+
+    if (action === '') {
+      return res.status(400).json({ error: 'Invalid action' });
+    }
+    const response = await collection.findOne({ idCRM: idCRM });
+    await collection.updateOne(
+      { _id: response._id },
+      {
+        $set: {
+          Licence: action 
+
+        }
+      }
+    );
+    res.json({ success: true });
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+module.exports = {UpdateLicence, getLivestat, getLivestatById, updateLivestat, updateLivestat2, updateLivestat3, getLivestatByIdandDate, updateStatusStores,GetLicence };

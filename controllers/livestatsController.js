@@ -236,9 +236,10 @@ const getLivestatByIdandDate = async (req, res) => {
           return res.status(404).json({ error: "Livestats not found within the specified date range" });
       } else {
           const sumsForEachLine = calculateSumsForEachLine(livestats);
-          sumsForEachLine.devise = livestats[1].devise
-          sumsForEachLine.IdCRM = livestats[1].IdCRM
-        console.log(livestats)
+      
+          sumsForEachLine.IdCRM = livestats[0].IdCRM
+          sumsForEachLine.devise = livestats[0].devise
+
           res.json(sumsForEachLine);
       }
   } catch (error) {

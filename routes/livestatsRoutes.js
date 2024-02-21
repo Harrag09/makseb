@@ -15,6 +15,6 @@ livestatsRoutes.get("/livestats2", getLivestat);
 livestatsRoutes.get("/SumData", getLivestatByIdandDate);
 livestatsRoutes.post("/statusStores", updateStatusStores);
 livestatsRoutes.get("/GetLicence/:idCRM", GetLicence);
-livestatsRoutes.get("/UpdateLicence/:idCRM/:action", UpdateLicence);
+livestatsRoutes.post("/UpdateLicence/:idCRM/:action", UpdateLicence);
 
 module.exports = livestatsRoutes;

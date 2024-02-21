@@ -2,7 +2,7 @@ const express = require("express");
 const livestatsController = require("../controllers/livestatsController.js");
 const verifyToken = require("../utils/verifyToken.js");
 
-const { getLivestat, getLivestatById, getLivestatByIdandDate, updateLivestat, updateLivestat2, updateLivestat3,updateStatusStores ,GetLicence,UpdateLicence } = livestatsController;
+const {updateAllCatCripteInMongo,updateAllCatInUploid, getLivestat, getLivestatById, getLivestatByIdandDate, updateLivestat, updateLivestat2, updateLivestat3,updateStatusStores ,GetLicence ,UpdateLicence} = livestatsController;
 const { verifyAccessToken } = verifyToken;
 
 const livestatsRoutes = express.Router();

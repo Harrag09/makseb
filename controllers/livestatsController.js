@@ -2,6 +2,10 @@ const { connectToDatabase, client } = require('../config/dbConfig.js');
 
 
 const { ObjectId } = require('mongodb');
+const fs = require('fs');
+const path = require('path');
+const multer = require('multer');
+const { Console } = require('console');
 
 const getLivestat = async (req, res) => {
   const idCRM = req.body.idCRM;
@@ -196,19 +200,19 @@ const updateLivestat3 = async (req, res) => {
 
 const calculateSumsForEachLine = (objects, sumsForEachLine = {}) => {
   objects.forEach(obj => {
-      for (const key in obj) {
-          if (typeof obj[key] === 'object' && obj[key] !== null) {
-              sumsForEachLine[key] = calculateSumsForEachLine([obj[key]], sumsForEachLine[key] || {});
-          }  
-         if (typeof obj[key] === 'number') 
-          {
-              // If the value is a number, add it to the sum
-              const result = (sumsForEachLine[key] || 0) + obj[key];
-              sumsForEachLine[key] = Math.round(result * 100) / 100;}
-              if (typeof obj[key] === 'string') 
-          {  if (key != 'date') { sumsForEachLine[key] =  obj[key];  }
-                        }
+    for (const key in obj) {
+      if (typeof obj[key] === 'object' && obj[key] !== null) {
+        sumsForEachLine[key] = calculateSumsForEachLine([obj[key]], sumsForEachLine[key] || {});
       }
+      if (typeof obj[key] === 'number') {
+        // If the value is a number, add it to the sum
+        const result = (sumsForEachLine[key] || 0) + obj[key];
+        sumsForEachLine[key] = Math.round(result * 100) / 100;
+      }
+      if (typeof obj[key] === 'string') {
+        if (key != 'date') { sumsForEachLine[key] = obj[key]; }
+      }
+    }
   });
 
   return sumsForEachLine;
@@ -216,36 +220,37 @@ const calculateSumsForEachLine = (objects, sumsForEachLine = {}) => {
 
 const getLivestatByIdandDate = async (req, res) => {
   try {
-      const idCRM = req.query.idCRM; // Access query parameters using req.query
-      const startDateString = req.query.date1;
-      const endDateString = req.query.date2;
+    const idCRM = req.query.idCRM; // Access query parameters using req.query
+    const startDateString = req.query.date1;
+    const endDateString = req.query.date2;
 
-      // Connect to the database
-      const db = await connectToDatabase();
-      const collection = db.collection('livestats');
+    // Connect to the database
+    const db = await connectToDatabase();
+    const collection = db.collection('livestats');
 
-      // Aggregate query to calculate live stats
-      const livestats = await collection.aggregate([
-          {
-              // Match documents based on IdCRM and date range
-              $match: {
-                  IdCRM: idCRM,
-                  date: { $gte: startDateString, $lte: endDateString }
-              }
-          },
-      ]).toArray();
+    // Aggregate query to calculate live stats
+    const livestats = await collection.aggregate([
+      {
+        // Match documents based on IdCRM and date range
+        $match: {
+          IdCRM: idCRM,
+          date: { $gte: startDateString, $lte: endDateString }
+        }
+      },
+    ]).toArray();
 
-      if (livestats.length === 0) {
-          return res.status(404).json({ error: "Livestats not found within the specified date range" });
-      } else {
-          const sumsForEachLine = calculateSumsForEachLine(livestats);
-          res.json(sumsForEachLine);
-      }
+    if (livestats.length === 0) {
+      return res.status(404).json({ error: "Livestats not found within the specified date range" });
+    } else {
+      const sumsForEachLine = calculateSumsForEachLine(livestats);
+      res.json(sumsForEachLine);
+    }
   } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: "Internal Server Error" });
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
 
 
 
@@ -281,6 +286,8 @@ const updateStatusStores = async (req, res) => {
           {
             $set: {
               Status: data.statusStores,
+              LastCommand: data.LastCommand
+
             }
           }
         );
@@ -298,22 +305,21 @@ const updateStatusStores = async (req, res) => {
 
 
 const GetLicence = async (req, res) => {
-  
+
   try {
     const db = await connectToDatabase();
     const collection = db.collection('user');
     const idCRM = req.params.idCRM;
-    console.log(idCRM);
-        const user = await collection.findOne({ idCRM: idCRM });
-     
-        let hasLicense = false; 
-    
-        if (user) {
-          hasLicense = user.Licence === true; 
-        }
-        
-        res.json({hasLicense });
-  
+    const user = await collection.findOne({ idCRM: idCRM });
+
+    let hasLicense = false;
+
+    if (user) {
+      hasLicense = user.Licence;
+    }
+
+    res.json({ hasLicense });
+
 
   } catch (error) {
     console.error(error);
@@ -321,16 +327,14 @@ const GetLicence = async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
-
-
 const UpdateLicence = async (req, res) => {
-  
+
   try {
     const db = await connectToDatabase();
     const collection = db.collection('user');
     const idCRM = req.params.idCRM;
     const action = req.params.action;
-    console.log(idCRM,action);
+    console.log(idCRM, action);
 
     if (action === '') {
       return res.status(400).json({ error: 'Invalid action' });
@@ -340,7 +344,7 @@ const UpdateLicence = async (req, res) => {
       { _id: response._id },
       {
         $set: {
-          Licence: action 
+          Licence: action
 
         }
       }
@@ -352,4 +356,81 @@ const UpdateLicence = async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
-module.exports = {UpdateLicence, getLivestat, getLivestatById, updateLivestat, updateLivestat2, updateLivestat3, getLivestatByIdandDate, updateStatusStores,GetLicence };
+
+
+
+
+
+
+const updateAllCatInUploid = async (req, res) => {
+  try {
+    const data = req.body;
+
+    const base64Data = data.image.replace(/^data:image\/\w+;base64,/, '');
+    const decodedImage = Buffer.from(base64Data, 'base64');
+
+    // Construct folder path based on IdCRM
+    const folderPath = path.join(__dirname, 'uploads', data.IdCRM);
+
+    // Create directory if it doesn't exist
+    if (!fs.existsSync(folderPath)) {
+      fs.mkdirSync(folderPath, { recursive: true }); // Ensure parent directories are created
+    }
+
+    // Generate a unique filename based on category
+    const filename = `${data.Categories}.png`;
+
+    // Write the decoded image data to the file system
+    fs.writeFileSync(path.join(folderPath, filename), decodedImage);
+
+    // Send success response
+    res.sendStatus(200);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+
+
+const updateAllCatCripteInMongo = async (req, res) => {
+  try {
+    const data = req.body;
+    console.log(data);
+
+
+
+    const db = await connectToDatabase();
+    const collection = db.collection('Images');
+    console.log("Catégories", data);
+
+    const result = await collection.findOne({ IdCRM: data.IdCRM, Categories: data.Categories });
+
+
+
+    if (result) {
+      await collection.updateOne(
+        { _id: result._id },
+        { $set: data }
+      );
+      console.log("Updated Catégories");
+    } else {
+      console.log('No result found.');
+      await collection.insertOne(data);
+      console.log("1 Catégories inserted");
+    }
+
+
+    res.sendStatus(200);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+
+
+
+
+
+module.exports = { updateAllCatCripteInMongo, updateAllCatInUploid, UpdateLicence, getLivestat, getLivestatById, updateLivestat, updateLivestat2, updateLivestat3, getLivestatByIdandDate, updateStatusStores, GetLicence };

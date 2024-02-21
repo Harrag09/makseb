@@ -48,7 +48,7 @@ const upload = multer({ storage: storage });
 app.post('/upload', upload.single('image'), (req, res) => {
 
   
-  res.send('File uploaded successfully');
+  res.send('File uploaded successfully !');
 });
 
 

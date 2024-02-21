@@ -281,8 +281,6 @@ const updateStatusStores = async (req, res) => {
           {
             $set: {
               Status: data.statusStores,
-              LastCommand: data.LastCommand
-
             }
           }
         );

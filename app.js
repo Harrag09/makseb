@@ -53,6 +53,35 @@ app.post('/upload', upload.single('image'), (req, res) => {
 });
 
 
+
+
+
+app.get('/images', (req, res) => {
+  const uploadDirectory = 'uploads/';
+
+  // Read the contents of the upload directory
+  fs.readdir(uploadDirectory, (err, files) => {
+    if (err) {
+      return res.status(500).json({ error: 'Unable to read directory' });
+    }
+
+    // Filter out only the image files
+    const imageFiles = files.filter(file => {
+      const extname = path.extname(file).toLowerCase();
+      return extname === '.png' || extname === '.jpg' || extname === '.jpeg' || extname === '.gif';
+    });
+
+    // Send the array of image file names in the response
+    res.json({ images: imageFiles });
+  });
+});
+
+
+
+
+
+
+
 const PORT = 8002;
 
 // Start the server

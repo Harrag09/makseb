@@ -5,7 +5,8 @@ const cors = require('cors');
 const livestatsRoutes = require('./routes/livestatsRoutes.js');
 const authRoutes = require('./routes/auth.js');
 const usersRoutes = require('./routes/users.js');
-
+const multer = require('multer');
+const path = require('path');
 const app = express();
 
 // Enable CORS for the specific origin
@@ -30,6 +31,26 @@ connectToDatabase();
 app.use('/', livestatsRoutes);
 app.use('/', authRoutes);
 app.use('/api', usersRoutes);
+
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads/') 
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+  }
+});
+
+const upload = multer({ storage: storage });
+
+
+app.post('/upload', upload.single('image'), (req, res) => {
+
+  
+  res.send('File uploaded successfully');
+});
+
 
 const PORT = 8002;
 

@@ -8,6 +8,7 @@ const usersRoutes = require('./routes/users.js');
 const multer = require('multer');
 const path = require('path');
 const app = express();
+const fs = require('fs');
 
 // Enable CORS for the specific origin
 app.use(cors({

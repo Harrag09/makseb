@@ -251,7 +251,6 @@ const getLivestatByIdandDate = async (req, res) => {
 
 
 
-
 const updateStatusStores = async (req, res) => {
   const data = req.body;
   console.log(data)
@@ -262,19 +261,34 @@ const updateStatusStores = async (req, res) => {
     const response = await collection.findOne({ idCRM: data.IdCRM });
     console.log(response);
     if (response) {
+      if (data.LastCommand != null) {
+        await collection.updateOne(
+          { _id: response._id },
+          {
+            $set: {
+              Status: data.statusStores,
+              LastCommand: data.LastCommand
 
-      await collection.updateOne(
-        { _id: response._id },
-        {
-          $set: {
-            Status: data.statusStores,
-            LastCommand : data.LastCommand
-
+            }
           }
-        }
-      );
+        );
 
-      console.log("Updated  status successfully");
+        console.log("Updated  status  et LastCommand successfully");
+      }
+      else {
+        await collection.updateOne(
+          { _id: response._id },
+          {
+            $set: {
+              Status: data.statusStores,
+              LastCommand: data.LastCommand
+
+            }
+          }
+        );
+
+        console.log("Updated  status successfully");
+      }
     }
 
     res.sendStatus(200);

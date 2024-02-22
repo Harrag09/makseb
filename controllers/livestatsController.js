@@ -6,6 +6,7 @@ const fs = require('fs');
 const path = require('path');
 const multer = require('multer');
 const { Console } = require('console');
+const { decode } = require('punycode');
 
 const getLivestat = async (req, res) => {
   const idCRM = req.body.idCRM;
@@ -220,18 +221,15 @@ const calculateSumsForEachLine = (objects, sumsForEachLine = {}) => {
 
 const getLivestatByIdandDate = async (req, res) => {
   try {
-    const idCRM = req.query.idCRM; // Access query parameters using req.query
+    const idCRM = req.query.idCRM; 
     const startDateString = req.query.date1;
     const endDateString = req.query.date2;
 
-    // Connect to the database
     const db = await connectToDatabase();
     const collection = db.collection('livestats');
 
-    // Aggregate query to calculate live stats
     const livestats = await collection.aggregate([
       {
-        // Match documents based on IdCRM and date range
         $match: {
           IdCRM: idCRM,
           date: { $gte: startDateString, $lte: endDateString }
@@ -327,6 +325,7 @@ const GetLicence = async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
 const UpdateLicence = async (req, res) => {
 
   try {
@@ -369,21 +368,18 @@ const updateAllCatInUploid = async (req, res) => {
     const base64Data = data.image.replace(/^data:image\/\w+;base64,/, '');
     const decodedImage = Buffer.from(base64Data, 'base64');
 
-    // Construct folder path based on IdCRM
-    const folderPath = path.join(__dirname, 'uploads', data.IdCRM);
+    const parentFolderPath = path.join(__dirname, '..'); // Go up one directory level
+    const folderPath = path.join(parentFolderPath, 'uploads', data.IdCRM);
+   
 
-    // Create directory if it doesn't exist
     if (!fs.existsSync(folderPath)) {
-      fs.mkdirSync(folderPath, { recursive: true }); // Ensure parent directories are created
+      fs.mkdirSync(folderPath, { recursive: true }); 
     }
 
-    // Generate a unique filename based on category
     const filename = `${data.Categories}.png`;
 
-    // Write the decoded image data to the file system
     fs.writeFileSync(path.join(folderPath, filename), decodedImage);
 
-    // Send success response
     res.sendStatus(200);
   } catch (error) {
     console.error(error);
@@ -397,9 +393,6 @@ const updateAllCatCripteInMongo = async (req, res) => {
   try {
     const data = req.body;
     console.log(data);
-
-
-
     const db = await connectToDatabase();
     const collection = db.collection('Images');
     console.log("Catégories", data);

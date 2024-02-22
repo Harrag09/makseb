@@ -311,11 +311,13 @@ const GetLicence = async (req, res) => {
     const user = await collection.findOne({ idCRM: idCRM });
 
     let hasLicense = false;
-
+  
     if (user) {
-      hasLicense = user.Licence;
+      if(user.Licence==="Enable"){   hasLicense = "EMakseb";}
+      else{hasLicense = "MaksebD";} 
+   
     }
-
+console.log(hasLicense);
     res.json({ hasLicense });
 
 

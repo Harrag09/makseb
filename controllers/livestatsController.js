@@ -108,6 +108,64 @@ const updateLivestat = async (req, res) => {
 
 const updateLivestat2 = async (req, res) => {
   const data = req.body;
+  try {
+    const db = await connectToDatabase();
+    const collection = db.collection('livestats2');
+
+    const result = await collection.findOne({ IdCRM: data.IdCRM });
+    // console.log(data);
+    if (result) {
+
+      await collection.updateOne(
+        { _id: result._id },
+        {
+          $set: {
+            TotalHT: data.Total_HT,
+            TVA: data.TVA,
+            TotalTTC: data.Total_TTC,
+            Especes: data.Especes,
+            CarteBancaire: data.Carte_Bancaire,
+            Cheques: data.Cheques,
+            TicketResto: data.TicketResto,
+            SurPlace: data.SurPlace,
+            A_Emporter: data.A_Emporter,
+            Livraison: data.Livraison,
+            devise: data.devise
+          }
+        }
+      );
+
+      console.log("Updated successfully");
+    } else {
+      console.log('No result found.');
+
+      await collection.insertOne({
+        TotalHT: data.Total_HT,
+        TVA: data.TVA,
+        TotalTTC: data.Total_TTC,
+        Especes: data.Especes,
+        CarteBancaire: data.Carte_Bancaire,
+        Cheques: data.Cheques,
+        TicketResto: data.TicketResto,
+        SurPlace: data.SurPlace,
+        A_Emporter: data.A_Emporter,
+        Livraison: data.Livraison,
+        IdCRM: data.IdCRM,
+        devise: data.devise
+      });
+
+      console.log("1 record inserted");
+    }
+
+    res.sendStatus(200);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+const updateLivestat4 = async (req, res) => {
+  const data = req.body;
+  console.log(data)
 
   try {
     const db = await connectToDatabase();
@@ -132,7 +190,7 @@ const updateLivestat2 = async (req, res) => {
           }
         );
 
-        console.log("Updated successfully",data.IdCRM,data.date);
+        console.log("Updated successfully");
       } else {
         console.log('No result found.');
 
@@ -140,7 +198,7 @@ const updateLivestat2 = async (req, res) => {
 
         await collection.insertOne(updateFields);
 
-        console.log("1 record inserted",data.IdCRM,data.date);
+        console.log("1 record inserted");
       }
     
 
@@ -150,7 +208,6 @@ const updateLivestat2 = async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
-
 
 const updateLivestat3 = async (req, res) => {
   const data = req.body;
@@ -430,4 +487,4 @@ const updateAllCatCripteInMongo = async (req, res) => {
 
 
 
-module.exports = { updateAllCatCripteInMongo, updateAllCatInUploid, UpdateLicence, getLivestat, getLivestatById, updateLivestat, updateLivestat2, updateLivestat3, getLivestatByIdandDate, updateStatusStores, GetLicence };
+module.exports = { updateAllCatCripteInMongo, updateAllCatInUploid, UpdateLicence, getLivestat, getLivestatById, updateLivestat, updateLivestat2, updateLivestat3,updateLivestat4, getLivestatByIdandDate, updateStatusStores, GetLicence };

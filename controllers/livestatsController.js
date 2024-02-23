@@ -474,7 +474,6 @@ const updateAllCatCripteInMongo = async (req, res) => {
       console.log("1 Catégories inserted");
     }
 
-
     res.sendStatus(200);
   } catch (error) {
     console.error(error);

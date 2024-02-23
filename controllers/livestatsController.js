@@ -108,18 +108,18 @@ const updateLivestat = async (req, res) => {
 
 const updateLivestat2 = async (req, res) => {
   const data = req.body;
-  console.log(data)
 
   try {
     const db = await connectToDatabase();
-    const collection = db.collection('livestats2');
+    const collection = db.collection('livestats');
     console.log("livestats 2 : ", data);
 
-    for (const livestat of data) {
-      const result = await collection.findOne({ IdCRM: livestat.IdCRM, date: livestat.date });
+    
+      const result = await collection.findOne({ IdCRM: data.IdCRM, date: data.date });
       const updateFields = {};
-      for (const key in livestat) {
-        updateFields[key] = livestat[key];
+      for (const key in data) {
+
+        updateFields[key] = data[key];
       }
       if (result) {
 
@@ -132,7 +132,7 @@ const updateLivestat2 = async (req, res) => {
           }
         );
 
-        console.log("Updated successfully");
+        console.log("Updated successfully",data.IdCRM,data.date);
       } else {
         console.log('No result found.');
 
@@ -140,9 +140,9 @@ const updateLivestat2 = async (req, res) => {
 
         await collection.insertOne(updateFields);
 
-        console.log("1 record inserted");
+        console.log("1 record inserted",data.IdCRM,data.date);
       }
-    }
+    
 
     res.sendStatus(200);
   } catch (error) {
@@ -150,6 +150,8 @@ const updateLivestat2 = async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
+
 const updateLivestat3 = async (req, res) => {
   const data = req.body;
   console.log(data)

@@ -342,8 +342,8 @@ const updateStatusStores = async (req, res) => {
           { _id: response._id },
           {
             $set: {
-              Status: data.statusStores,
-              LastCommand: data.LastCommand
+              Status: data.statusStores
+            
 
             }
           }

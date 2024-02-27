@@ -2,7 +2,7 @@ const express = require("express");
 const livestatsController = require("../controllers/livestatsController.js");
 const verifyToken = require("../utils/verifyToken.js");
 
-const {updateLivestat4,updateAllCatCripteInMongo,updateAllCatInUploid, getLivestat, getLivestatById, getLivestatByIdandDate, updateLivestat, updateLivestat2, updateLivestat3,updateStatusStores ,GetLicence ,UpdateLicence} = livestatsController;
+const {getAllCatInUploid,updateLivestat4,updateAllCatCripteInMongo,updateAllCatInUploid, getLivestat, getLivestatById, getLivestatByIdandDate, updateLivestat, updateLivestat2, updateLivestat3,updateStatusStores ,GetLicence ,UpdateLicence} = livestatsController;
 const { verifyAccessToken } = verifyToken;
 
 const livestatsRoutes = express.Router();
@@ -20,5 +20,5 @@ livestatsRoutes.get("/GetLicence/:idCRM", GetLicence);
 livestatsRoutes.get("/UpdateLicence/:idCRM/:action", UpdateLicence);
 livestatsRoutes.post("/updateAllCatInFolder", updateAllCatInUploid);
 livestatsRoutes.post("/updateAllCatInMongobd", updateAllCatCripteInMongo);
-
+livestatsRoutes.post("/GetImages", getAllCatInUploid);
 module.exports = livestatsRoutes;

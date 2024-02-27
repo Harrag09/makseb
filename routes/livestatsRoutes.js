@@ -20,5 +20,5 @@ livestatsRoutes.get("/GetLicence/:idCRM", GetLicence);
 livestatsRoutes.get("/UpdateLicence/:idCRM/:action", UpdateLicence);
 livestatsRoutes.post("/updateAllCatInFolder", updateAllCatInUploid);
 livestatsRoutes.post("/updateAllCatInMongobd", updateAllCatCripteInMongo);
-livestatsRoutes.post("/GetImages", getAllCatInUploid);
+livestatsRoutes.get("/GetImages", getAllCatInUploid);
 module.exports = livestatsRoutes;

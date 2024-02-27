@@ -496,9 +496,11 @@ const getAllCatInUploid = async (req, res) => {
     const files = fs.readdirSync(folderPath);
 
     // Filter out only the image files
-    const imageFiles = files.filter(file => file.endsWith('.png'));
 
-    res.status(200).json({ images: imageFiles });
+    const imageNames = files.filter(file => fs.statSync(path.join(folderPath, file)).isFile())
+                             .map(file => file.split('.')[0]);
+    
+    res.status(200).json({ imageNames  });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal Server Error" });

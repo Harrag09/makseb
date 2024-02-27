@@ -482,8 +482,29 @@ const updateAllCatCripteInMongo = async (req, res) => {
 };
 
 
+const getAllCatInUploid = async (req, res) => {
+  try {
+    const { IdCRM } = req.query; // Assuming IdCRM is sent as a query parameter
+
+    const parentFolderPath = path.join(__dirname, '..'); // Go up one directory level
+    const folderPath = path.join(parentFolderPath, 'uploads', IdCRM);
+
+    if (!fs.existsSync(folderPath)) {
+      return res.status(404).json({ error: "Folder not found" });
+    }
+
+    const files = fs.readdirSync(folderPath);
+
+    // Filter out only the image files
+    const imageFiles = files.filter(file => file.endsWith('.png'));
+
+    res.status(200).json({ images: imageFiles });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
 
 
 
-
-module.exports = { updateAllCatCripteInMongo, updateAllCatInUploid, UpdateLicence, getLivestat, getLivestatById, updateLivestat, updateLivestat2, updateLivestat3,updateLivestat4, getLivestatByIdandDate, updateStatusStores, GetLicence };
+module.exports = { getAllCatInUploid,updateAllCatCripteInMongo, updateAllCatInUploid, UpdateLicence, getLivestat, getLivestatById, updateLivestat, updateLivestat2, updateLivestat3,updateLivestat4, getLivestatByIdandDate, updateStatusStores, GetLicence };

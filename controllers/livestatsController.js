@@ -216,7 +216,7 @@ const updateLivestat3 = async (req, res) => {
   try {
     // Connect to the database
     const db = await connectToDatabase();
-    const collection = db.collection('livestats');
+    const collection = db.collection('TempsReels');
     
     // Delete existing data with the specified IdCRM
     for (const livestat of data) {

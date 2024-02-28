@@ -211,49 +211,35 @@ const updateLivestat4 = async (req, res) => {
 
 const updateLivestat3 = async (req, res) => {
   const data = req.body;
-  console.log(data)
+  console.log(data);
 
   try {
+    // Connect to the database
     const db = await connectToDatabase();
     const collection = db.collection('livestats');
-    console.log("livestats 2 : ", data);
-
+    
+    // Delete existing data with the specified IdCRM
     for (const livestat of data) {
-      const result = await collection.findOne({ IdCRM: livestat.IdCRM, date: livestat.date });
-      const updateFields = {};
-      for (const key in livestat) {
-
-        updateFields[key] = livestat[key];
-      }
-      if (result) {
-
-
-        await collection.updateOne(
-          { _id: result._id },
-          {
-            $set: updateFields
-
-          }
-        );
-
-        console.log("Updated successfully");
-      } else {
-        console.log('No result found.');
-
-
-
-        await collection.insertOne(updateFields);
-
-        console.log("1 record inserted");
-      }
+      await collection.deleteMany({ IdCRM: livestat.IdCRM });
     }
 
+    // Insert new live state data into the collection
+    for (const livestat of data) {
+      const updateFields = {};
+      for (const key in livestat) {
+        updateFields[key] = livestat[key];
+      }
+      await collection.insertOne(updateFields);
+    }
+
+    console.log("Data updated successfully");
     res.sendStatus(200);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
 
 
 

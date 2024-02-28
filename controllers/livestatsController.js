@@ -294,7 +294,35 @@ const getLivestatByIdandDate = async (req, res) => {
   }
 };
 
+const getLivestatByIdandDate2 = async (req, res) => {
+  try {
+    const idCRM = req.query.idCRM; 
+    const startDateString = req.query.date1;
+    const endDateString = req.query.date2;
 
+    const db = await connectToDatabase();
+    const collection = db.collection('TempsReels');
+
+    const livestats = await collection.aggregate([
+      {
+        $match: {
+          IdCRM: idCRM,
+          date: { $gte: startDateString, $lte: endDateString }
+        }
+      },
+    ]).toArray();
+
+    if (livestats.length === 0) {
+      return res.status(404).json({ error: "Livestats not found within the specified date range" });
+    } else {
+      const sumsForEachLine = calculateSumsForEachLine(livestats);
+      res.json(sumsForEachLine);
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
 
 
 
@@ -495,4 +523,4 @@ const getAllCatInUploid = async (req, res) => {
 
 
 
-module.exports = { getAllCatInUploid,updateAllCatCripteInMongo, updateAllCatInUploid, UpdateLicence, getLivestat, getLivestatById, updateLivestat, updateLivestat2, updateLivestat3,updateLivestat4, getLivestatByIdandDate, updateStatusStores, GetLicence };
+module.exports = { getLivestatByIdandDate2,getAllCatInUploid,updateAllCatCripteInMongo, updateAllCatInUploid, UpdateLicence, getLivestat, getLivestatById, updateLivestat, updateLivestat2, updateLivestat3,updateLivestat4, getLivestatByIdandDate, updateStatusStores, GetLicence };

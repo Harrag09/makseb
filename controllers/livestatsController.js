@@ -399,6 +399,35 @@ const getAllCatInUploid = async (req, res) => {
   }
 };
 
+const getTiquerId = async (req, res) => {
+  try {
+    const idCRM = req.body.idCRM; 
+    const startDateString = req.body.date1;
+    const endDateString = req.body.date2;
+
+    const db = await connectToDatabase();
+    const collection = db.collection('Tiquer');
+
+    const livestats = await collection.aggregate([
+      {
+        $match: {
+          IdCRM: idCRM,
+          Date: { $gte:  startDateString, $lte: endDateString }
+        }
+      },
+    ]).toArray();
+   console.log(livestats);
+    if (livestats.length === 0) {
+      return res.status(404).json({ error: "Livestats not found within the specified date range" });
+    } else {
+    
+      res.json(livestats);
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
 
 
-module.exports = {UpdateTiquer, getLivestatByIdandDate2,getAllCatInUploid,updateAllCatCripteInMongo, updateAllCatInUploid, UpdateLicence,updateLivestat3,updateLivestat4, getLivestatByIdandDate, updateStatusStores, GetLicence };
+module.exports = {getTiquerId,UpdateTiquer, getLivestatByIdandDate2,getAllCatInUploid,updateAllCatCripteInMongo, updateAllCatInUploid, UpdateLicence,updateLivestat3,updateLivestat4, getLivestatByIdandDate, updateStatusStores, GetLicence };

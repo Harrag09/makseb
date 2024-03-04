@@ -521,6 +521,40 @@ const getAllCatInUploid = async (req, res) => {
   }
 };
 
+const UpdateTiquer = async (req, res) => {
+  const data = req.body;
+  
+
+  try {
+    const db = await connectToDatabase();
+    const collection = db.collection('Tiquer');
+
+      const result = await collection.findOne({ IdCRM: data.IdCRM, date: data.date ,idTiquer :data.idTiquer });
+      const updateFields = {};
+      for (const key in data) {
+
+        updateFields[key] = data[key];
+      }
+      
+      if (result) {
+
+        console.log("aready Exist");
+      } else {
+        console.log('No result found.');
 
 
-module.exports = { getLivestatByIdandDate2,getAllCatInUploid,updateAllCatCripteInMongo, updateAllCatInUploid, UpdateLicence, getLivestat, getLivestatById, updateLivestat, updateLivestat2, updateLivestat3,updateLivestat4, getLivestatByIdandDate, updateStatusStores, GetLicence };
+
+        await collection.insertOne(updateFields);
+
+        console.log("1 Tiquer  inserted");
+      }
+    
+
+    res.sendStatus(200);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+module.exports = { UpdateTiquer,getLivestatByIdandDate2,getAllCatInUploid,updateAllCatCripteInMongo, updateAllCatInUploid, UpdateLicence, getLivestat, getLivestatById, updateLivestat, updateLivestat2, updateLivestat3,updateLivestat4, getLivestatByIdandDate, updateStatusStores, GetLicence };

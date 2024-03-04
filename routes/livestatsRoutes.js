@@ -2,7 +2,7 @@ const express = require("express");
 const livestatsController = require("../controllers/livestatsController.js");
 const verifyToken = require("../utils/verifyToken.js");
 
-const {UpdateTiquer,getLivestatByIdandDate2,getAllCatInUploid,updateLivestat4,updateAllCatCripteInMongo,updateAllCatInUploid, getLivestatByIdandDate,   updateLivestat3,updateStatusStores ,GetLicence ,UpdateLicence} = livestatsController;
+const {getTiquerId,UpdateTiquer,getLivestatByIdandDate2,getAllCatInUploid,updateLivestat4,updateAllCatCripteInMongo,updateAllCatInUploid, getLivestatByIdandDate,   updateLivestat3,updateStatusStores ,GetLicence ,UpdateLicence} = livestatsController;
 const { verifyAccessToken } = verifyToken;
 
 const livestatsRoutes = express.Router();
@@ -13,6 +13,7 @@ livestatsRoutes.post("/UpdateTiquer", UpdateTiquer);
 
 livestatsRoutes.get("/SumData", getLivestatByIdandDate);
 livestatsRoutes.get("/SumData2", getLivestatByIdandDate2);
+livestatsRoutes.get("/GetTiquer", getTiquerId);
 
 livestatsRoutes.post("/statusStores", updateStatusStores);
 

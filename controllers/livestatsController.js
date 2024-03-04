@@ -401,9 +401,10 @@ const getAllCatInUploid = async (req, res) => {
 
 const getTiquerId = async (req, res) => {
   try {
-    const idCRM = req.body.idCRM; 
-    const startDateString = req.body.date1;
-    const endDateString = req.body.date2;
+      const idCRM = req.query.idCRM; 
+    const startDateString = req.query.date1;
+    const endDateString = req.query.date2;
+
 
     const db = await connectToDatabase();
     const collection = db.collection('Tiquer');

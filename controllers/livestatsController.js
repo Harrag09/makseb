@@ -1,168 +1,10 @@
-const { connectToDatabase, client } = require('../config/dbConfig.js');
+const { connectToDatabase} = require('../config/dbConfig.js');
 
-
-const { ObjectId } = require('mongodb');
 const fs = require('fs');
 const path = require('path');
-const multer = require('multer');
-const { Console } = require('console');
-const { decode } = require('punycode');
 
-const getLivestat = async (req, res) => {
-  const idCRM = req.body.idCRM;
 
-  try {
-    const db = await connectToDatabase();
-    const collection = db.collection('TempsReels');
 
-    const livestatArray = await collection.find({ IdCRM: idCRM }).toArray();
-
-    if (livestatArray.length === 0) {
-      return res.status(404).json({ error: "Livestat not found" });
-    }
-
-    res.json(livestatArray);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Internal Server Error" });
-  }
-};
-
-const getLivestatById = async (req, res) => {
-  const idCRM = req.body.idCRM;
-
-  try {
-    const db = await connectToDatabase();
-    const collection = db.collection('livestats2');
-
-    const livestat = await collection.findOne({ IdCRM: idCRM });
-
-    if (!livestat) {
-      return res.status(404).json({ error: "Livestat not found" });
-    }
-
-    res.json(livestat);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Internal Server Error" });
-  }
-};
-
-const updateLivestat = async (req, res) => {
-  const data = req.body;
-  try {
-    const db = await connectToDatabase();
-    const collection = db.collection('livestats2');
-
-    const result = await collection.findOne({ IdCRM: data.IdCRM });
-    // console.log(data);
-    if (result) {
-
-      await collection.updateOne(
-        { _id: result._id },
-        {
-          $set: {
-            TotalHT: data.Total_HT,
-            TVA: data.TVA,
-            TotalTTC: data.Total_TTC,
-            Especes: data.Especes,
-            CarteBancaire: data.Carte_Bancaire,
-            Cheques: data.Cheques,
-            TicketResto: data.TicketResto,
-            SurPlace: data.SurPlace,
-            A_Emporter: data.A_Emporter,
-            Livraison: data.Livraison,
-            devise: data.devise
-          }
-        }
-      );
-
-      console.log("Updated successfully");
-    } else {
-      console.log('No result found.');
-
-      await collection.insertOne({
-        TotalHT: data.Total_HT,
-        TVA: data.TVA,
-        TotalTTC: data.Total_TTC,
-        Especes: data.Especes,
-        CarteBancaire: data.Carte_Bancaire,
-        Cheques: data.Cheques,
-        TicketResto: data.TicketResto,
-        SurPlace: data.SurPlace,
-        A_Emporter: data.A_Emporter,
-        Livraison: data.Livraison,
-        IdCRM: data.IdCRM,
-        devise: data.devise
-      });
-
-      console.log("1 record inserted");
-    }
-
-    res.sendStatus(200);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Internal Server Error" });
-  }
-};
-
-const updateLivestat2 = async (req, res) => {
-  const data = req.body;
-  try {
-    const db = await connectToDatabase();
-    const collection = db.collection('livestats2');
-
-    const result = await collection.findOne({ IdCRM: data.IdCRM });
-    // console.log(data);
-    if (result) {
-
-      await collection.updateOne(
-        { _id: result._id },
-        {
-          $set: {
-            TotalHT: data.Total_HT,
-            TVA: data.TVA,
-            TotalTTC: data.Total_TTC,
-            Especes: data.Especes,
-            CarteBancaire: data.Carte_Bancaire,
-            Cheques: data.Cheques,
-            TicketResto: data.TicketResto,
-            SurPlace: data.SurPlace,
-            A_Emporter: data.A_Emporter,
-            Livraison: data.Livraison,
-            devise: data.devise
-          }
-        }
-      );
-
-      console.log("Updated successfully");
-    } else {
-      console.log('No result found.');
-
-      await collection.insertOne({
-        TotalHT: data.Total_HT,
-        TVA: data.TVA,
-        TotalTTC: data.Total_TTC,
-        Especes: data.Especes,
-        CarteBancaire: data.Carte_Bancaire,
-        Cheques: data.Cheques,
-        TicketResto: data.TicketResto,
-        SurPlace: data.SurPlace,
-        A_Emporter: data.A_Emporter,
-        Livraison: data.Livraison,
-        IdCRM: data.IdCRM,
-        devise: data.devise
-      });
-
-      console.log("1 record inserted");
-    }
-
-    res.sendStatus(200);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Internal Server Error" });
-  }
-};
 const updateLivestat4 = async (req, res) => {
   const data = req.body;
   console.log(data)
@@ -241,6 +83,42 @@ const updateLivestat3 = async (req, res) => {
 };
 
 
+
+const UpdateTiquer = async (req, res) => {
+  const data = req.body;
+  
+
+  try {
+    const db = await connectToDatabase();
+    const collection = db.collection('Tiquer');
+
+      const result = await collection.findOne({ IdCRM: data.IdCRM, date: data.date ,idTiquer :data.idTiquer });
+      const updateFields = {};
+      for (const key in data) {
+
+        updateFields[key] = data[key];
+      }
+      
+      if (result) {
+
+        console.log("aready Exist");
+      } else {
+        console.log('No result found.');
+
+
+
+        await collection.insertOne(updateFields);
+
+        console.log("1 Tiquer  inserted");
+      }
+    
+
+    res.sendStatus(200);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
 
 
 
@@ -521,40 +399,6 @@ const getAllCatInUploid = async (req, res) => {
   }
 };
 
-const UpdateTiquer = async (req, res) => {
-  const data = req.body;
-  
-
-  try {
-    const db = await connectToDatabase();
-    const collection = db.collection('Tiquer');
-
-      const result = await collection.findOne({ IdCRM: data.IdCRM, date: data.date ,idTiquer :data.idTiquer });
-      const updateFields = {};
-      for (const key in data) {
-
-        updateFields[key] = data[key];
-      }
-      
-      if (result) {
-
-        console.log("aready Exist");
-      } else {
-        console.log('No result found.');
 
 
-
-        await collection.insertOne(updateFields);
-
-        console.log("1 Tiquer  inserted");
-      }
-    
-
-    res.sendStatus(200);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Internal Server Error" });
-  }
-};
-
-module.exports = { UpdateTiquer,getLivestatByIdandDate2,getAllCatInUploid,updateAllCatCripteInMongo, updateAllCatInUploid, UpdateLicence, getLivestat, getLivestatById, updateLivestat, updateLivestat2, updateLivestat3,updateLivestat4, getLivestatByIdandDate, updateStatusStores, GetLicence };
+module.exports = {UpdateTiquer, getLivestatByIdandDate2,getAllCatInUploid,updateAllCatCripteInMongo, updateAllCatInUploid, UpdateLicence,updateLivestat3,updateLivestat4, getLivestatByIdandDate, updateStatusStores, GetLicence };

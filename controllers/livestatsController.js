@@ -91,8 +91,9 @@ const UpdateTiquer = async (req, res) => {
   try {
     const db = await connectToDatabase();
     const collection = db.collection('Tiquer');
-
+         console.log(data.IdCRM,date: data.date,data.idTiquer);
       const result = await collection.findOne({ IdCRM: data.IdCRM, date: data.date ,idTiquer :data.idTiquer });
+          console.log(result);
       const updateFields = {};
       for (const key in data) {
 

@@ -434,22 +434,9 @@ const getTiquerId = async (req, res) => {
 
 
 const generateTicketsHTML = async (req, res) => {
-  const idCRM = req.query.idCRM; 
-  const HeureTicket= req.query.HeureTicket; 
-  const idTiquer= req.query.idTiquer; 
+ const data = req.query.data; 
 
-  const db = await connectToDatabase();
-  const collection = db.collection('Tiquer');
-  const livestats = await collection.aggregate([
-    {
-      $match: {
-        IdCRM: idCRM,
-        HeureTicket: HeureTicket,
-        idTiquer: idTiquer
-      }
-    },
-  ]).toArray();
-  tickets = livestats;
+  tickets = data;
   let htmlContent = `
   <!DOCTYPE html>
   <html lang="en">

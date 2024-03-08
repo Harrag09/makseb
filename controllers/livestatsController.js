@@ -432,4 +432,134 @@ const getTiquerId = async (req, res) => {
 };
 
 
-module.exports = {getTiquerId,UpdateTiquer, getLivestatByIdandDate2,getAllCatInUploid,updateAllCatCripteInMongo, updateAllCatInUploid, UpdateLicence,updateLivestat3,updateLivestat4, getLivestatByIdandDate, updateStatusStores, GetLicence };
+
+const generateTicketsHTML = async (req, res) => {
+  const idCRM = req.query.idCRM; 
+  const HeureTicket= req.query.HeureTicket; 
+  const idTiquer= req.query.idTiquer; 
+
+  const db = await connectToDatabase();
+  const collection = db.collection('Tiquer');
+  const livestats = await collection.aggregate([
+    {
+      $match: {
+        IdCRM: idCRM,
+        HeureTicket: HeureTicket,
+        idTiquer: idTiquer
+      }
+    },
+  ]).toArray();
+  tickets = livestats;
+  let htmlContent = `
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Tickets</title>
+      <style>
+          /* Define your CSS styles here */
+          body {
+              font-family: Arial, sans-serif;
+          }
+          .ticket {
+              margin: 20px;
+              padding: 10px;
+              border: 1px solid #ccc;
+          }
+          .ticket-details {
+              margin-bottom: 10px;
+          }
+          .items-list {
+              margin-top: 10px;
+          }
+          .item {
+              margin-bottom: 5px;
+          }
+          .payment-details {
+              margin-top: 10px;
+          }
+          /* Add more styles as needed */
+      </style>
+  </head>
+  <body>
+  `;
+
+  if (tickets) {
+    tickets.forEach(ticket => {
+      const ticketDate = new Date(ticket.Date.substring(0, 4), parseInt(ticket.Date.substring(4, 6)) - 1, ticket.Date.substring(6, 8));
+      const formattedDate = ticketDate.toLocaleDateString('fr-FR', {
+        day: '2-digit',
+        month: 'long',
+        year: 'numeric'
+      });
+
+      htmlContent += `
+      <div class="ticket">
+          <div class="ticket-details">
+              // <p>${ticket.name}</p>
+              <p>ALIZETH DIGITAL EL MAY DJERBA 4175 DJERBA</p>
+              <p>${formattedDate} ${ticket.HeureTicket}</p>
+              <p>Servi par: ADMIN</p>
+              <p>TICKET: ${ticket.idTiquer}</p>
+          </div>
+          <div class="items-list">
+              <ul>
+      `;
+
+      ticket.Menu.forEach(item => {
+        htmlContent += `
+        <li class="item">${item.QtyProduct}. ${item.NameProduct}: ${item.TTC} ${item.QtyProduct * item.TTC} ${ticket.devise}</li>
+        `;
+
+        if (item.Gredient && item.Gredient.length > 0) {
+          item.Gredient.forEach(option => {
+            htmlContent += `
+            <li class="item">${option.NameProduct}: ${option.TTC} ${option.TTC * option.QtyProduct} ${ticket.devise}</li>
+            `;
+          });
+        }
+
+        if (item.Sup && item.Sup.length > 0) {
+          item.Sup.forEach(option => {
+            htmlContent += `
+            <li class="item">${option.QtyProduct}. ${option.NameProduct}: ${option.TTC} ${option.TTC * option.QtyProduct} ${ticket.devise}</li>
+            `;
+          });
+        }
+      });
+
+      htmlContent += `
+              </ul>
+          </div>
+          <div class="payment-details">
+      `;
+
+      ticket.ModePaiement.forEach(payment => {
+        htmlContent += `
+        <p>${payment.ModePaimeent}: ${payment.totalwithMode} ${ticket.devise}</p>
+        `;
+      });
+
+      htmlContent += `
+          </div>
+          <div class="closing-note">
+              <p>${ticket.ModeConsomation.toUpperCase()}</p>
+              <p>MERCI DE VOTRE VISITE A TRES BIENTOT</p>
+          </div>
+      </div>
+      `;
+    });
+  }
+
+  htmlContent += `
+  </body>
+  </html>
+  `;
+
+  res.send(htmlContent);
+};  
+
+
+
+module.exports = { generateTicketsHTML,  getTiquerId,UpdateTiquer, getLivestatByIdandDate2,getAllCatInUploid,updateAllCatCripteInMongo, updateAllCatInUploid, UpdateLicence,updateLivestat3,updateLivestat4, getLivestatByIdandDate, updateStatusStores, GetLicence };

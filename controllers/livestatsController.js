@@ -435,7 +435,7 @@ const getTiquerId = async (req, res) => {
 
 const generateTicketsHTML = async (req, res) => {
  const data = req.query.data; 
-
+   console.log(data);
   tickets = data;
   let htmlContent = `
   <!DOCTYPE html>

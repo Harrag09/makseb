@@ -86,14 +86,14 @@ const updateLivestat3 = async (req, res) => {
 
 const UpdateTiquer = async (req, res) => {
   const data = req.body;
-  
+
 
   try {
     const db = await connectToDatabase();
     const collection = db.collection('Tiquer');
-         console.log(data.IdCRM,data.date,data.idTiquer);
-      const result = await collection.findOne({ IdCRM: data.IdCRM, date: data.date ,idTiquer :data.idTiquer });
-          console.log(result);
+
+      const result = await collection.findOne({ IdCRM: data.IdCRM, Date: data.Date ,idTiquer :data.idTiquer ,HeureTicket:data.HeureTicket});
+    
       const updateFields = {};
       for (const key in data) {
 
@@ -402,10 +402,9 @@ const getAllCatInUploid = async (req, res) => {
 
 const getTiquerId = async (req, res) => {
   try {
-      const idCRM = req.query.idCRM; 
-    const startDateString = req.query.date1;
-    const endDateString = req.query.date2;
-
+    const idCRM = req.body.idCRM; 
+    const startDateString = req.body.date1;
+    const endDateString = req.body.date2;
 
     const db = await connectToDatabase();
     const collection = db.collection('Tiquer');
@@ -430,13 +429,23 @@ const getTiquerId = async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
-
-
-
 const generateTicketsHTML = async (req, res) => {
- const data = req.query.data; 
-   console.log(data);
-  tickets = data;
+  const idCRM = req.query.idCRM; 
+  const HeureTicket= req.query.HeureTicket; 
+  const idTiquer= req.query.idTiquer; 
+
+  const db = await connectToDatabase();
+  const collection = db.collection('Tiquer');
+  const livestats = await collection.aggregate([
+    {
+      $match: {
+        IdCRM: idCRM,
+        HeureTicket: HeureTicket,
+        idTiquer: idTiquer
+      }
+    },
+  ]).toArray();
+  tickets = livestats;
   let htmlContent = `
   <!DOCTYPE html>
   <html lang="en">
@@ -484,7 +493,6 @@ const generateTicketsHTML = async (req, res) => {
       htmlContent += `
       <div class="ticket">
           <div class="ticket-details">
-              // <p>${ticket.name}</p>
               <p>ALIZETH DIGITAL EL MAY DJERBA 4175 DJERBA</p>
               <p>${formattedDate} ${ticket.HeureTicket}</p>
               <p>Servi par: ADMIN</p>
@@ -548,5 +556,4 @@ const generateTicketsHTML = async (req, res) => {
 };  
 
 
-
-module.exports = { generateTicketsHTML,  getTiquerId,UpdateTiquer, getLivestatByIdandDate2,getAllCatInUploid,updateAllCatCripteInMongo, updateAllCatInUploid, UpdateLicence,updateLivestat3,updateLivestat4, getLivestatByIdandDate, updateStatusStores, GetLicence };
+module.exports = {generateTicketsHTML,getTiquerId,UpdateTiquer, getLivestatByIdandDate2,getAllCatInUploid,updateAllCatCripteInMongo, updateAllCatInUploid, UpdateLicence,updateLivestat3,updateLivestat4, getLivestatByIdandDate, updateStatusStores, GetLicence };

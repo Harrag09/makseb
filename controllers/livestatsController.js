@@ -430,22 +430,13 @@ const getTiquerId = async (req, res) => {
   }
 };
 const generateTicketsHTML = async (req, res) => {
-  const idCRM = req.query.idCRM; 
-  const HeureTicket= req.query.HeureTicket; 
-  const idTiquer= req.query.idTiquer; 
+  const data2 = req.query.data;
+  
+  const data = JSON.parse(data2);
 
-  const db = await connectToDatabase();
-  const collection = db.collection('Tiquer');
-  const livestats = await collection.aggregate([
-    {
-      $match: {
-        IdCRM: idCRM,
-        HeureTicket: HeureTicket,
-        idTiquer: idTiquer
-      }
-    },
-  ]).toArray();
-  tickets = livestats;
+  console.log(data)
+  console.log(data.idCRM,data.HeureTicket,data.idTiquer,data.Date)
+  ticket = data;
   let htmlContent = `
   <!DOCTYPE html>
   <html lang="en">
@@ -462,6 +453,11 @@ const generateTicketsHTML = async (req, res) => {
               margin: 20px;
               padding: 10px;
               border: 1px solid #ccc;
+              borderRadius: 8px;
+              padding: 10px;
+              margin: 10px;
+              marginBottom: 10px;
+              width: 507px;
           }
           .ticket-details {
               margin-bottom: 10px;
@@ -475,85 +471,105 @@ const generateTicketsHTML = async (req, res) => {
           .payment-details {
               margin-top: 10px;
           }
+          .test{
+            margin:100px
+          }
           /* Add more styles as needed */
       </style>
   </head>
   <body>
   `;
 
-  if (tickets) {
-    tickets.forEach(ticket => {
       const ticketDate = new Date(ticket.Date.substring(0, 4), parseInt(ticket.Date.substring(4, 6)) - 1, ticket.Date.substring(6, 8));
       const formattedDate = ticketDate.toLocaleDateString('fr-FR', {
         day: '2-digit',
         month: 'long',
         year: 'numeric'
       });
-
       htmlContent += `
       <div class="ticket">
           <div class="ticket-details">
               <p>ALIZETH DIGITAL EL MAY DJERBA 4175 DJERBA</p>
-              <p>${formattedDate} ${ticket.HeureTicket}</p>
+              <p style='padding-left: 220px;'>${formattedDate} ${ticket.HeureTicket}</p>
               <p>Servi par: ADMIN</p>
-              <p>TICKET: ${ticket.idTiquer}</p>
+              <h1><b>TICKET: ${ticket.idTiquer}</b></h1>
           </div>
           <div class="items-list">
               <ul>
+              <table>
+  <tbody>
+  <tr  >
+  <td>     <div ><span style='padding: 10px;'>PU</span> TTC</div></td>
+  </tr>
+  </tbody>
+</table>
       `;
-
       ticket.Menu.forEach(item => {
         htmlContent += `
-        <li class="item">${item.QtyProduct}. ${item.NameProduct}: ${item.TTC} ${item.QtyProduct * item.TTC} ${ticket.devise}</li>
+        ---------------------------------------------------------------------------------------
+        <table border=0>
+        <tbody>
+          <tr>
+            <td style='width: 280px;'>
+              <div class="item">${item.QtyProduct}. ${item.NameProduct}:</div>
+            </td>
+            <td >
+              <div '><span style='padding: 10px;'>${item.TTC} </span>${item.QtyProduct * item.TTC} ${ticket.devise}</div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
         `;
-
         if (item.Gredient && item.Gredient.length > 0) {
           item.Gredient.forEach(option => {
-            htmlContent += `
-            <li class="item">${option.NameProduct}: ${option.TTC} ${option.TTC * option.QtyProduct} ${ticket.devise}</li>
-            `;
+            if (option.TTC != 0) {
+              htmlContent += `
+              <p   class="item">${option.NameProduct}: ${option.TTC} ${option.TTC * option.QtyProduct} ${ticket.devise}</p>
+              `;
+            } else {
+              htmlContent += `
+              <p   class="item">${option.NameProduct} </p>
+              `;
+            }
           });
         }
-
         if (item.Sup && item.Sup.length > 0) {
           item.Sup.forEach(option => {
             htmlContent += `
-            <li class="item">${option.QtyProduct}. ${option.NameProduct}: ${option.TTC} ${option.TTC * option.QtyProduct} ${ticket.devise}</li>
+            <p  class="item">${option.QtyProduct}. ${option.NameProduct}: ${option.TTC} ${option.TTC * option.QtyProduct} ${ticket.devise}</p>
             `;
           });
         }
       });
-
       htmlContent += `
-              </ul>
+                </table>
           </div>
           <div class="payment-details">
       `;
-
       ticket.ModePaiement.forEach(payment => {
         htmlContent += `
+        -----------------------------------------------------------------------------------------------
         <p>${payment.ModePaimeent}: ${payment.totalwithMode} ${ticket.devise}</p>
+        -----------------------------------------------------------------------------------------------
         `;
       });
-
       htmlContent += `
           </div>
           <div class="closing-note">
-              <p>${ticket.ModeConsomation.toUpperCase()}</p>
+              <p style='padding-left: 180px;'>${ticket.ModeConsomation.toUpperCase()}</p>
+              -----------------------------------------------------------------------------------------------
               <p>MERCI DE VOTRE VISITE A TRES BIENTOT</p>
           </div>
       </div>
       `;
-    });
-  }
-
+    
+  
   htmlContent += `
   </body>
   </html>
   `;
-
   res.send(htmlContent);
-};  
+};
 
 
 module.exports = {generateTicketsHTML,getTiquerId,UpdateTiquer, getLivestatByIdandDate2,getAllCatInUploid,updateAllCatCripteInMongo, updateAllCatInUploid, UpdateLicence,updateLivestat3,updateLivestat4, getLivestatByIdandDate, updateStatusStores, GetLicence };

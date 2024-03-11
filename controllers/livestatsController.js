@@ -412,7 +412,7 @@
       const livestats = await collection.aggregate([
         {
           $match: {
-            IdCRM: idCRM,
+            idCRM: idCRM,
             Date: { $gte:  startDateString, $lte: endDateString }
           }
         },

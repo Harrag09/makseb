@@ -17,10 +17,10 @@ const transporter = nodemailer.createTransport({
 }
 });
 const sendWelcomeEmail = (req, res) => {
-  const { email } = req.body; // Récupérer l'e-mail à partir de la requête
+  const { email,lien } = req.body; // Récupérer l'e-mail à partir de la requête
   const message = `
     Bienvenue chez Makseb Solutions !\n
-    Voici votre ticket  : [insérer le numéro de ticket ici]\n
+    Voici votre ticket  : lien
     Si vous avez des questions ou avez besoin d'assistance supplémentaire, n'hésitez pas à nous contacter à assistance.makseb@gmail.com.\n
     Cordialement,\n
     L'équipe de support technique de Makseb Solutions
@@ -833,4 +833,4 @@ const sendWelcomeEmail = (req, res) => {
     `;
     res.send(htmlContent);
   };
-  module.exports = {generateTicketsHTML2,generateTicketsHTML,getTiquerId,UpdateTiquer, getLivestatByIdandDate2,getAllCatInUploid,updateAllCatCripteInMongo, updateAllCatInUploid, UpdateLicence,updateLivestat3,updateLivestat4, getLivestatByIdandDate, updateStatusStores, GetLicence };
+  module.exports = {sendWelcomeEmail ,generateTicketsHTML2,generateTicketsHTML,getTiquerId,UpdateTiquer, getLivestatByIdandDate2,getAllCatInUploid,updateAllCatCripteInMongo, updateAllCatInUploid, UpdateLicence,updateLivestat3,updateLivestat4, getLivestatByIdandDate, updateStatusStores, GetLicence };

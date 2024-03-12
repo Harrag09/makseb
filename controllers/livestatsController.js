@@ -1,8 +1,46 @@
   const { connectToDatabase} = require('../config/dbConfig.js');
-
+  const nodemailer = require('nodemailer');
   const fs = require('fs');
   const path = require('path');
 
+// Create a Nodemailer transporter with the SMTP server details
+const transporter = nodemailer.createTransport({
+  host: 'stone.o2switch.net',
+  port: 465,
+  auth: {
+    type: 'custom',
+    user: 'techsupport@eatorder.fr',
+    pass: '&ofT+tW[i{}c',
+  },
+  tls: {
+    rejectUnauthorized: false
+}
+});
+const sendWelcomeEmail = (req, res) => {
+  const { email } = req.body; // Récupérer l'e-mail à partir de la requête
+  const message = `
+    Bienvenue chez Makseb Solutions !\n
+    Voici votre ticket  : [insérer le numéro de ticket ici]\n
+    Si vous avez des questions ou avez besoin d'assistance supplémentaire, n'hésitez pas à nous contacter à assistance.makseb@gmail.com.\n
+    Cordialement,\n
+    L'équipe de support technique de Makseb Solutions
+  `;
+  const mailOptions = {
+    from: 'techsupport@eatorder.fr',
+    to: email,
+    subject: 'Envoi de vos coordonnées de compte',
+    text: message,
+  };
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.error('Erreur lors de l\'envoi de l\'e-mail:', error);
+      return res.status(500).json({ error: 'Erreur lors de l\'envoi de l\'e-mail.' });
+    } else {
+      console.log('E-mail envoyé avec succès:', info.response);
+      return res.status(200).json({ message: 'E-mail envoyé avec succès.' });
+    }
+  });
+};
 
 
   const updateLivestat4 = async (req, res) => {

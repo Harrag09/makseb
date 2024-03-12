@@ -20,7 +20,7 @@ const sendWelcomeEmail = (req, res) => {
   const { email,lien } = req.body; // Récupérer l'e-mail à partir de la requête
   const message = `
     Bienvenue chez Makseb Solutions !\n
-    Voici votre ticket  : lien
+    Voici votre ticket  : ${lien}
     Si vous avez des questions ou avez besoin d'assistance supplémentaire, n'hésitez pas à nous contacter à assistance.makseb@gmail.com.\n
     Cordialement,\n
     L'équipe de support technique de Makseb Solutions

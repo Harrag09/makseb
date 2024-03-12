@@ -18,6 +18,7 @@ const transporter = nodemailer.createTransport({
 });
 const sendWelcomeEmail = (req, res) => {
   const { email, lien } = req.body;
+  console.log(lien);
   // Define the email template as a string
   const emailTemplate = `
     <!DOCTYPE html>

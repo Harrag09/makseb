@@ -29,7 +29,7 @@ const sendWelcomeEmail = (req, res) => {
     </head>
     <body>
       <p>Bienvenue chez Makseb Solutions !</p>
-      <p>Voici votre ticket  : <a href="/${lien}">cliquez ici</a></p>
+      <p>Voici votre ticket : <a href="/${lien}">cliquez ici</a></p>
       <p>Si vous avez des questions ou avez besoin d'assistance supplémentaire, n'hésitez pas à nous contacter à assistance.makseb@gmail.com.</p>
       <p>Cordialement,</p>
       <p>L'équipe de support technique de Makseb Solutions</p>

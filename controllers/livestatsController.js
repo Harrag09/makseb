@@ -17,19 +17,30 @@ const transporter = nodemailer.createTransport({
 }
 });
 const sendWelcomeEmail = (req, res) => {
-  const { email,lien } = req.body; // Récupérer l'e-mail à partir de la requête
-  const message = `
-    Bienvenue chez Makseb Solutions !\n
-    Voici votre ticket  : <a href="/${lien}">cliquez ici</a>\n
-    Si vous avez des questions ou avez besoin d'assistance supplémentaire, n'hésitez pas à nous contacter à assistance.makseb@gmail.com.\n
-    Cordialement,\n
-    L'équipe de support technique de Makseb Solutions
+  const { email, lien } = req.body;
+  // Define the email template as a string
+  const emailTemplate = `
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Welcome Email</title>
+    </head>
+    <body>
+      <p>Bienvenue chez Makseb Solutions !</p>
+      <p>Voici votre ticket  : <a href="/${lien}">cliquez ici</a></p>
+      <p>Si vous avez des questions ou avez besoin d'assistance supplémentaire, n'hésitez pas à nous contacter à assistance.makseb@gmail.com.</p>
+      <p>Cordialement,</p>
+      <p>L'équipe de support technique de Makseb Solutions</p>
+    </body>
+    </html>
   `;
   const mailOptions = {
     from: 'techsupport@eatorder.fr',
     to: email,
     subject: 'Envoi de vos coordonnées de compte',
-    text: message,
+    html: emailTemplate, // Set the email template as the HTML body
   };
   transporter.sendMail(mailOptions, (error, info) => {
     if (error) {

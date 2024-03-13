@@ -27,11 +27,11 @@ const sendWelcomeEmail = (req, res) => {
       <title>Welcome Email</title>
     </head>
     <body>
-      <p>Bienvenue chez /${name} !</p>
+      <p>Bienvenue chez ${name} !</p>
       <p>Veuillez trouver ci-joint votre ticket : <a href="${lien}">cliquez ici</a></p>
       <p>Si vous avez des questions ou avez besoin d'assistance supplémentaire, n'hésitez pas à nous recontacter.</p>
       <p>Cordialement,</p>
-      <p>/${name}</p>
+      <p>${name}</p>
     </body>
     </html>
   `;

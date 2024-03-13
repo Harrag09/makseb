@@ -3,22 +3,20 @@
   const fs = require('fs');
   const path = require('path');
 
-// Create a Nodemailer transporter with the SMTP server details
 const transporter = nodemailer.createTransport({
-  host: 'stone.o2switch.net',
+  host: 'makseb.fr',
   port: 465,
   auth: {
     type: 'custom',
-    user: 'techsupport@eatorder.fr',
-    pass: '&ofT+tW[i{}c',
+    user: 'commandes@makseb.fr',
+    pass: 'Makseb2024',
   },
   tls: {
     rejectUnauthorized: false
 }
 });
 const sendWelcomeEmail = (req, res) => {
-  const { email, lien } = req.body;
-  console.log(lien);
+  const { email, lien, name } = req.body;
   // Define the email template as a string
   const emailTemplate = `
     <!DOCTYPE html>
@@ -29,16 +27,16 @@ const sendWelcomeEmail = (req, res) => {
       <title>Welcome Email</title>
     </head>
     <body>
-      <p>Bienvenue chez Makseb Solutions !</p>
-      <p>Voici votre ticket : ${lien}</p>
-      <p>Si vous avez des questions ou avez besoin d'assistance supplémentaire, n'hésitez pas à nous contacter à assistance.makseb@gmail.com.</p>
+      <p>Bienvenue chez /${name} !</p>
+      <p>Veuillez trouver ci-joint votre ticket : <a href="${lien}">cliquez ici</a></p>
+      <p>Si vous avez des questions ou avez besoin d'assistance supplémentaire, n'hésitez pas à nous recontacter.</p>
       <p>Cordialement,</p>
-      <p>L'équipe de support technique de Makseb Solutions</p>
+      <p>/${name}</p>
     </body>
     </html>
   `;
   const mailOptions = {
-    from: 'techsupport@eatorder.fr',
+    from: 'commandes@makseb.fr',
     to: email,
     subject: 'Envoi de vos coordonnées de compte',
     html: emailTemplate, // Set the email template as the HTML body

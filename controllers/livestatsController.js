@@ -482,9 +482,7 @@ const sendWelcomeEmail = (req, res) => {
 
   const generateTicketsHTML = async (req, res) => {
     const data2 = req.query.data;
-    
     const data = JSON.parse(data2);
-
     console.log(data)
     console.log(data.idCRM,data.HeureTicket,data.idTiquer,data.Date)
     ticket = data;
@@ -508,7 +506,7 @@ const sendWelcomeEmail = (req, res) => {
                 padding: 10px;
                 margin: 10px;
                 marginBottom: 10px;
-                width: 507px;
+                width: 450px;
             }
             .ticket-details {
                 margin-bottom: 10px;
@@ -533,8 +531,7 @@ const sendWelcomeEmail = (req, res) => {
     </head>
     <body>
     `;
-   
-     
+    
         const ticketDate = new Date(ticket.Date.substring(0, 4), parseInt(ticket.Date.substring(4, 6)) - 1, ticket.Date.substring(6, 8));
         const formattedDate = ticketDate.toLocaleDateString('fr-FR', {
           day: '2-digit',
@@ -565,7 +562,7 @@ const sendWelcomeEmail = (req, res) => {
           totalHT += item.HT * item.QtyProduct;
           totalTVA += item.TVA * item.QtyProduct;
           htmlContent += `
-          ---------------------------------------------------------------------------------------
+          -------------------------------------------------------------------
           <table border=0>
           <tbody>
             <tr>
@@ -636,9 +633,9 @@ const sendWelcomeEmail = (req, res) => {
         htmlContent += `
             </div>
             <div class="payment-details">
-            -----------------------------------------------------------------------------------------------
+             ------------------------------------------------------------------------------------
         `;
-      htmlContent += `
+       htmlContent += `
           <table border=0>
           <tbody>
             <tr>
@@ -658,7 +655,7 @@ const sendWelcomeEmail = (req, res) => {
             </tr>
           </tbody>
         </table>
-          -----------------------------------------------------------------------------------------------
+        ------------------------------------------------------------------------------------
           `;
         ticket.ModePaiement.forEach(payment => {
           htmlContent += `
@@ -674,14 +671,14 @@ const sendWelcomeEmail = (req, res) => {
             </tr>
           </tbody>
         </table>
-          -----------------------------------------------------------------------------------------------
+        ------------------------------------------------------------------------------------
           `;
         });
         htmlContent += `
             </div>
             <div class="closing-note">
                 <p style='padding-left: 180px;'>${ticket.ModeConsomation.toUpperCase()}</p>
-                -----------------------------------------------------------------------------------------------
+                ------------------------------------------------------------------------------------
                 <p style='padding-left: 80px;'>MERCI DE VOTRE VISITE A TRES BIENTOT</p>
             </div>
         </div>
@@ -694,7 +691,6 @@ const sendWelcomeEmail = (req, res) => {
     `;
     res.send(htmlContent);
   };
-
 
 
 

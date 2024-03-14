@@ -477,6 +477,9 @@ const sendWelcomeEmail = (req, res) => {
       res.status(500).json({ error: "Internal Server Error" });
     }
   };
+
+
+
   const generateTicketsHTML = async (req, res) => {
     const data2 = req.query.data;
     
@@ -516,6 +519,9 @@ const sendWelcomeEmail = (req, res) => {
             .item {
                 margin-bottom: 5px;
             }
+            .items {
+              margin-left: 30px;
+          }
             .payment-details {
                 margin-top: 10px;
             }
@@ -527,7 +533,8 @@ const sendWelcomeEmail = (req, res) => {
     </head>
     <body>
     `;
-
+    if (tickets) {
+      tickets.forEach(ticket => {
         const ticketDate = new Date(ticket.Date.substring(0, 4), parseInt(ticket.Date.substring(4, 6)) - 1, ticket.Date.substring(6, 8));
         const formattedDate = ticketDate.toLocaleDateString('fr-FR', {
           day: '2-digit',
@@ -546,13 +553,17 @@ const sendWelcomeEmail = (req, res) => {
                 <ul>
                 <table>
     <tbody>
-    <tr  >
-    <td>     <div ><span style='padding: 10px;'>PU</span> TTC</div></td>
+    <tr>
+    <td>     <div ><span style='padding: 10px; padding-left: 300px;'>PU</span> TTC</div></td>
     </tr>
     </tbody>
   </table>
         `;
+        let totalHT = 0;
+        let totalTVA = 0;
         ticket.Menu.forEach(item => {
+          totalHT += item.HT * item.QtyProduct;
+          totalTVA += item.TVA * item.QtyProduct;
           htmlContent += `
           ---------------------------------------------------------------------------------------
           <table border=0>
@@ -562,7 +573,7 @@ const sendWelcomeEmail = (req, res) => {
                 <div class="item">${item.QtyProduct}. ${item.NameProduct}:</div>
               </td>
               <td >
-                <div '><span style='padding: 10px;'>${item.TTC} </span>${item.QtyProduct * item.TTC} ${ticket.devise}</div>
+                <div '><span  style='padding: 10px;'>${item.TTC} </span>${item.QtyProduct * item.TTC} ${ticket.devise}</div>
               </td>
             </tr>
           </tbody>
@@ -571,33 +582,98 @@ const sendWelcomeEmail = (req, res) => {
           if (item.Gredient && item.Gredient.length > 0) {
             item.Gredient.forEach(option => {
               if (option.TTC != 0) {
+                totalHT += option.HT * option.QtyProduct;
+                const optionTVA = option.TVA;
+                totalTVA += optionTVA * option.QtyProduct;
                 htmlContent += `
-                <p   class="item">${option.NameProduct}: ${option.TTC} ${option.TTC * option.QtyProduct} ${ticket.devise}</p>
-                `;
+                <table border=0>
+                  <tr>
+                    <td style='width: 280px;'>
+                      <div class="items">${option.NameProduct}:</div>
+                    </td>
+                    <td >
+                      <div '><span  style='padding: 10px;'>${option.TTC} </span>   ${option.TTC * option.QtyProduct} ${ticket.devise}</div>
+                    </td>
+                  </tr>
+                    `;
               } else {
+                totalHT += option.HT * option.QtyProduct;
+                const optionTVA = option.TVA;
+                totalTVA += optionTVA * option.QtyProduct;
                 htmlContent += `
-                <p   class="item">${option.NameProduct} </p>
+                <tr>
+                <td style='width: 280px;'>
+                <p   class="items">${option.NameProduct} </p>
+                </td>
+                </tr>
+              </table>
                 `;
               }
             });
           }
           if (item.Sup && item.Sup.length > 0) {
             item.Sup.forEach(option => {
+              totalHT += option.HT * option.QtyProduct;
+                const optionTVA = option.TVA;
+                totalTVA += optionTVA * option.QtyProduct;
               htmlContent += `
-              <p  class="item">${option.QtyProduct}. ${option.NameProduct}: ${option.TTC} ${option.TTC * option.QtyProduct} ${ticket.devise}</p>
+              <table border=0>
+              <tbody>
+                <tr>
+                  <td style='width: 280px;'>
+                    <div class="items">${option.QtyProduct}. ${option.NameProduct}:</div>
+                  </td>
+                  <td >
+                    <div '><span  style='padding: 10px;'>${option.TTC} </span>   ${option.TTC * option.QtyProduct} ${ticket.devise}</div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
               `;
             });
           }
         });
         htmlContent += `
-                  </table>
             </div>
             <div class="payment-details">
+            -----------------------------------------------------------------------------------------------
         `;
+      htmlContent += `
+          <table border=0>
+          <tbody>
+            <tr>
+              <td style='width: 280px;'>
+              MONTANT  HT:  ${totalHT.toFixed(1)}${ticket.devise}
+              </td>
+              <td >
+                <div '><span  style='padding: 10px;'>TOTAL: </span> ${ticket.TTC} ${ticket.devise}</div>
+              </td>
+            </tr>
+            <tr >
+            <td style='width: 280px;'>
+              </td>
+            <td >
+            <div '><span  style='padding: 10px;'>DONT TVA:  </span>  ${totalTVA.toFixed(1)}${ticket.devise}</div>
+          </td>
+            </tr>
+          </tbody>
+        </table>
+          -----------------------------------------------------------------------------------------------
+          `;
         ticket.ModePaiement.forEach(payment => {
           htmlContent += `
-          -----------------------------------------------------------------------------------------------
-          <p>${payment.ModePaimeent}: ${payment.totalwithMode} ${ticket.devise}</p>
+          <table border=0>
+          <tbody>
+            <tr>
+              <td style='width: 280px;'>
+                <div class="items">${payment.ModePaimeent}:</div>
+              </td>
+              <td >
+                <div '><span  style='padding: 20px;'> </span> ${payment.totalwithMode} ${ticket.devise}</div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
           -----------------------------------------------------------------------------------------------
           `;
         });
@@ -606,18 +682,22 @@ const sendWelcomeEmail = (req, res) => {
             <div class="closing-note">
                 <p style='padding-left: 180px;'>${ticket.ModeConsomation.toUpperCase()}</p>
                 -----------------------------------------------------------------------------------------------
-                <p>MERCI DE VOTRE VISITE A TRES BIENTOT</p>
+                <p style='padding-left: 80px;'>MERCI DE VOTRE VISITE A TRES BIENTOT</p>
             </div>
         </div>
         `;
-      
-    
+      });
+    }
     htmlContent += `
     </body>
     </html>
     `;
     res.send(htmlContent);
   };
+
+
+
+
 
   const generateTicketsHTML2 = async (req, res) => {
     const idCRM = req.query.idCRM;

@@ -533,8 +533,8 @@ const sendWelcomeEmail = (req, res) => {
     </head>
     <body>
     `;
-    if (tickets) {
-      tickets.forEach(ticket => {
+   
+     
         const ticketDate = new Date(ticket.Date.substring(0, 4), parseInt(ticket.Date.substring(4, 6)) - 1, ticket.Date.substring(6, 8));
         const formattedDate = ticketDate.toLocaleDateString('fr-FR', {
           day: '2-digit',
@@ -686,15 +686,14 @@ const sendWelcomeEmail = (req, res) => {
             </div>
         </div>
         `;
-      });
-    }
+      
+    
     htmlContent += `
     </body>
     </html>
     `;
     res.send(htmlContent);
   };
-
 
 
 

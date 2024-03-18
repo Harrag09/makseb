@@ -569,10 +569,10 @@ const generateTicketsHTML = async (req, res) => {
           <tbody>
             <tr>
               <td style='width: 280px;'>
-                <div class="item">${item.QtyProduct}. ${item.NameProduct}:</div>
+                <div class="item">${item.QtyProduct} * ${item.NameProduct}</div>
               </td>
               <td >
-                <div '><span  style='padding: 10px;'>${item.TTC} </span>${item.QtyProduct * item.TTC} ${data.devise}</div>
+                <div '><span  style='padding: 10px;'> ${item.TTC > 0 ? item.TTC : ''} </span>${item.TTC > 0 ? item.QtyProduct * item.TTC: ''} ${item.TTC > 0 ? data.devise:''}</div>
               </td>
             </tr>
           </tbody>
@@ -588,10 +588,10 @@ const generateTicketsHTML = async (req, res) => {
                 <table border=0>
                   <tr>
                     <td style='width: 280px;'>
-                      <div class="items">${option.NameProduct}:</div>
+                      <div class="items">${option.NameProduct}</div>
                     </td>
                     <td >
-                      <div '><span  style='padding: 10px;'>${option.TTC} </span>   ${option.TTC * option.QtyProduct} ${data.devise}</div>
+                      <div '><span  style='padding: 10px;'>${option.TTC > 0 ?option.TTC:''} </span>   ${option.TTC > 0 ?option.TTC * option.QtyProduct:''} ${option.TTC > 0 ?data.devise:''}</div>
                     </td>
                   </tr>
                     `;
@@ -620,10 +620,10 @@ const generateTicketsHTML = async (req, res) => {
               <tbody>
                 <tr>
                   <td style='width: 280px;'>
-                    <div class="items">${option.QtyProduct}. ${option.NameProduct}:</div>
+                    <div class="items">${option.QtyProduct} * ${option.NameProduct}</div>
                   </td>
                   <td >
-                    <div '><span  style='padding: 10px;'>${option.TTC} </span>   ${option.TTC * option.QtyProduct} ${data.devise}</div>
+                    <div '><span  style='padding: 10px;'>${option.TTC > 0 ?option.TTC:''} </span>   ${option.TTC > 0 ?option.TTC * option.QtyProduct:''} ${option.TTC > 0 ?data.devise:''}</div>
                   </td>
                 </tr>
               </tbody>
@@ -693,6 +693,16 @@ const generateTicketsHTML = async (req, res) => {
     `;
     res.send(htmlContent);
   };
+
+
+
+
+
+
+
+
+
+
 
 
 

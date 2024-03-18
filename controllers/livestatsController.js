@@ -485,7 +485,12 @@ const sendWelcomeEmail = (req, res) => {
 
 
 
- const generateTicketsHTML = async (req, res) => {
+
+
+
+
+
+  const generateTicketsHTML = async (req, res) => {
     const data = JSON.parse(req.query.data);
     let htmlContent = `
     <!DOCTYPE html>
@@ -560,7 +565,7 @@ const sendWelcomeEmail = (req, res) => {
         `;
         let totalHT = 0;
         let totalTVA = 0;
-        ticket.Menu.forEach(item => {
+        data.Menu.forEach(item => {
           totalHT += item.HT * item.QtyProduct;
           totalTVA += item.TVA * item.QtyProduct;
           htmlContent += `
@@ -659,7 +664,7 @@ const sendWelcomeEmail = (req, res) => {
         </table>
         ------------------------------------------------------------------------------------
           `;
-        ticket.ModePaiement.forEach(payment => {
+        data.ModePaiement.forEach(payment => {
           htmlContent += `
           <table border=0>
           <tbody>

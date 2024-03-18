@@ -485,9 +485,6 @@ const sendWelcomeEmail = (req, res) => {
 
 
 
-
-
-
 const generateTicketsHTML = async (req, res) => {
     const data = JSON.parse(req.query.data);
     let htmlContent = `
@@ -498,17 +495,19 @@ const generateTicketsHTML = async (req, res) => {
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Tickets</title>
         <style>
+            /* Define your CSS styles here */
             body {
                 font-family: Arial, sans-serif;
-                margin: 0;
-                padding: 0;
             }
             .ticket {
-                border: 1px solid #ccc;
-                border-radius: 8px;
-                margin: 10px;
+                margin: 20px;
                 padding: 10px;
-                width: 100%;
+                border: 1px solid #ccc;
+                borderRadius: 8px;
+                padding: 10px;
+                margin: 10px;
+                marginBottom: 10px;
+                width: 450px;
             }
             .ticket-details {
                 margin-bottom: 10px;
@@ -520,165 +519,180 @@ const generateTicketsHTML = async (req, res) => {
                 margin-bottom: 5px;
             }
             .items {
-                margin-left: 30px;
-            }
+              margin-left: 30px;
+          }
             .payment-details {
                 margin-top: 10px;
             }
-            /* Add more styles as needed */
-            @media only screen and (max-width: 600px) {
-                .ticket {
-                    width: 90%;
-                    margin: 10px auto;
-                }
+            .test{
+              margin:100px
             }
+            /* Add more styles as needed */
         </style>
     </head>
     <body>
     `;
-
-    const ticketDate = new Date(data.Date.substring(0, 4), parseInt(data.Date.substring(4, 6)) - 1, data.Date.substring(6, 8));
-    const formattedDate = ticketDate.toLocaleDateString('fr-FR', {
-        day: '2-digit',
-        month: 'long',
-        year: 'numeric'
-    });
-
-    htmlContent += `
-    <div class="ticket">
-        <div class="ticket-details">
-            <p>ALIZETH DIGITAL EL MAY DJERBA 4175 DJERBA</p>
-            <p>${formattedDate} ${data.HeureTicket}</p>
-            <p>Servi par: ADMIN</p>
-            <h1><b>TICKET: ${data.idTiquer}</b></h1>
-        </div>
-        <div class="items-list">
-            <ul>
-                <table>
-                    <tbody>
-                        <tr>
-                            <td><span class="price-label">PU</span> TTC</td>
-                        </tr>
-                    </tbody>
-                </table>
-    `;
-
-    let totalHT = 0;
-    let totalTVA = 0;
-
-    data.Menu.forEach(item => {
-        totalHT += item.HT * item.QtyProduct;
-        totalTVA += item.TVA * item.QtyProduct;
-
+ 
+   
+        const ticketDate = new Date(data.Date.substring(0, 4), parseInt(data.Date.substring(4, 6)) - 1, data.Date.substring(6, 8));
+        const formattedDate = ticketDate.toLocaleDateString('fr-FR', {
+          day: '2-digit',
+          month: 'long',
+          year: 'numeric'
+        });
         htmlContent += `
-        <table>
-            <tbody>
-                <tr>
-                    <td>
-                        <div class="item">${item.QtyProduct}. ${item.NameProduct}:</div>
-                    </td>
-                    <td>
-                        <div><span class="price">${item.TTC}</span> ${item.QtyProduct * item.TTC} ${data.devise}</div>
-                    </td>
-                </tr>
-            </tbody>
+        <div class="ticket">
+            <div class="ticket-details">
+                <p>ALIZETH DIGITAL EL MAY DJERBA 4175 DJERBA</p>
+                <p style='padding-left: 220px;'>${formattedDate} ${data.HeureTicket}</p>
+                <p>Servi par: ADMIN</p>
+                <h1><b>TICKET: ${data.idTiquer}</b></h1>
+            </div>
+            <div class="items-list">
+                <ul>
+                <table>
+    <tbody>
+    <tr>
+    <td>     <div ><span style='padding: 10px; padding-left: 300px;'>PU</span> TTC</div></td>
+    </tr>
+    </tbody>
+  </table>
+        `;
+        let totalHT = 0;
+        let totalTVA = 0;
+        data.Menu.forEach(item => {
+          totalHT += item.HT * item.QtyProduct;
+          totalTVA += item.TVA * item.QtyProduct;
+          htmlContent += `
+          -------------------------------------------------------------------
+          <table border=0>
+          <tbody>
+            <tr>
+              <td style='width: 280px;'>
+                <div class="item">${item.QtyProduct}. ${item.NameProduct}:</div>
+              </td>
+              <td >
+                <div '><span  style='padding: 10px;'>${item.TTC} </span>${item.QtyProduct * item.TTC} ${data.devise}</div>
+              </td>
+            </tr>
+          </tbody>
         </table>
-        `;
-
-        if (item.Gredient && item.Gredient.length > 0) {
+          `;
+          if (item.Gredient && item.Gredient.length > 0) {
             item.Gredient.forEach(option => {
+              if (option.TTC != 0) {
                 totalHT += option.HT * option.QtyProduct;
-                totalTVA += option.TVA * option.QtyProduct;
-
+                const optionTVA = option.TVA;
+                totalTVA += optionTVA * option.QtyProduct;
                 htmlContent += `
-                <table>
-                    <tr>
-                        <td>
-                            <div class="items">${option.NameProduct}:</div>
-                        </td>
-                        <td>
-                            <div><span class="price">${option.TTC}</span> ${option.TTC * option.QtyProduct} ${data.devise}</div>
-                        </td>
-                    </tr>
-                </table>
+                <table border=0>
+                  <tr>
+                    <td style='width: 280px;'>
+                      <div class="items">${option.NameProduct}:</div>
+                    </td>
+                    <td >
+                      <div '><span  style='padding: 10px;'>${option.TTC} </span>   ${option.TTC * option.QtyProduct} ${data.devise}</div>
+                    </td>
+                  </tr>
+                    `;
+              } else {
+                totalHT += option.HT * option.QtyProduct;
+                const optionTVA = option.TVA;
+                totalTVA += optionTVA * option.QtyProduct;
+                htmlContent += `
+                <tr>
+                <td style='width: 280px;'>
+                <p   class="items">${option.NameProduct} </p>
+                </td>
+                </tr>
+              </table>
                 `;
+              }
             });
-        }
-
-        if (item.Sup && item.Sup.length > 0) {
+          }
+          if (item.Sup && item.Sup.length > 0) {
             item.Sup.forEach(option => {
-                totalHT += option.HT * option.QtyProduct;
-                totalTVA += option.TVA * option.QtyProduct;
-
-                htmlContent += `
-                <table>
-                    <tbody>
-                        <tr>
-                            <td>
-                                <div class="items">${option.QtyProduct}. ${option.NameProduct}:</div>
-                            </td>
-                            <td>
-                                <div><span class="price">${option.TTC}</span> ${option.TTC * option.QtyProduct} ${data.devise}</div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-                `;
-            });
-        }
-    });
-
-    htmlContent += `
-        </div>
-        <div class="payment-details">
-            <table>
-                <tbody>
-                    <tr>
-                        <td>
-                            MONTANT HT: ${totalHT.toFixed(1)} ${data.devise}
-                        </td>
-                        <td>
-                            TOTAL: ${data.TTC} ${data.devise}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                        </td>
-                        <td>
-                            DONT TVA: ${totalTVA.toFixed(1)} ${data.devise}
-                        </td>
-                    </tr>
-                </tbody>
+              totalHT += option.HT * option.QtyProduct;
+                const optionTVA = option.TVA;
+                totalTVA += optionTVA * option.QtyProduct;
+              htmlContent += `
+              <table border=0>
+              <tbody>
+                <tr>
+                  <td style='width: 280px;'>
+                    <div class="items">${option.QtyProduct}. ${option.NameProduct}:</div>
+                  </td>
+                  <td >
+                    <div '><span  style='padding: 10px;'>${option.TTC} </span>   ${option.TTC * option.QtyProduct} ${data.devise}</div>
+                  </td>
+                </tr>
+              </tbody>
             </table>
-        </div>
-    `;
-
-    data.ModePaiement.forEach(payment => {
+              `;
+            });
+          }
+        });
         htmlContent += `
-        <div class="payment-method">
-            <span>${payment.ModePaimeent}:</span>
-            <span>${payment.totalwithMode} ${data.devise}</span>
+            </div>
+            <div class="payment-details">
+             ------------------------------------------------------------------------------------
+        `;
+       htmlContent += `
+          <table border=0>
+          <tbody>
+            <tr>
+              <td style='width: 280px;'>
+              MONTANT  HT:  ${totalHT.toFixed(1)}${data.devise}
+              </td>
+              <td >
+                <div '><span  style='padding: 10px;'>TOTAL: </span> ${data.TTC} ${data.devise}</div>
+              </td>
+            </tr>
+            <tr >
+            <td style='width: 280px;'>
+              </td>
+            <td >
+            <div '><span  style='padding: 10px;'>DONT TVA:  </span>  ${totalTVA.toFixed(1)}${data.devise}</div>
+          </td>
+            </tr>
+          </tbody>
+        </table>
+        ------------------------------------------------------------------------------------
+          `;
+        data.ModePaiement.forEach(payment => {
+          htmlContent += `
+          <table border=0>
+          <tbody>
+            <tr>
+              <td style='width: 280px;'>
+                <div class="items">${payment.ModePaimeent}:</div>
+              </td>
+              <td >
+                <div '><span  style='padding: 20px;'> </span> ${payment.totalwithMode} ${data.devise}</div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        ------------------------------------------------------------------------------------
+          `;
+        });
+        htmlContent += `
+            </div>
+            <div class="closing-note">
+                <p style='padding-left: 180px;'>${data.ModeConsomation.toUpperCase()}</p>
+                ------------------------------------------------------------------------------------
+                <p style='padding-left: 80px;'>MERCI DE VOTRE VISITE A TRES BIENTOT</p>
+            </div>
         </div>
         `;
-    });
-
-    htmlContent += `
-        <div class="closing-note">
-            <p>${data.ModeConsomation.toUpperCase()}</p>
-            <p>MERCI DE VOTRE VISITE A TRES BIENTOT</p>
-        </div>
-    </div>
-    `;
-
+    
+    
     htmlContent += `
     </body>
     </html>
     `;
-
     res.send(htmlContent);
-};
-
-
+  };
 
 
 

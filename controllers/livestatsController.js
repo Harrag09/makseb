@@ -483,8 +483,6 @@ const sendWelcomeEmail = (req, res) => {
 
 
 
-
-
 const generateTicketsHTML = async (req, res) => {
     const data = JSON.parse(req.query.data);
     let htmlContent = `
@@ -564,7 +562,7 @@ const generateTicketsHTML = async (req, res) => {
           totalHT += item.HT ;
           totalTVA += item.TVA ;
           htmlContent += `
-          -------------------------------------------------------------------
+          ------------------------------------------------------------------------------
           <table border=0>
           <tbody>
             <tr>
@@ -623,7 +621,7 @@ const generateTicketsHTML = async (req, res) => {
                     <div class="items">${option.QtyProduct} * ${option.NameProduct}</div>
                   </td>
                   <td >
-                    <div '><span  style='padding: 10px;'></span>   ${option.TTC > 0 ?option.TTC :''} ${option.TTC > 0 ?data.devise:''}</div>
+                    <div '><span  style='padding: 10px;'>${option.TTC > 0 ?option.TTC / option.QtyProduct :''} </span>   ${option.TTC > 0 ?option.TTC :''} ${option.TTC > 0 ?data.devise:''}</div>
                   </td>
                 </tr>
               </tbody>
@@ -635,7 +633,7 @@ const generateTicketsHTML = async (req, res) => {
         htmlContent += `
             </div>
             <div class="payment-details">
-             ------------------------------------------------------------------------------------
+            ------------------------------------------------------------------------------
         `;
        htmlContent += `
           <table border=0>
@@ -657,7 +655,7 @@ const generateTicketsHTML = async (req, res) => {
             </tr>
           </tbody>
         </table>
-        ------------------------------------------------------------------------------------
+        ------------------------------------------------------------------------------
           `;
         data.ModePaiement.forEach(payment => {
           htmlContent += `
@@ -673,14 +671,14 @@ const generateTicketsHTML = async (req, res) => {
             </tr>
           </tbody>
         </table>
-        ------------------------------------------------------------------------------------
+        ------------------------------------------------------------------------------
           `;
         });
         htmlContent += `
             </div>
             <div class="closing-note">
                 <p style='padding-left: 180px;'>${data.ModeConsomation.toUpperCase()}</p>
-                ------------------------------------------------------------------------------------
+                ------------------------------------------------------------------------------
                 <p style='padding-left: 80px;'>MERCI DE VOTRE VISITE A TRES BIENTOT</p>
             </div>
         </div>
@@ -693,14 +691,6 @@ const generateTicketsHTML = async (req, res) => {
     `;
     res.send(htmlContent);
   };
-
-
-
-
-
-
-
-
 
 
 

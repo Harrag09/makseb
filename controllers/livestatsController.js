@@ -482,8 +482,7 @@ const sendWelcomeEmail = (req, res) => {
 
 
 
-
-const generateTicketsHTML = async (req, res) => {
+  const generateTicketsHTML = async (req, res) => {
     const data = JSON.parse(req.query.data);
     let htmlContent = `
     <!DOCTYPE html>
@@ -559,10 +558,10 @@ const generateTicketsHTML = async (req, res) => {
         let totalHT = 0;
         let totalTVA = 0;
         data.Menu.forEach(item => {
-          totalHT += item.HT ;
-          totalTVA += item.TVA ;
+          totalHT += item.HT * item.QtyProduct;
+          totalTVA += item.TVA * item.QtyProduct;
           htmlContent += `
-          ------------------------------------------------------------------------------
+          -------------------------------------------------------------------
           <table border=0>
           <tbody>
             <tr>
@@ -570,7 +569,7 @@ const generateTicketsHTML = async (req, res) => {
                 <div class="item">${item.QtyProduct} * ${item.NameProduct}</div>
               </td>
               <td >
-                <div '><span  style='padding: 10px;'> ${item.TTC > 0 ? item.TTC / item.QtyProduct: ''} </span>${item.TTC > 0 ? item.TTC: ''} ${item.TTC > 0 ? data.devise:''}</div>
+                <div '><span  style='padding: 10px;'> ${item.TTC > 0 ? item.TTC : ''} </span>${item.TTC > 0 ? item.QtyProduct * item.TTC: ''} ${item.TTC > 0 ? data.devise:''}</div>
               </td>
             </tr>
           </tbody>
@@ -579,9 +578,9 @@ const generateTicketsHTML = async (req, res) => {
           if (item.Gredient && item.Gredient.length > 0) {
             item.Gredient.forEach(option => {
               if (option.TTC != 0) {
-                totalHT += option.HT ;
+                totalHT += option.HT * option.QtyProduct;
                 const optionTVA = option.TVA;
-                totalTVA += optionTVA ;
+                totalTVA += optionTVA * option.QtyProduct;
                 htmlContent += `
                 <table border=0>
                   <tr>
@@ -589,7 +588,7 @@ const generateTicketsHTML = async (req, res) => {
                       <div class="items">${option.NameProduct}</div>
                     </td>
                     <td >
-                      <div '><span  style='padding: 10px;'>${option.TTC > 0 ? option.TTC  / option.QtyProduct:''} </span>   ${option.TTC > 0 ?option.TTC:''} ${option.TTC > 0 ?data.devise:''}</div>
+                      <div '><span  style='padding: 10px;'>${option.TTC > 0 ?option.TTC:''} </span>   ${option.TTC > 0 ?option.TTC * option.QtyProduct:''} ${option.TTC > 0 ?data.devise:''}</div>
                     </td>
                   </tr>
                     `;
@@ -612,7 +611,7 @@ const generateTicketsHTML = async (req, res) => {
             item.Sup.forEach(option => {
               totalHT += option.HT ;
                 const optionTVA = option.TVA;
-                totalTVA += optionTVA;
+                totalTVA += optionTVA ;
               htmlContent += `
               <table border=0>
               <tbody>
@@ -621,7 +620,7 @@ const generateTicketsHTML = async (req, res) => {
                     <div class="items">${option.QtyProduct} * ${option.NameProduct}</div>
                   </td>
                   <td >
-                    <div '><span  style='padding: 10px;'>${option.TTC > 0 ?option.TTC / option.QtyProduct :''} </span>   ${option.TTC > 0 ?option.TTC :''} ${option.TTC > 0 ?data.devise:''}</div>
+                    <div '><span  style='padding: 10px;'>${option.TTC > 0 ?option.TTC:''} </span>   ${option.TTC > 0 ?option.TTC * option.QtyProduct:''} ${option.TTC > 0 ?data.devise:''}</div>
                   </td>
                 </tr>
               </tbody>
@@ -633,7 +632,7 @@ const generateTicketsHTML = async (req, res) => {
         htmlContent += `
             </div>
             <div class="payment-details">
-            ------------------------------------------------------------------------------
+             ------------------------------------------------------------------------------------
         `;
        htmlContent += `
           <table border=0>
@@ -650,12 +649,12 @@ const generateTicketsHTML = async (req, res) => {
             <td style='width: 280px;'>
               </td>
             <td >
-            <div '><span  style='padding: 10px;'>DONT TVA:  </span>  ${totalTVA.toFixed(1)}${data.devise}</div>
+            <div '><span  style='padding: 7px;'>DONT TVA:  </span>  ${totalTVA.toFixed(1)}${data.devise}</div>
           </td>
             </tr>
           </tbody>
         </table>
-        ------------------------------------------------------------------------------
+        ------------------------------------------------------------------------------------
           `;
         data.ModePaiement.forEach(payment => {
           htmlContent += `
@@ -671,14 +670,14 @@ const generateTicketsHTML = async (req, res) => {
             </tr>
           </tbody>
         </table>
-        ------------------------------------------------------------------------------
+        ------------------------------------------------------------------------------------
           `;
         });
         htmlContent += `
             </div>
             <div class="closing-note">
                 <p style='padding-left: 180px;'>${data.ModeConsomation.toUpperCase()}</p>
-                ------------------------------------------------------------------------------
+                ------------------------------------------------------------------------------------
                 <p style='padding-left: 80px;'>MERCI DE VOTRE VISITE A TRES BIENTOT</p>
             </div>
         </div>
@@ -691,7 +690,6 @@ const generateTicketsHTML = async (req, res) => {
     `;
     res.send(htmlContent);
   };
-
 
 
 

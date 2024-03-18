@@ -1,4 +1,4 @@
-  const { connectToDatabase} = require('../config/dbConfig.js');
+ const { connectToDatabase} = require('../config/dbConfig.js');
   const nodemailer = require('nodemailer');
   const fs = require('fs');
   const path = require('path');
@@ -561,8 +561,8 @@ const generateTicketsHTML = async (req, res) => {
         let totalHT = 0;
         let totalTVA = 0;
         data.Menu.forEach(item => {
-          totalHT += item.HT * item.QtyProduct;
-          totalTVA += item.TVA * item.QtyProduct;
+          totalHT += item.HT ;
+          totalTVA += item.TVA ;
           htmlContent += `
           -------------------------------------------------------------------
           <table border=0>
@@ -572,7 +572,7 @@ const generateTicketsHTML = async (req, res) => {
                 <div class="item">${item.QtyProduct} * ${item.NameProduct}</div>
               </td>
               <td >
-                <div '><span  style='padding: 10px;'> ${item.TTC > 0 ? item.TTC : ''} </span>${item.TTC > 0 ? item.QtyProduct * item.TTC: ''} ${item.TTC > 0 ? data.devise:''}</div>
+                <div '><span  style='padding: 10px;'> ${item.TTC > 0 ? item.TTC / item.QtyProduct: ''} </span>${item.TTC > 0 ? item.TTC: ''} ${item.TTC > 0 ? data.devise:''}</div>
               </td>
             </tr>
           </tbody>
@@ -581,9 +581,9 @@ const generateTicketsHTML = async (req, res) => {
           if (item.Gredient && item.Gredient.length > 0) {
             item.Gredient.forEach(option => {
               if (option.TTC != 0) {
-                totalHT += option.HT * option.QtyProduct;
+                totalHT += option.HT ;
                 const optionTVA = option.TVA;
-                totalTVA += optionTVA * option.QtyProduct;
+                totalTVA += optionTVA ;
                 htmlContent += `
                 <table border=0>
                   <tr>
@@ -591,14 +591,14 @@ const generateTicketsHTML = async (req, res) => {
                       <div class="items">${option.NameProduct}</div>
                     </td>
                     <td >
-                      <div '><span  style='padding: 10px;'>${option.TTC > 0 ?option.TTC:''} </span>   ${option.TTC > 0 ?option.TTC * option.QtyProduct:''} ${option.TTC > 0 ?data.devise:''}</div>
+                      <div '><span  style='padding: 10px;'>${option.TTC > 0 ? option.TTC  / option.QtyProduct:''} </span>   ${option.TTC > 0 ?option.TTC:''} ${option.TTC > 0 ?data.devise:''}</div>
                     </td>
                   </tr>
                     `;
               } else {
-                totalHT += option.HT * option.QtyProduct;
+                totalHT += option.HT ;
                 const optionTVA = option.TVA;
-                totalTVA += optionTVA * option.QtyProduct;
+                totalTVA += optionTVA ;
                 htmlContent += `
                 <tr>
                 <td style='width: 280px;'>
@@ -612,9 +612,9 @@ const generateTicketsHTML = async (req, res) => {
           }
           if (item.Sup && item.Sup.length > 0) {
             item.Sup.forEach(option => {
-              totalHT += option.HT * option.QtyProduct;
+              totalHT += option.HT ;
                 const optionTVA = option.TVA;
-                totalTVA += optionTVA * option.QtyProduct;
+                totalTVA += optionTVA;
               htmlContent += `
               <table border=0>
               <tbody>
@@ -623,7 +623,7 @@ const generateTicketsHTML = async (req, res) => {
                     <div class="items">${option.QtyProduct} * ${option.NameProduct}</div>
                   </td>
                   <td >
-                    <div '><span  style='padding: 10px;'>${option.TTC > 0 ?option.TTC:''} </span>   ${option.TTC > 0 ?option.TTC * option.QtyProduct:''} ${option.TTC > 0 ?data.devise:''}</div>
+                    <div '><span  style='padding: 10px;'></span>   ${option.TTC > 0 ?option.TTC :''} ${option.TTC > 0 ?data.devise:''}</div>
                   </td>
                 </tr>
               </tbody>
@@ -693,7 +693,6 @@ const generateTicketsHTML = async (req, res) => {
     `;
     res.send(htmlContent);
   };
-
 
 
 

@@ -481,51 +481,109 @@ const sendWelcomeEmail = (req, res) => {
 
 
 
-
-  const generateTicketsHTML = async (req, res) => {
+const generateTicketsHTML = async (req, res) => {
     const data = JSON.parse(req.query.data);
     let htmlContent = `
     <!DOCTYPE html>
-    <html lang="en">
+    <html lang="fr">
     <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Tickets</title>
-        <style>
-            /* Define your CSS styles here */
-            body {
-                font-family: Arial, sans-serif;
-            }
-            .ticket {
-                margin: 20px;
-                padding: 10px;
-                border: 1px solid #ccc;
-                borderRadius: 8px;
-                padding: 10px;
-                margin: 10px;
-                marginBottom: 10px;
-                width: 450px;
-            }
-            .ticket-details {
-                margin-bottom: 10px;
-            }
-            .items-list {
-                margin-top: 10px;
-            }
-            .item {
-                margin-bottom: 5px;
-            }
-            .items {
-              margin-left: 30px;
-          }
-            .payment-details {
-                margin-top: 10px;
-            }
-            .test{
-              margin:100px
-            }
-            /* Add more styles as needed */
-        </style>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title> Ticket Restaurant</title>
+      <!-- Bootstrap CSS -->
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+      <style>
+        /* Custom CSS for ticket */
+        .ticket {
+    
+          width: 100%;
+          margin: 0 auto;
+          margin-top: 5px;
+          margin-left: 5px;
+    
+          font-family: Arial, sans-serif;
+          border: 1px solid #ccc;
+          padding: 5px;
+          border-radius: 10px;
+          box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .ticket-header {
+          text-align: center;
+          margin-bottom: 5px;
+          padding-top: 15px;
+        }
+        .TicketID{
+            margin-top: -10px;  
+        }
+        .Ligne1 {
+          border-bottom: 1px dashed #ccc;
+          margin-bottom: 18px;
+        }
+        .Ligne2{
+          border-bottom: 1px solid #ccc;
+          margin-right: 25px;
+         
+        }
+        .StyledTable{
+            width: 100%;
+            margin-left: 10px;
+        }
+        .StyledTable2{
+            width: 100%;
+            margin-left: 25px;
+        
+        }
+        .Fist{width: 68%;}
+        .Fist2{width: 80%;}
+     .ProductName{
+        font-size: 0.8rem;
+     }
+     .GredientName{
+        font-size: 0.7rem;
+       
+     }
+     .Taux{
+        font-size: 0.9rem;
+       
+     }
+     .GredientTD{
+     padding-left: 20px;
+     padding-top: -10px;
+     }
+     .SuplimentTD{
+      padding-left: 10px;
+     padding-top: -10px;
+     }
+     .tabletva{
+      align-items: center;
+    
+     }
+     .totalText{
+      padding-left: 150px;
+      font-size: 1.2rem;
+    
+     }
+     .HTtext{
+      padding-left: 10px;
+      font-size: 0.9rem;
+    
+     }
+     .DivtotalText{
+      padding-top: 10px;
+    
+     }
+     .centered-text {
+        text-align: center;
+        margin-top: -16px;
+        
+      }
+      .bold-text {
+        font-weight: bold;
+        font-size: 1.3rem;
+    
+      }
+    
+      </style>
     </head>
     <body>
     `;
@@ -538,158 +596,153 @@ const sendWelcomeEmail = (req, res) => {
           year: 'numeric'
         });
         htmlContent += `
+
         <div class="ticket">
-            <div class="ticket-details">
-                <p>ALIZETH DIGITAL EL MAY DJERBA 4175 DJERBA</p>
-                <p style='padding-left: 220px;'>${formattedDate} ${data.HeureTicket}</p>
-                <p>Servi par: ADMIN</p>
-                <h1><b>TICKET: ${data.idTiquer}</b></h1>
-            </div>
-            <div class="items-list">
-                <ul>
-                <table>
+        <!-- Ticket Header -->
+        <div class="ticket-header">
+          <h5>ALIZETH DIGITAL</h5>
+          <p>El May Djerba <BR>
+          4175 DJERBA</p>
+          <div class="Ligne1"></div>
+          <div>Suivi par : Admin Le ${formattedDate} / ${data.HeureTicket} </div>
+          <div class="Ligne1"></div><div class="Ligne1"></div>
+        </div>
+
+      
+        <h5 class="TicketID"><b>TICKET  : ${data.idTiquer}</b></h5><br>
+        <div class="Ligne1"></div>
+        <div style="page-break-before: always;"></div>
+ 
+        <table class="StyledTable">
+        <thead>
+            <tr>
+                <td class="Fist"><text class="ProductName"><b></b></text></td>
+
+                <td><b>PU</b></td>
+                <td><b>TTC</b></td>
+
+            </tr>
+            
+        </thead>
+    </table>
+        <div class="Ligne2"></div>
+        `;
+        data.Menu.forEach(item => {
+          htmlContent += `
+
+          <table class="StyledTable">
+          <tbody>
+              <tr>
+                  <td class="Fist"><text class="ProductName"><b>${item.QtyProduct} * ${item.NameProduct}</b></text></td>
+  
+                  <td>${item.TTC > 0 ? item.TTC : ''}</td>
+                  <td>${item.TTC > 0 ? item.QtyProduct * item.TTC: ''} ${item.TTC > 0 ? data.devise:''}</td>
+              </tr>
+              `;
+              if (item.Gredient && item.Gredient.length > 0) {
+                item.Gredient.forEach(option => {   
+                    htmlContent += `
+              <tr >
+                  <td class="GredientTD" ><text class="GredientName"><b>${option.QtyProduct} *  ${option.NameProduct}</b></text></td>
+                  <td >${option.TTC > 0 ?option.TTC:''}</td>
+                  <td >${option.TTC > 0 ?option.TTC * option.QtyProduct:''} ${option.TTC > 0 ?data.devise:''}<</td>
+              </tr>
+              `;
+            
+          });
+        }
+        if (item.Sup && item.Sup.length > 0) {
+          item.Sup.forEach(option => {
+            htmlContent += `
+
+            <tr >
+              <td class="SuplimentTD" ><text class="GredientName"><b>${option.QtyProduct} *  ${option.NameProduct}</b></text></td>
+              <td >${option.TTC > 0 ?option.TTC:''}</td>
+              <td >${option.TTC > 0 ?option.TTC * option.QtyProduct:''} ${option.TTC > 0 ?data.devise:''}<</td>
+          </tr>
+          `;
+        });
+      }
+      htmlContent += `
+          </tbody>
+      </table>  <div class="Ligne2"></div>`;
+    });
+      
+    htmlContent += `
+    <div class="Ligne2"></div>
+    <br><div>
+    <text class="HTtext">Montant HT : ${data.ChiffreAffaire.Total_Ht} ${data.devise}TND **** TVA : ${data.ChiffreAffaire.Total_Ht} ${data.devise}  </text></div>
+  <div class="DivtotalText">
+      <text class="totalText"><b>TOTAL : ${data.ChiffreAffaire.Total_Ht}  ${data.devise}</b> </text>
+    </div>
+  
+  <div class="Ligne2"></div>
+   
+     
+    <table  class="StyledTable" >
+      <tbody>
+      `;
+      data.ModePaiement.forEach(payment => {
+        htmlContent += `
+          <tr >
+              <td class="Fist" ><text class="Taux"><b>${payment.ModePaimeent}</b></text></td>
+  
+              <td ><text class="Taux"><b>${payment.totalwithMode} ${data.devise}</b></text></td>
+          </tr>
+          `;
+        });
+        htmlContent += `
+  
+        
+      </tbody>
+  </table>
+  <div class="Ligne1"></div><div class="Ligne1"></div>
+  
+  
+  <table  class="StyledTable2" >
     <tbody>
-    <tr>
-    <td>     <div ><span style='padding: 10px; padding-left: 300px;'>PU</span> TTC</div></td>
-    </tr>
+    `;
+    data.ChiffreAffaireDetailler.forEach(Chiffre => {
+      htmlContent += `
+        <tr >
+          <td ><text class="Taux"><b>${Chiffre.Taux}</b></text></td>
+            <td  ><text class="Taux"><b>${Chiffre.HT}</b></text></td>
+            <td ><text class="Taux"><b>${Chiffre.TVA}</b></text></td>
+            <td ><text class="Taux"><b>${Chiffre.TTC}</b></text></td>
+        </tr>
+        `;
+    });
+    htmlContent += `
     </tbody>
   </table>
-        `;
-        let totalHT = 0;
-        let totalTVA = 0;
-        data.Menu.forEach(item => {
-          totalHT += item.HT * item.QtyProduct;
-          totalTVA += item.TVA * item.QtyProduct;
-          htmlContent += `
-          -------------------------------------------------------------------
-          <table border=0>
-          <tbody>
-            <tr>
-              <td style='width: 280px;'>
-                <div class="item">${item.QtyProduct} * ${item.NameProduct}</div>
-              </td>
-              <td >
-                <div '><span  style='padding: 10px;'> ${item.TTC > 0 ? item.TTC : ''} </span>${item.TTC > 0 ? item.QtyProduct * item.TTC: ''} ${item.TTC > 0 ? data.devise:''}</div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-          `;
-          if (item.Gredient && item.Gredient.length > 0) {
-            item.Gredient.forEach(option => {
-              if (option.TTC != 0) {
-                totalHT += option.HT * option.QtyProduct;
-                const optionTVA = option.TVA;
-                totalTVA += optionTVA * option.QtyProduct;
-                htmlContent += `
-                <table border=0>
-                  <tr>
-                    <td style='width: 280px;'>
-                      <div class="items">${option.NameProduct}</div>
-                    </td>
-                    <td >
-                      <div '><span  style='padding: 10px;'>${option.TTC > 0 ?option.TTC:''} </span>   ${option.TTC > 0 ?option.TTC * option.QtyProduct:''} ${option.TTC > 0 ?data.devise:''}</div>
-                    </td>
-                  </tr>
-                    `;
-              } else {
-                totalHT += option.HT ;
-                const optionTVA = option.TVA;
-                totalTVA += optionTVA ;
-                htmlContent += `
-                <tr>
-                <td style='width: 280px;'>
-                <p   class="items">${option.NameProduct} </p>
-                </td>
-                </tr>
-              </table>
-                `;
-              }
-            });
-          }
-          if (item.Sup && item.Sup.length > 0) {
-            item.Sup.forEach(option => {
-              totalHT += option.HT ;
-                const optionTVA = option.TVA;
-                totalTVA += optionTVA ;
-              htmlContent += `
-              <table border=0>
-              <tbody>
-                <tr>
-                  <td style='width: 280px;'>
-                    <div class="items">${option.QtyProduct} * ${option.NameProduct}</div>
-                  </td>
-                  <td >
-                    <div '><span  style='padding: 10px;'>${option.TTC > 0 ?option.TTC:''} </span>   ${option.TTC > 0 ?option.TTC * option.QtyProduct:''} ${option.TTC > 0 ?data.devise:''}</div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-              `;
-            });
-          }
-        });
-        htmlContent += `
-            </div>
-            <div class="payment-details">
-             ------------------------------------------------------------------------------------
-        `;
-       htmlContent += `
-          <table border=0>
-          <tbody>
-            <tr>
-              <td style='width: 280px;'>
-              MONTANT  HT:  ${totalHT.toFixed(1)}${data.devise}
-              </td>
-              <td >
-                <div '><span  style='padding: 10px;'>TOTAL: </span> ${data.TTC} ${data.devise}</div>
-              </td>
-            </tr>
-            <tr >
-            <td style='width: 280px;'>
-              </td>
-            <td >
-            <div '><span  style='padding: 7px;'>DONT TVA:  </span>  ${totalTVA.toFixed(1)}${data.devise}</div>
-          </td>
-            </tr>
-          </tbody>
-        </table>
-        ------------------------------------------------------------------------------------
-          `;
-        data.ModePaiement.forEach(payment => {
-          htmlContent += `
-          <table border=0>
-          <tbody>
-            <tr>
-              <td style='width: 280px;'>
-                <div class="items">${payment.ModePaimeent}:</div>
-              </td>
-              <td >
-                <div '><span  style='padding: 20px;'> </span> ${payment.totalwithMode} ${data.devise}</div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        ------------------------------------------------------------------------------------
-          `;
-        });
-        htmlContent += `
-            </div>
-            <div class="closing-note">
-                <p style='padding-left: 180px;'>${data.ModeConsomation.toUpperCase()}</p>
-                ------------------------------------------------------------------------------------
-                <p style='padding-left: 80px;'>MERCI DE VOTRE VISITE A TRES BIENTOT</p>
-            </div>
-        </div>
-        `;
+  
+  <div class="Ligne1"></div><div class="Ligne1"></div>
+  
+  <div class="centered-text">
+    <text class="bold-text ModeConsomation">${data.ModeConsomation.toUpperCase()}</text>
+  </div>
+  <div class="Ligne1"></div><div class="Ligne1"></div>
+  <div class="centered-text">
+    <text >MERCI DE VOTRE VISITE <br> A TRES BIENTOT </text>
+  </div><br>
+  RAMACAISSE
+  
+  
     
-    
-    htmlContent += `
-    </body>
-    </html>
-    `;
+   </div>      
+  </body>
+  </html>  `;
+
+
+
+
+
+
+        
+      
     res.send(htmlContent);
   };
+
 
 
 

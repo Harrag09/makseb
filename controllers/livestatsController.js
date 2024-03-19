@@ -480,7 +480,6 @@ const sendWelcomeEmail = (req, res) => {
 
 
 
-
 const generateTicketsHTML = async (req, res) => {
     const data = JSON.parse(req.query.data);
     console.log(data,data.ChiffreAffaire.Total_Ht)
@@ -588,6 +587,10 @@ const generateTicketsHTML = async (req, res) => {
         height: 7px;
        
     }
+    .SignTEXT{
+        height: 120px;
+      }
+  
     
       </style>
     </head>
@@ -640,7 +643,7 @@ const generateTicketsHTML = async (req, res) => {
           <table class="StyledTable">
           <tbody>
               <tr>
-                  <td class="Fist"><text class="ProductName"><b>${item.QtyProduct} * ${item.NameProduct}</b></text></td>
+                  <td class="Fist"><text class="ProductName"><b>${item.QtyProduct}  ${item.NameProduct}</b></text></td>
   
                   <td>${item.TTC > 0 ? item.TTC / item.QtyProduct : ''} </td>
                   <td>${item.TTC > 0 ? item.TTC : ''} ${item.TTC > 0 ? data.devise:''}</td>
@@ -650,7 +653,7 @@ const generateTicketsHTML = async (req, res) => {
                 item.Gredient.forEach(option => {   
                     htmlContent += `
               <tr >
-                  <td class="GredientTD" ><text class="GredientName"><b>${option.QtyProduct} *  ${option.NameProduct}</b></text></td>
+                  <td class="GredientTD" ><text class="GredientName"><b>${option.QtyProduct} X  ${option.NameProduct}</b></text></td>
                   <td >${option.TTC > 0 ?option.TTC / option.QtyProduct:''}</td>
                   <td >${option.TTC > 0 ?option.TTC:''} ${option.TTC > 0 ?data.devise:''}</td>
               </tr>
@@ -668,7 +671,7 @@ const generateTicketsHTML = async (req, res) => {
             htmlContent += `
 
             <tr >
-              <td class="SuplimentTD" ><text class="GredientName"><b>${option.QtyProduct} *  ${option.NameProduct}</b></text></td>
+              <td class="SuplimentTD" ><text class="GredientName"><b>${option.QtyProduct} X ${option.NameProduct}</b></text></td>
               <td >${option.TTC > 0 ?option.TTC / option.QtyProduct:''}</td>
               <td >${option.TTC > 0 ?option.TTC:''} ${option.TTC > 0 ?data.devise:''}</td>
           </tr>
@@ -746,12 +749,24 @@ const generateTicketsHTML = async (req, res) => {
   <div class="centered-text">
     <text >MERCI DE VOTRE VISITE <br> A TRES BIENTOT </text>
   </div><br>
-  RAMACAISSE
-</div>      
+  <div class="SignTEXT">${data.sign}</div>
+  
+  
+    
+   </div>      
   </body>
   </html>  `;
-   res.send(htmlContent);
+
+
+
+
+
+
+        
+      
+    res.send(htmlContent);
   };
+
 
 
 

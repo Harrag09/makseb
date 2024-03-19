@@ -482,7 +482,7 @@ const sendWelcomeEmail = (req, res) => {
 
 const generateTicketsHTML = async (req, res) => {
     const data = JSON.parse(req.query.data);
-    console.log(data)
+    console.log(data,data.ChiffreAffaire.Total_Ht)
     let htmlContent = `
     <!DOCTYPE html>
     <html lang="fr">
@@ -582,6 +582,10 @@ const generateTicketsHTML = async (req, res) => {
         font-size: 1.3rem;
     
       }
+      .spacer {
+        height: 7px;
+       
+    }
     
       </style>
     </head>
@@ -646,12 +650,17 @@ const generateTicketsHTML = async (req, res) => {
               <tr >
                   <td class="GredientTD" ><text class="GredientName"><b>${option.QtyProduct} *  ${option.NameProduct}</b></text></td>
                   <td >${option.TTC > 0 ?option.TTC:''}</td>
-                  <td >${option.TTC > 0 ?option.TTC * option.QtyProduct:''} ${option.TTC > 0 ?data.devise:''}<</td>
+                  <td >${option.TTC > 0 ?option.TTC * option.QtyProduct:''} ${option.TTC > 0 ?data.devise:''}</td>
               </tr>
               `;
             
           });
         }
+        htmlContent += `<tr class="spacer">
+            <td></td>
+            <td></td>
+            <td></td>
+            </tr>`;
         if (item.Sup && item.Sup.length > 0) {
           item.Sup.forEach(option => {
             htmlContent += `
@@ -702,10 +711,14 @@ const generateTicketsHTML = async (req, res) => {
   
   <table  class="StyledTable2" >
     <tbody>
+    <tr >
+    <td ><text class="Taux"><b>TAux</b></text></td>
+      <td  ><text class="Taux"><b>HT</b></text></td>
+      <td ><text class="Taux"><b>TVA</b></text></td>
+      <td ><text class="Taux"><b>TTC</b></text></td>
+  </tr>
     `;
-
- 
-  for (const key in data.ChiffreAffaireDetailler) {
+    for (const key in data.ChiffreAffaireDetailler) {
         if (data.ChiffreAffaireDetailler.hasOwnProperty(key)) {
             const Chiffre = data.ChiffreAffaireDetailler[key];
       htmlContent += `
@@ -718,8 +731,6 @@ const generateTicketsHTML = async (req, res) => {
         `;
     }
 }
-
- 
     htmlContent += `
     </tbody>
   </table>
@@ -750,6 +761,7 @@ const generateTicketsHTML = async (req, res) => {
       
     res.send(htmlContent);
   };
+
 
 
 

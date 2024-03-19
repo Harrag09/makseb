@@ -482,7 +482,7 @@ const sendWelcomeEmail = (req, res) => {
 
 const generateTicketsHTML = async (req, res) => {
     const data = JSON.parse(req.query.data);
-    console.log(data,data.ChiffreAffaire.Total_Ht)
+    console.log(data)
     let htmlContent = `
     <!DOCTYPE html>
     <html lang="fr">

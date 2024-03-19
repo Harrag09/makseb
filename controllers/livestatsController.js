@@ -639,8 +639,8 @@ const generateTicketsHTML = async (req, res) => {
               <tr>
                   <td class="Fist"><text class="ProductName"><b>${item.QtyProduct} * ${item.NameProduct}</b></text></td>
   
-                  <td>${item.TTC > 0 ? item.TTC / item.QtyProduct : ''} ${item.TTC > 0 ? data.devise:''}</td>
-                  <td>${item.TTC > 0 ? item.TTC : ''}</td>
+                  <td>${item.TTC > 0 ? item.TTC / item.QtyProduct : ''} </td>
+                  <td>${item.TTC > 0 ? item.TTC : ''} ${item.TTC > 0 ? data.devise:''}</td>
               </tr>
               `;
               if (item.Gredient && item.Gredient.length > 0) {
@@ -744,11 +744,23 @@ const generateTicketsHTML = async (req, res) => {
     <text >MERCI DE VOTRE VISITE <br> A TRES BIENTOT </text>
   </div><br>
   RAMACAISSE
+  
+  
+    
    </div>      
   </body>
   </html>  `;
+
+
+
+
+
+
+        
+      
     res.send(htmlContent);
   };
+
 
 
 

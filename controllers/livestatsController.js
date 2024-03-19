@@ -478,6 +478,7 @@ const sendWelcomeEmail = (req, res) => {
     }
   };
 
+
 const generateTicketsHTML = async (req, res) => {
     const data = JSON.parse(req.query.data);
     console.log(data,data.ChiffreAffaire.Total_Ht)
@@ -640,7 +641,7 @@ const generateTicketsHTML = async (req, res) => {
                   <td class="Fist"><text class="ProductName"><b>${item.QtyProduct} * ${item.NameProduct}</b></text></td>
   
                   <td>${item.TTC > 0 ? item.TTC : ''}</td>
-                  <td>${item.TTC > 0 ? item.QtyProduct * item.TTC: ''} ${item.TTC > 0 ? data.devise:''}</td>
+                  <td>${item.TTC > 0 ? item.QtyProduct / item.TTC: ''} ${item.TTC > 0 ? data.devise:''}</td>
               </tr>
               `;
               if (item.Gredient && item.Gredient.length > 0) {
@@ -649,7 +650,7 @@ const generateTicketsHTML = async (req, res) => {
               <tr >
                   <td class="GredientTD" ><text class="GredientName"><b>${option.QtyProduct} *  ${option.NameProduct}</b></text></td>
                   <td >${option.TTC > 0 ?option.TTC:''}</td>
-                  <td >${option.TTC > 0 ?option.TTC * option.QtyProduct:''} ${option.TTC > 0 ?data.devise:''}</td>
+                  <td >${option.TTC > 0 ?option.TTC / option.QtyProduct:''} ${option.TTC > 0 ?data.devise:''}</td>
               </tr>
               `;
             
@@ -667,7 +668,7 @@ const generateTicketsHTML = async (req, res) => {
             <tr >
               <td class="SuplimentTD" ><text class="GredientName"><b>${option.QtyProduct} *  ${option.NameProduct}</b></text></td>
               <td >${option.TTC > 0 ?option.TTC:''}</td>
-              <td >${option.TTC > 0 ?option.TTC * option.QtyProduct:''} ${option.TTC > 0 ?data.devise:''}</td>
+              <td >${option.TTC > 0 ?option.TTC / option.QtyProduct:''} ${option.TTC > 0 ?data.devise:''}</td>
           </tr>
           `;
         });
@@ -743,26 +744,13 @@ const generateTicketsHTML = async (req, res) => {
   <div class="centered-text">
     <text >MERCI DE VOTRE VISITE <br> A TRES BIENTOT </text>
   </div><br>
-  RAMACAISSE
-  
-  
-    
+  RAMACAISSE 
    </div>      
   </body>
   </html>  `;
-
-
-
-
-
-
-        
-      
+    
     res.send(htmlContent);
   };
-
-
-
 
 
 

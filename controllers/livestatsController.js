@@ -703,7 +703,11 @@ const generateTicketsHTML = async (req, res) => {
   <table  class="StyledTable2" >
     <tbody>
     `;
-    data.ChiffreAffaireDetailler.forEach(Chiffre => {
+
+ 
+  for (const key in data.ChiffreAffaireDetailler) {
+        if (data.ChiffreAffaireDetailler.hasOwnProperty(key)) {
+            const Chiffre = data.ChiffreAffaireDetailler[key];
       htmlContent += `
         <tr >
           <td ><text class="Taux"><b>${Chiffre.Taux}</b></text></td>
@@ -712,7 +716,10 @@ const generateTicketsHTML = async (req, res) => {
             <td ><text class="Taux"><b>${Chiffre.TTC}</b></text></td>
         </tr>
         `;
-    });
+    }
+}
+
+ 
     htmlContent += `
     </tbody>
   </table>

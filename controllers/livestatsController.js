@@ -480,9 +480,9 @@ const sendWelcomeEmail = (req, res) => {
 
 
 
-
 const generateTicketsHTML = async (req, res) => {
     const data = JSON.parse(req.query.data);
+    console.log(data,data.ChiffreAffaire.Total_Ht)
     let htmlContent = `
     <!DOCTYPE html>
     <html lang="fr">
@@ -628,6 +628,7 @@ const generateTicketsHTML = async (req, res) => {
         <div class="Ligne2"></div>
         `;
         data.Menu.forEach(item => {
+          
           htmlContent += `
 
           <table class="StyledTable">
@@ -671,9 +672,9 @@ const generateTicketsHTML = async (req, res) => {
     htmlContent += `
     <div class="Ligne2"></div>
     <br><div>
-    <text class="HTtext">Montant HT : ${data.ChiffreAffaire.Total_Ht} ${data.devise}TND **** TVA : ${data.ChiffreAffaire.Total_Ht} ${data.devise}  </text></div>
+    <text class="HTtext">Montant HT : ${data.ChiffreAffaire.Total_Ht?data.ChiffreAffaire.Total_Ht:''} ${data.devise}TND **** TVA : ${data.ChiffreAffaire.Total_TVA?data.ChiffreAffaire.Total_TVA:''} ${data.devise}  </text></div>
   <div class="DivtotalText">
-      <text class="totalText"><b>TOTAL : ${data.ChiffreAffaire.Total_Ht}  ${data.devise}</b> </text>
+      <text class="totalText"><b>TOTAL : ${data.ChiffreAffaire.Total_TTC?data.ChiffreAffaire.Total_TTC:''}  ${data.devise}</b> </text>
     </div>
   
   <div class="Ligne2"></div>

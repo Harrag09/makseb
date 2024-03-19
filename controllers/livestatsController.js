@@ -479,7 +479,6 @@ const sendWelcomeEmail = (req, res) => {
   };
 
 
-
 const generateTicketsHTML = async (req, res) => {
     const data = JSON.parse(req.query.data);
     console.log(data,data.ChiffreAffaire.Total_Ht)
@@ -668,7 +667,7 @@ const generateTicketsHTML = async (req, res) => {
             <tr >
               <td class="SuplimentTD" ><text class="GredientName"><b>${option.QtyProduct} *  ${option.NameProduct}</b></text></td>
               <td >${option.TTC > 0 ?option.TTC:''}</td>
-              <td >${option.TTC > 0 ?option.TTC * option.QtyProduct:''} ${option.TTC > 0 ?data.devise:''}<</td>
+              <td >${option.TTC > 0 ?option.TTC * option.QtyProduct:''} ${option.TTC > 0 ?data.devise:''}</td>
           </tr>
           `;
         });
@@ -681,7 +680,7 @@ const generateTicketsHTML = async (req, res) => {
     htmlContent += `
     <div class="Ligne2"></div>
     <br><div>
-    <text class="HTtext">Montant HT : ${data.ChiffreAffaire.Total_Ht?data.ChiffreAffaire.Total_Ht:''} ${data.devise}TND **** TVA : ${data.ChiffreAffaire.Total_TVA?data.ChiffreAffaire.Total_TVA:''} ${data.devise}  </text></div>
+    <text class="HTtext">Montant HT : ${data.ChiffreAffaire.Total_Ht?data.ChiffreAffaire.Total_Ht:''} ${data.devise} *** *** TVA : ${data.ChiffreAffaire.Total_TVA?data.ChiffreAffaire.Total_TVA:''} ${data.devise}  </text></div>
   <div class="DivtotalText">
       <text class="totalText"><b>TOTAL : ${data.ChiffreAffaire.Total_TTC?data.ChiffreAffaire.Total_TTC:''}  ${data.devise}</b> </text>
     </div>
@@ -761,7 +760,6 @@ const generateTicketsHTML = async (req, res) => {
       
     res.send(htmlContent);
   };
-
 
 
 

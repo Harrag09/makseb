@@ -478,7 +478,6 @@ const sendWelcomeEmail = (req, res) => {
     }
   };
 
-
 const generateTicketsHTML = async (req, res) => {
     const data = JSON.parse(req.query.data);
     console.log(data,data.ChiffreAffaire.Total_Ht)
@@ -513,6 +512,7 @@ const generateTicketsHTML = async (req, res) => {
         }
         .TicketID{
             margin-top: -10px;  
+            font-size: 1.6rem;
         }
         .Ligne1 {
           border-bottom: 1px dashed #ccc;
@@ -558,10 +558,10 @@ const generateTicketsHTML = async (req, res) => {
     
      }
      .totalText{
-      padding-left: 150px;
-      font-size: 1.2rem;
-    
-     }
+        padding-left: 150px;
+        font-size: 1.4rem;
+      
+       }
      .HTtext{
       padding-left: 10px;
       font-size: 0.9rem;
@@ -711,7 +711,7 @@ const generateTicketsHTML = async (req, res) => {
   <table  class="StyledTable2" >
     <tbody>
     <tr >
-    <td ><text class="Taux"><b>TAux</b></text></td>
+    <td ><text class="Taux"><b>TAUX</b></text></td>
       <td  ><text class="Taux"><b>HT</b></text></td>
       <td ><text class="Taux"><b>TVA</b></text></td>
       <td ><text class="Taux"><b>TTC</b></text></td>
@@ -760,6 +760,7 @@ const generateTicketsHTML = async (req, res) => {
       
     res.send(htmlContent);
   };
+
 
 
 

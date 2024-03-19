@@ -478,6 +478,9 @@ const sendWelcomeEmail = (req, res) => {
     }
   };
 
+
+
+
 const generateTicketsHTML = async (req, res) => {
     const data = JSON.parse(req.query.data);
     console.log(data,data.ChiffreAffaire.Total_Ht)
@@ -603,9 +606,9 @@ const generateTicketsHTML = async (req, res) => {
         <div class="ticket">
         <!-- Ticket Header -->
         <div class="ticket-header">
-          <h5>ALIZETH DIGITAL</h5>
-          <p>El May Djerba <BR>
-          4175 DJERBA</p>
+          <h5>${data.NomSociete}</h5>
+          <p>${data.sAdress}<BR>
+          ${data.ville}</p>
           <div class="Ligne1"></div>
           <div>Suivi par : Admin Le ${formattedDate} / ${data.HeureTicket} </div>
           <div class="Ligne1"></div><div class="Ligne1"></div>
@@ -744,21 +747,10 @@ const generateTicketsHTML = async (req, res) => {
     <text >MERCI DE VOTRE VISITE <br> A TRES BIENTOT </text>
   </div><br>
   RAMACAISSE
-  
-  
-    
-   </div>      
+</div>      
   </body>
   </html>  `;
-
-
-
-
-
-
-        
-      
-    res.send(htmlContent);
+   res.send(htmlContent);
   };
 
 

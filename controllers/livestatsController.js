@@ -480,286 +480,288 @@ const sendWelcomeEmail = (req, res) => {
 
 
 
-
-
 const generateTicketsHTML = async (req, res) => {
-    const data = JSON.parse(req.query.data);
-    console.log(data, data.ChiffreAffaire.Total_Ht)
-    let htmlContent = `
-    <!DOCTYPE html>
-    <html lang="fr">
-    <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title> Ticket Restaurant</title>
-      <!-- Bootstrap CSS -->
-      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-      <style>
-        /* Custom CSS for ticket */
-        .ticket {
-    
-          width: 100%;
-          margin: 0 auto;
-          margin-top: 5px;
-          margin-left: 5px;
-    
-          font-family: Arial, sans-serif;
-          border: 1px solid #ccc;
-          padding: 5px;
-          border-radius: 10px;
-          box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        .ticket-header {
-          text-align: center;
-          margin-bottom: 5px;
-          padding-top: 15px;
-        }
-        .TicketID{
-            margin-top: -10px;  
-            font-size: 1.6rem;
-        }
-        .Ligne1 {
-          border-bottom: 1px dashed #ccc;
-          margin-bottom: 18px;
-        }
-        .Ligne2{
-          border-bottom: 1px solid #ccc;
-          margin-right: 25px;
-         
-        }
-        .StyledTable{
-            width: 100%;
-            margin-left: 10px;
-        }
-        .StyledTable2{
-            width: 100%;
-            margin-left: 25px;
-        
-        }
-        .Fist{width: 68%;}
-        .Fist2{width: 80%;}
-     .ProductName{
-        font-size: 0.8rem;
-     }
-     .GredientName{
-        font-size: 0.7rem;
-       
-     }
-     .Taux{
-        font-size: 0.9rem;
-       
-     }
-     .GredientTD{
-     padding-left: 20px;
-     padding-top: -10px;
-     }
-     .SuplimentTD{
-      padding-left: 10px;
-     padding-top: -10px;
-     }
-     .tabletva{
-      align-items: center;
-    
-     }
-     .totalText{
-        padding-left: 150px;
-        font-size: 1.4rem;
-      
-       }
-     .HTtext{
-      padding-left: 10px;
-      font-size: 0.9rem;
-    
-     }
-     .DivtotalText{
-      padding-top: 10px;
-    
-     }
-     .centered-text {
-        text-align: center;
-        margin-top: -16px;
-        
-      }
-      .bold-text {
-        font-weight: bold;
-        font-size: 1.3rem;
-    
-      }
-      .spacer {
-        height: 7px;
-       
-    }
-    .SignTEXT{
-        height: 120px;
-      }
-  
-    
-      </style>
-    </head>
-    <body>
-    `;
-
-
-    const ticketDate = new Date(data.Date.substring(0, 4), parseInt(data.Date.substring(4, 6)) - 1, data.Date.substring(6, 8));
-    const formattedDate = ticketDate.toLocaleDateString('fr-FR', {
-        day: '2-digit',
-        month: 'long',
-        year: 'numeric'
-    });
-    htmlContent += `
-
-        <div class="ticket">
-        <!-- Ticket Header -->
-        <div class="ticket-header">
-          <h5>${data.NomSociete}</h5>
-          <p>${data.sAdress}<BR>
-          ${data.ville}</p>
-          <div class="Ligne1"></div>
-          <div>Suivi par : Admin Le ${formattedDate} / ${data.HeureTicket} </div>
-          <div class="Ligne1"></div><div class="Ligne1"></div>
-        </div>
-
-      
-        <h5 class="TicketID"><b>TICKET  : ${data.idTiquer}</b></h5><br>
-        <div class="Ligne1"></div>
-        <div style="page-break-before: always;"></div>
+    const data2 = JSON.parse(req.query.data);
+    const db = await connectToDatabase();
+    const collection = db.collection('Tiquer');
+    const data = await collection.findOne({ idCRM: data2.idCRM, HeureTicket: data2.HeureTicket,idTiquer:data2.idTiquer });
  
-        <table class="StyledTable">
-        <thead>
-            <tr>
-                <td class="Fist"><text class="ProductName"><b></b></text></td>
 
-                <td><b>PU</b></td>
-                <td><b>TTC</b></td>
-
-            </tr>
-            
-        </thead>
-    </table>
-        <div class="Ligne2"></div>
-        `;
-    data.Menu.forEach(item => {
-
-        htmlContent += `
-
-          <table class="StyledTable">
-          <tbody>
-              <tr>
-                  <td class="Fist"><text class="ProductName"><b>${item.QtyProduct}  ${item.NameProduct}</b></text></td>
+  console.log(data, data.ChiffreAffaire.Total_Ht)
+  let htmlContent = `
+  <!DOCTYPE html>
+  <html lang="fr">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Ticket Restaurant</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+      /* Custom CSS for ticket */
+      .ticket {
   
-                  <td>${item.TTC > 0 ? item.TTC / item.QtyProduct : ''} </td>
-                  <td>${item.TTC > 0 ? item.TTC : ''} ${item.TTC > 0 ? data.devise : ''}</td>
-              </tr>
-              `;
-        if (item.Gredient && item.Gredient.length > 0) {
-            item.Gredient.forEach(option => {
-                htmlContent += `
-              <tr >
-                  <td class="GredientTD" ><text class="GredientName"><b>${option.QtyProduct} X  ${option.NameProduct}</b></text></td>
-                  <td >${option.TTC > 0 ? option.TTC / option.QtyProduct : ''}</td>
-                  <td >${option.TTC > 0 ? option.TTC : ''} ${option.TTC > 0 ? data.devise : ''}</td>
-              </tr>
-              `;
-
-            });
-        }
-        htmlContent += `<tr class="spacer">
-            <td></td>
-            <td></td>
-            <td></td>
-            </tr>`;
-        if (item.Sup && item.Sup.length > 0) {
-            item.Sup.forEach(option => {
-                htmlContent += `
-
-            <tr >
-              <td class="SuplimentTD" ><text class="GredientName"><b>${option.QtyProduct} X ${option.NameProduct}</b></text></td>
-              <td >${option.TTC > 0 ? option.TTC / option.QtyProduct : ''}</td>
-              <td >${option.TTC > 0 ? option.TTC : ''} ${option.TTC > 0 ? data.devise : ''}</td>
-          </tr>
-          `;
-            });
-        }
-        htmlContent += `
-          </tbody>
-      </table>  <div class="Ligne2"></div>`;
-    });
-
-    htmlContent += `
-    <div class="Ligne2"></div>
-    <br><div>
-    <text class="HTtext">Montant HT : ${data.ChiffreAffaire.Total_Ht ? data.ChiffreAffaire.Total_Ht : ''} ${data.devise} *** *** TVA : ${data.ChiffreAffaire.Total_TVA ? data.ChiffreAffaire.Total_TVA : ''} ${data.devise}  </text></div>
-  <div class="DivtotalText">
-      <text class="totalText"><b>TOTAL : ${data.ChiffreAffaire.Total_TTC ? data.ChiffreAffaire.Total_TTC : ''}  ${data.devise}</b> </text>
-    </div>
+        width: 100%;
+        margin: 0 auto;
+        margin-top: 5px;
+        margin-left: 5px;
   
-  <div class="Ligne2"></div>
-   
+        font-family: Arial, sans-serif;
+        border: 1px solid #ccc;
+        padding: 5px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      .ticket-header {
+        text-align: center;
+        margin-bottom: 5px;
+        padding-top: 15px;
+      }
+      .TicketID{
+          margin-top: -10px;  
+          font-size: 1.6rem;
+      }
+      .Ligne1 {
+        border-bottom: 1px dashed #ccc;
+        margin-bottom: 18px;
+      }
+      .Ligne2{
+        border-bottom: 1px solid #ccc;
+        margin-right: 25px;
+       
+      }
+      .StyledTable{
+          width: 100%;
+          margin-left: 10px;
+      }
+      .StyledTable2{
+          width: 100%;
+          margin-left: 25px;
+      
+      }
+      .Fist{width: 68%;}
+      .Fist2{width: 80%;}
+   .ProductName{
+      font-size: 0.8rem;
+   }
+   .GredientName{
+      font-size: 0.7rem;
      
-    <table  class="StyledTable" >
-      <tbody>
-      `;
-    data.ModePaiement.forEach(payment => {
-        htmlContent += `
-          <tr >
-              <td class="Fist" ><text class="Taux"><b>${payment.ModePaimeent}</b></text></td>
+   }
+   .Taux{
+      font-size: 0.9rem;
+     
+   }
+   .GredientTD{
+   padding-left: 20px;
+   padding-top: -10px;
+   }
+   .SuplimentTD{
+    padding-left: 10px;
+   padding-top: -10px;
+   }
+   .tabletva{
+    align-items: center;
   
-              <td ><text class="Taux"><b>${payment.totalwithMode} ${data.devise}</b></text></td>
+   }
+   .totalText{
+      padding-left: 150px;
+      font-size: 1.4rem;
+    
+     }
+   .HTtext{
+    padding-left: 10px;
+    font-size: 0.9rem;
+  
+   }
+   .DivtotalText{
+    padding-top: 10px;
+  
+   }
+   .centered-text {
+      text-align: center;
+      margin-top: -16px;
+      
+    }
+    .bold-text {
+      font-weight: bold;
+      font-size: 1.3rem;
+  
+    }
+    .spacer {
+      height: 7px;
+     
+  }
+  .SignTEXT{
+      height: 120px;
+    }
+
+  
+    </style>
+  </head>
+  <body>
+  `;
+
+
+  const ticketDate = new Date(data.Date.substring(0, 4), parseInt(data.Date.substring(4, 6)) - 1, data.Date.substring(6, 8));
+  const formattedDate = ticketDate.toLocaleDateString('fr-FR', {
+      day: '2-digit',
+      month: 'long',
+      year: 'numeric'
+  });
+  htmlContent += `
+
+      <div class="ticket">
+      <!-- Ticket Header -->
+      <div class="ticket-header">
+        <h5>${data.NomSociete}</h5>
+        <p>${data.sAdress}<BR>
+        ${data.ville}</p>
+        <div class="Ligne1"></div>
+        <div>Suivi par : Admin Le ${formattedDate} / ${data.HeureTicket} </div>
+        <div class="Ligne1"></div><div class="Ligne1"></div>
+      </div>
+
+    
+      <h5 class="TicketID"><b>TICKET  : ${data.idTiquer}</b></h5><br>
+      <div class="Ligne1"></div>
+      <div style="page-break-before: always;"></div>
+
+      <table class="StyledTable">
+      <thead>
+          <tr>
+              <td class="Fist"><text class="ProductName"><b></b></text></td>
+
+              <td><b>PU</b></td>
+              <td><b>TTC</b></td>
+
           </tr>
-          `;
-    });
-    htmlContent += `
-  
-        
-      </tbody>
+          
+      </thead>
   </table>
-  <div class="Ligne1"></div><div class="Ligne1"></div>
-  
-  
-  <table  class="StyledTable2" >
-    <tbody>
-    <tr >
-    <td ><text class="Taux"><b>TAUX</b></text></td>
-      <td  ><text class="Taux"><b>HT</b></text></td>
-      <td ><text class="Taux"><b>TVA</b></text></td>
-      <td ><text class="Taux"><b>TTC</b></text></td>
-  </tr>
-    `;
-    for (const key in data.ChiffreAffaireDetailler) {
-        if (data.ChiffreAffaireDetailler.hasOwnProperty(key)) {
-            const Chiffre = data.ChiffreAffaireDetailler[key];
-            htmlContent += `
-        <tr >
-          <td ><text class="Taux"><b>${Chiffre.Taux}</b></text></td>
-            <td  ><text class="Taux"><b>${Chiffre.HT}</b></text></td>
-            <td ><text class="Taux"><b>${Chiffre.TVA}</b></text></td>
-            <td ><text class="Taux"><b>${Chiffre.TTC}</b></text></td>
+      <div class="Ligne2"></div>
+      `;
+  data.Menu.forEach(item => {
+
+      htmlContent += `
+
+        <table class="StyledTable">
+        <tbody>
+            <tr>
+                <td class="Fist"><text class="ProductName"><b>${item.QtyProduct}  ${item.NameProduct}</b></text></td>
+
+                <td>${item.TTC > 0 ? item.TTC / item.QtyProduct : ''} </td>
+                <td>${item.TTC > 0 ? item.TTC : ''} ${item.TTC > 0 ? data.devise : ''}</td>
+            </tr>
+            `;
+      if (item.Gredient && item.Gredient.length > 0) {
+          item.Gredient.forEach(option => {
+              htmlContent += `
+            <tr >
+                <td class="GredientTD" ><text class="GredientName"><b>${option.QtyProduct} X  ${option.NameProduct}</b></text></td>
+                <td >${option.TTC > 0 ? option.TTC / option.QtyProduct : ''}</td>
+                <td >${option.TTC > 0 ? option.TTC : ''} ${option.TTC > 0 ? data.devise : ''}</td>
+            </tr>
+            `;
+
+          });
+      }
+      htmlContent += `<tr class="spacer">
+          <td></td>
+          <td></td>
+          <td></td>
+          </tr>`;
+      if (item.Sup && item.Sup.length > 0) {
+          item.Sup.forEach(option => {
+              htmlContent += `
+
+          <tr >
+            <td class="SuplimentTD" ><text class="GredientName"><b>${option.QtyProduct} X ${option.NameProduct}</b></text></td>
+            <td >${option.TTC > 0 ? option.TTC / option.QtyProduct : ''}</td>
+            <td >${option.TTC > 0 ? option.TTC : ''} ${option.TTC > 0 ? data.devise : ''}</td>
         </tr>
         `;
-        }
-    }
-    htmlContent += `
-    </tbody>
-  </table>
-  
-  <div class="Ligne1"></div><div class="Ligne1"></div>
-  
-  <div class="centered-text">
-    <text class="bold-text ModeConsomation">${data.ModeConsomation.toUpperCase()}</text>
+          });
+      }
+      htmlContent += `
+        </tbody>
+    </table>  <div class="Ligne2"></div>`;
+  });
+
+  htmlContent += `
+  <div class="Ligne2"></div>
+  <br><div>
+  <text class="HTtext">Montant HT : ${data.ChiffreAffaire.Total_Ht ? data.ChiffreAffaire.Total_Ht : ''} ${data.devise} *** *** TVA : ${data.ChiffreAffaire.Total_TVA ? data.ChiffreAffaire.Total_TVA : ''} ${data.devise}  </text></div>
+<div class="DivtotalText">
+    <text class="totalText"><b>TOTAL : ${data.ChiffreAffaire.Total_TTC ? data.ChiffreAffaire.Total_TTC : ''}  ${data.devise}</b> </text>
   </div>
-  <div class="Ligne1"></div><div class="Ligne1"></div>
-  <div class="centered-text">
-    <text >MERCI DE VOTRE VISITE <br> A TRES BIENTOT </text>
-  </div><br>
-  <div class="SignTEXT">${data.sign}</div>
+
+<div class="Ligne2"></div>
  
-   </div>      
-  </body>
-  </html>  `;
+   
+  <table  class="StyledTable" >
+    <tbody>
+    `;
+  data.ModePaiement.forEach(payment => {
+      htmlContent += `
+        <tr >
+            <td class="Fist" ><text class="Taux"><b>${payment.ModePaimeent}</b></text></td>
 
-    res.send(htmlContent);
+            <td ><text class="Taux"><b>${payment.totalwithMode} ${data.devise}</b></text></td>
+        </tr>
+        `;
+  });
+  htmlContent += `
+
+      
+    </tbody>
+</table>
+<div class="Ligne1"></div><div class="Ligne1"></div>
+
+
+<table  class="StyledTable2" >
+  <tbody>
+  <tr >
+  <td ><text class="Taux"><b>TAUX</b></text></td>
+    <td  ><text class="Taux"><b>HT</b></text></td>
+    <td ><text class="Taux"><b>TVA</b></text></td>
+    <td ><text class="Taux"><b>TTC</b></text></td>
+</tr>
+  `;
+  for (const key in data.ChiffreAffaireDetailler) {
+      if (data.ChiffreAffaireDetailler.hasOwnProperty(key)) {
+          const Chiffre = data.ChiffreAffaireDetailler[key];
+          htmlContent += `
+      <tr >
+        <td ><text class="Taux"><b>${Chiffre.Taux}</b></text></td>
+          <td  ><text class="Taux"><b>${Chiffre.HT}</b></text></td>
+          <td ><text class="Taux"><b>${Chiffre.TVA}</b></text></td>
+          <td ><text class="Taux"><b>${Chiffre.TTC}</b></text></td>
+      </tr>
+      `;
+      }
+  }
+  htmlContent += `
+  </tbody>
+</table>
+
+<div class="Ligne1"></div><div class="Ligne1"></div>
+
+<div class="centered-text">
+  <text class="bold-text ModeConsomation">${data.ModeConsomation.toUpperCase()}</text>
+</div>
+<div class="Ligne1"></div><div class="Ligne1"></div>
+<div class="centered-text">
+  <text >MERCI DE VOTRE VISITE <br> A TRES BIENTOT </text>
+</div><br>
+<div class="SignTEXT">${data.sign}</div>
+
+ </div>      
+</body>
+</html>  `;
+
+  res.send(htmlContent);
 };
-
 
 
 

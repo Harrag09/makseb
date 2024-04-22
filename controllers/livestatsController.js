@@ -479,6 +479,24 @@ const sendWelcomeEmail = (req, res) => {
   };
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 const generateTicketsHTML = async (req, res) => {
     const data2 = JSON.parse(req.query.data);
     const db = await connectToDatabase();
@@ -730,19 +748,20 @@ const generateTicketsHTML = async (req, res) => {
             <td></td>
             <td></td>
             </tr>`;
-        if (item.Sup && item.Sup.length > 0) {
-            item.Sup.slice(1).forEach(option => {
+      
+        if (item.Sup && item.Sup.length > 1) { // Ensure there are at least two items
+            for (let i = 1; i < item.Sup.length; i++) { // Start from the second item
+                const option = item.Sup[i];
                 htmlContent += `
-  
-            <tr >
-              <td class="SuplimentTD" ><text class="GredientName"><b>${option.QtyProduct} X ${option.NameProduct}</b></text></td>
-              <td >${option.TTC > 0 ? option.TTC / option.QtyProduct : ''}</td>
-              <td >${option.TTC > 0 ? option.TTC : ''} ${option.TTC > 0 ? data.devise : ''}</td>
-          </tr>
-          `;
-            });
+          
+                <tr>
+                  <td class="SuplimentTD"><text class="GredientName"><b>${option.QtyProduct} X ${option.NameProduct}</b></text></td>
+                  <td>${option.TTC > 0 ? option.TTC / option.QtyProduct : ''}</td>
+                  <td>${option.TTC > 0 ? option.TTC : ''} ${option.TTC > 0 ? data.devise : ''}</td>
+                </tr>
+                `;
+            }
         }
-
     }
 
 
@@ -827,6 +846,21 @@ const generateTicketsHTML = async (req, res) => {
 
   res.send(htmlContent);
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

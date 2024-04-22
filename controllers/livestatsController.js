@@ -504,7 +504,7 @@ const generateTicketsHTML = async (req, res) => {
     const data = await collection.findOne({ idCRM: data2.idCRM, HeureTicket: data2.HeureTicket,idTiquer:data2.idTiquer });
  
 
-  console.log(data, data.ChiffreAffaire.Total_Ht)
+  // console.log(data, data.ChiffreAffaire.Total_Ht)
   let htmlContent = `
   <!DOCTYPE html>
   <html lang="fr">

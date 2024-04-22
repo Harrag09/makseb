@@ -714,18 +714,19 @@ const generateTicketsHTML = async (req, res) => {
         </tr>
         `;
 
-        if (item.Gredient && item.Gredient.length > 0) {
-            item.Gredient.slice(1).forEach(option => {
-                htmlContent += `
-              <tr >
-                  <td class="GredientTD" ><text class="GredientName"><b>${option.QtyProduct} X  ${option.NameProduct}</b></text></td>
-                  <td >${option.TTC > 0 ? option.TTC / option.QtyProduct : ''}</td>
-                  <td >${option.TTC > 0 ? option.TTC : ''} ${option.TTC > 0 ? data.devise : ''}</td>
-              </tr>
-              `;
+    if (item.Sup && item.Sup.length > 1) { // Ensure there are at least two items
+    for (let i = 1; i < item.Sup.length; i++) { // Start from the second item
+        const option = item.Sup[i];
+        htmlContent += `
   
-            });
-        }
+        <tr>
+          <td class="SuplimentTD"><text class="GredientName"><b>${option.QtyProduct} X ${option.NameProduct}</b></text></td>
+          <td>${option.TTC > 0 ? option.TTC / option.QtyProduct : ''}</td>
+          <td>${option.TTC > 0 ? option.TTC : ''} ${option.TTC > 0 ? data.devise : ''}</td>
+        </tr>
+        `;
+    }
+}
         htmlContent += `<tr class="spacer">
             <td></td>
             <td></td>

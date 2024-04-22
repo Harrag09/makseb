@@ -643,6 +643,9 @@ const generateTicketsHTML = async (req, res) => {
       `;
   data.Menu.forEach(item => {
 
+
+    if(item.TTC > 0){
+
       htmlContent += `
 
         <table class="StyledTable">
@@ -683,6 +686,69 @@ const generateTicketsHTML = async (req, res) => {
         `;
           });
       }
+    }else{
+        htmlContent += `
+
+        <table class="StyledTable">
+        <tbody>
+            <tr>
+                <td class="Fist"><text class="ProductName"><b>${item.QtyProduct}  ${item.NameProduct}</b></text></td>
+
+                <td>${item.TTC > 0 ? item.TTC / item.QtyProduct : ''} </td>
+                <td>${item.TTC > 0 ? item.TTC : ''} ${item.TTC > 0 ? data.devise : ''}</td>
+            </tr>
+            `;
+
+            htmlContent += `<tr class="spacer">
+            <td></td>
+            <td></td>
+            <td></td>
+            </tr>`;
+
+              htmlContent += `
+
+          <tr >
+            <td class="SuplimentTD" ><text class="GredientName"><b>${item.Sup[0].QtyProduct} X ${item.Sup[0].NameProduct}</b></text></td>
+            <td >${item.Sup[0].TTC > 0 ? item.Sup[0].TTC / item.Sup[0].QtyProduct : ''}</td>
+            <td >${item.Sup[0].TTC > 0 ? item.Sup[0].TTC : ''} ${item.Sup[0].TTC > 0 ? data.devise : ''}</td>
+        </tr>
+        `;
+
+        if (item.Gredient && item.Gredient.length > 0) {
+            item.Gredient.slice(1).forEach(option => {
+                htmlContent += `
+              <tr >
+                  <td class="GredientTD" ><text class="GredientName"><b>${option.QtyProduct} X  ${option.NameProduct}</b></text></td>
+                  <td >${option.TTC > 0 ? option.TTC / option.QtyProduct : ''}</td>
+                  <td >${option.TTC > 0 ? option.TTC : ''} ${option.TTC > 0 ? data.devise : ''}</td>
+              </tr>
+              `;
+  
+            });
+        }
+        htmlContent += `<tr class="spacer">
+            <td></td>
+            <td></td>
+            <td></td>
+            </tr>`;
+        if (item.Sup && item.Sup.length > 0) {
+            item.Sup.forEach(option => {
+                htmlContent += `
+  
+            <tr >
+              <td class="SuplimentTD" ><text class="GredientName"><b>${option.QtyProduct} X ${option.NameProduct}</b></text></td>
+              <td >${option.TTC > 0 ? option.TTC / option.QtyProduct : ''}</td>
+              <td >${option.TTC > 0 ? option.TTC : ''} ${option.TTC > 0 ? data.devise : ''}</td>
+          </tr>
+          `;
+            });
+        }
+
+    }
+
+
+
+
       htmlContent += `
         </tbody>
     </table>  <div class="Ligne2"></div>`;
@@ -762,7 +828,6 @@ const generateTicketsHTML = async (req, res) => {
 
   res.send(htmlContent);
 };
-
 
 
 

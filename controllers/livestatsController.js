@@ -495,6 +495,10 @@ const sendWelcomeEmail = (req, res) => {
 
 
 
+
+
+
+
 const generateTicketsHTML = async (req, res) => {
     try{
 
@@ -749,6 +753,23 @@ const generateTicketsHTML = async (req, res) => {
             <td></td>
             <td></td>
             </tr>`;
+            if (item.Gredient2 && item.Gredient2.length > 0) {
+                item.Gredient2.forEach(option => {
+                    htmlContent += `
+                  <tr >
+                      <td class="GredientTD" ><text class="GredientName"><b>${option.QtyProduct} X  ${option.NameProduct}</b></text></td>
+                      <td >${option.TTC > 0 ? option.TTC / option.QtyProduct : ''}</td>
+                      <td >${option.TTC > 0 ? option.TTC : ''} ${option.TTC > 0 ? data.devise : ''}</td>
+                  </tr>
+                  `;
+      
+                });
+            }
+            htmlContent += `<tr class="spacer">
+                <td></td>
+                <td></td>
+                <td></td>
+                </tr>`;
       
         if (item.Sup && item.Sup.length > 1) { // Ensure there are at least two items
             for (let i = 1; i < item.Sup.length; i++) { // Start from the second item
@@ -850,9 +871,6 @@ const generateTicketsHTML = async (req, res) => {
         console.log(err);
 }
 };
-
-
-
 
 
 

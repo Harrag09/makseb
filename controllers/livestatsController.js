@@ -495,9 +495,10 @@ const sendWelcomeEmail = (req, res) => {
 
 
 
-
-
 const generateTicketsHTML = async (req, res) => {
+    try{
+
+ 
     const data2 = JSON.parse(req.query.data);
     const db = await connectToDatabase();
     const collection = db.collection('Tiquer');
@@ -845,10 +846,10 @@ const generateTicketsHTML = async (req, res) => {
 </html>  `;
 
   res.send(htmlContent);
+}catch(err){
+        console.log(err);
+}
 };
-
-
-
 
 
 

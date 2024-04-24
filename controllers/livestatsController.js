@@ -131,6 +131,11 @@ const sendWelcomeEmail = (req, res) => {
   };
 
 
+
+
+
+
+
 const UpdateTiquer = async (req, res) => {
     const data = req.body;
 
@@ -149,12 +154,7 @@ const UpdateTiquer = async (req, res) => {
         
         if (result) {
 
-          const updateResult = await collection.updateOne(
-            { IdCRM: data.IdCRM, Date: data.Date, idTiquer: data.idTiquer, HeureTicket: data.HeureTicket },
-            { $set: data }
-        );
-
-        console.log(updateResult.modifiedCount + " Tiquer updated");
+          console.log("aready Exist");
         } else {
           console.log('No result found.');
 
@@ -172,6 +172,11 @@ const UpdateTiquer = async (req, res) => {
       res.status(500).json({ error: "Internal Server Error" });
     }
   };
+
+
+
+
+
 
 
 

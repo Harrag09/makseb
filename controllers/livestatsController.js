@@ -489,18 +489,6 @@ const sendWelcomeEmail = (req, res) => {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 const generateTicketsHTML = async (req, res) => {
   try{
 
@@ -681,6 +669,23 @@ data.Menu.forEach(item => {
               <td>${item.TTC > 0 ? item.TTC : ''} ${item.TTC > 0 ? data.devise : ''}</td>
           </tr>
           `;
+          if (item.Gredient2 && item.Gredient2.length > 0) {
+            item.Gredient2.forEach(option => {
+                htmlContent += `
+              <tr >
+                  <td class="GredientTD" ><text class="GredientName"><b>(SANS) ${option.NameProduct}</b></text></td>
+                  <td >${option.TTC > 0 ? option.TTC / option.QtyProduct : ''}</td>
+                  <td >${option.TTC > 0 ? option.TTC : ''} ${option.TTC > 0 ? data.devise : ''}</td>
+              </tr>
+              `;
+    
+            });
+        }
+        htmlContent += `<tr class="spacer">
+            <td></td>
+            <td></td>
+            <td></td>
+            </tr>`;
     if (item.Gredient && item.Gredient.length > 0) {
         item.Gredient.forEach(option => {
             htmlContent += `
@@ -741,9 +746,9 @@ data.Menu.forEach(item => {
         item.Gredient2.forEach(option => {
             htmlContent += `
           <tr >
-              <td class="GredientTD" ><text class="GredientName"><b>(SANS)  ${option.NameProduct}</b></text></td>
-              <td ></td>
-              <td ></td>
+              <td class="GredientTD" ><text class="GredientName"><b>(SANS) ${option.NameProduct}</b></text></td>
+              <td >${option.TTC > 0 ? option.TTC / option.QtyProduct : ''}</td>
+              <td >${option.TTC > 0 ? option.TTC : ''} ${option.TTC > 0 ? data.devise : ''}</td>
           </tr>
           `;
 
@@ -873,6 +878,18 @@ res.send(htmlContent);
       console.log(err);
 }
 };
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

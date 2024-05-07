@@ -9,10 +9,11 @@ const multer = require('multer');
 const path = require('path');
 const app = express();
 const fs = require('fs');
-
+const { updateStatus } = require('./controllers/livestatsController.js');
+const CronJob = require('cron').CronJob;
 // Enable CORS for the specific origin
 app.use(cors({
-  origin: ['https://harrag09.github.io','http://localhost:3002','http://localhost:3001','http://statistics.sc3makseb.universe.wf','http://localhost:3000'],
+  origin: ['https://harrag09.github.io','http://localhost:3002','http://localhost:3001','http://statistics.sc3makseb.universe.wf','http://localhost:3000','http://192.168.1.2:3001','http://192.168.1.45:3001'],
   methods: 'GET, POST, OPTIONS, PUT, PATCH, DELETE',
   credentials: true,
 }));
@@ -53,6 +54,14 @@ app.post('/upload', upload.single('image'), (req, res) => {
 });
 
 
+
+//CHANGE STATUS DE ALL USER CHAQUE 10 MIN
+// const job = new CronJob('*/10 * * * *', updateStatus);
+
+//CHANGE STATUS DE ALL USER CHAQUE 5 MIN
+// const job = new CronJob('*/5 * * * *', updateStatus);
+
+// job.start();
 
 
 

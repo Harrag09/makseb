@@ -56,12 +56,11 @@ app.post('/upload', upload.single('image'), (req, res) => {
 
 
 //CHANGE STATUS DE ALL USER CHAQUE 10 MIN
-// const job = new CronJob('*/10 * * * *', updateStatus);
+const job = new CronJob('*/10 * * * *', updateStatus);
 
 //CHANGE STATUS DE ALL USER CHAQUE 5 MIN
 // const job = new CronJob('*/5 * * * *', updateStatus);
-
-// job.start();
+ job.start();
 
 
 

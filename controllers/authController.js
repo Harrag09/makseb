@@ -33,10 +33,11 @@ const signin = async (req, res) => {
       const decodedToken = jwt.decode(access_token);
       if (decodedToken) {
         const userRole = decodedToken.Role;
-        // Use the userRole as needed in your front-end code
+ 
       }
+      
       const user = response;
-      const user2 = {access_token:access_token,idCRM: user.idCRM,userid:user._id}
+      const user2 = {access_token:access_token,idCRM: user.idCRM,userid:user._id,Nom:user.Nom}
 
       return res.status(200).json({
         msg: "User found.",
@@ -49,6 +50,7 @@ const signin = async (req, res) => {
     res.status(500).json({ msg: err?.message, success: false });
   }
 };
+
 
 
 
@@ -212,7 +214,7 @@ const modifyUser = async (req, res) => {
     const db = await connectToDatabase();
     const collection = db.collection('user');
 
-    const users = await collection.find().toArray();
+    const users = await collection.find({ Role: "store" }).toArray();
 
     if (users.length === 0) {
       return res.status(404).json({

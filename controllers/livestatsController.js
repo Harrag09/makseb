@@ -248,7 +248,6 @@ const UpdateTiquer = async (req, res) => {
           }
         },
       ]).toArray();
-
       if (livestats.length === 0) {
         return res.status(404).json({ error: "Livestats not found within the specified date range" });
       } else {
@@ -270,7 +269,7 @@ const UpdateTiquer = async (req, res) => {
     try {
       const db = await connectToDatabase();
       const collection = db.collection('user');
-
+  
       const response = await collection.findOne({ idCRM: data.IdCRM });
       console.log(response);
       if (response) {
@@ -279,31 +278,16 @@ const UpdateTiquer = async (req, res) => {
             { _id: response._id },
             {
               $set: {
-                Status: data.statusStores,
-                LastCommand: data.LastCommand
-
+                Status: 'Activer', 
+                LastCommand: data.LastCommand,
+                lastInteraction: new Date() 
               }
             }
           );
-
-          console.log("Updated  status  et LastCommand successfully");
-        }
-        else {
-          await collection.updateOne(
-            { _id: response._id },
-            {
-              $set: {
-                Status: data.statusStores
-              
-
-              }
-            }
-          );
-
-          console.log("Updated  status successfully");
+          console.log("Updated status and last interaction successfully");
         }
       }
-
+  
       res.sendStatus(200);
     } catch (error) {
       console.error(error);
@@ -312,6 +296,33 @@ const UpdateTiquer = async (req, res) => {
   };
 
 
+
+const updateStatus = async () => {
+  try {
+    const db = await connectToDatabase();
+    const collection = db.collection('user');
+
+    //10
+    const fiveMinutesAgo  = new Date(Date.now() - 10 * 60 * 1000);
+    //5
+    // const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000); 
+
+   
+    await collection.updateMany(
+      { lastInteraction: { $gt: fiveMinutesAgo } },
+      { $set: { Status: 'Activer' } }
+    );
+
+    await collection.updateMany(
+      { lastInteraction: { $lt: fiveMinutesAgo } },
+      { $set: { Status: 'Désactiver' } }
+    );
+
+    console.log('updateStatus : Status for All user updated successfully');
+  } catch (error) {
+    console.error(error);
+  }
+};
   const GetLicence = async (req, res) => {
 
     try {
@@ -1132,4 +1143,4 @@ res.send(htmlContent);
     `;
     res.send(htmlContent);
   };
-  module.exports = {sendWelcomeEmail ,generateTicketsHTML2,generateTicketsHTML,getTiquerId,UpdateTiquer, getLivestatByIdandDate2,getAllCatInUploid,updateAllCatCripteInMongo, updateAllCatInUploid, UpdateLicence,updateLivestat3,updateLivestat4, getLivestatByIdandDate, updateStatusStores, GetLicence };
+  module.exports = {updateStatus,sendWelcomeEmail ,generateTicketsHTML2,generateTicketsHTML,getTiquerId,UpdateTiquer, getLivestatByIdandDate2,getAllCatInUploid,updateAllCatCripteInMongo, updateAllCatInUploid, UpdateLicence,updateLivestat3,updateLivestat4, getLivestatByIdandDate, updateStatusStores, GetLicence };

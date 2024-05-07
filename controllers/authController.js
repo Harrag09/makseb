@@ -83,11 +83,8 @@ const deleteIdUser = async (req, res) => {
 const modifyUser = async (req, res) => {
   try {
     const userId = req.params.id; 
-    const id =new mongoose.Types.ObjectId(userId)
     console.log(userId);
-
-    
-
+    const id =new mongoose.Types.ObjectId(userId)
     const db = await connectToDatabase();
     const collection = db.collection('user');
     const existingUser = await collection.findOne({ _id: id });
@@ -98,12 +95,14 @@ const modifyUser = async (req, res) => {
         success: false,
       });
     }
-    const { Nom, Login, Password, idCRM } = req.body;
-    await collection.updateOne({ _id: id }, { $set: { Login, Password, idCRM } });
+    const { Nom, Login, Password, idCRM ,Email,Tel} = req.body;
+   
+    const resaa = await collection.updateOne({ _id: id }, { $set: { Nom, Login, Password, idCRM ,Email,Tel } });
 
     return res.status(200).json({
       msg: "User modified successfully.",
       success: true,
+      data:resaa
     });
   } catch (err) {
     console.error("An error occurred while modifying the user:", err);
@@ -150,6 +149,7 @@ const modifyUser = async (req, res) => {
 
  const signup = async (req, res) => {
   try {
+    
     const { Nom, Login, Password, Tel, idCRM ,Prenom,Email,Address } = req.body;
     const db = await connectToDatabase();
     const collection = db.collection('user');
@@ -169,11 +169,11 @@ const modifyUser = async (req, res) => {
     const LastCommand = ""
     const newUser = { Nom, Login, Password, Tel, idCRM, Role,Prenom,Email,Address,Licence,LastCommand };
     const response = await collection.insertOne(newUser);
-
+    const ss= await collection.findOne({ Login, idCRM});
     return res.status(200).json({
       msg: "User created successfully.",
       success: true,
-      data: response,
+      data: ss,
     });
 
   } catch (err) {

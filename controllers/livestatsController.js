@@ -219,10 +219,11 @@ const UpdateTiquer = async (req, res) => {
       ]).toArray();
 
       if (livestats.length === 0) {
-        return res.status(404).json({ error: "Livestats not found within the specified date range" });
+    
+        return res.status(200).json({ msg: "Rien de statistique trouvé pour ces dates spécifiées", success: true ,data:livestats});
       } else {
         const sumsForEachLine = calculateSumsForEachLine(livestats);
-        res.json(sumsForEachLine);
+        res.status(200).json({ msg:"Des statistiques existent pour ces dates spécifiées", success: true ,data:sumsForEachLine});
       }
     } catch (error) {
       console.error(error);
@@ -248,10 +249,10 @@ const UpdateTiquer = async (req, res) => {
         },
       ]).toArray();
       if (livestats.length === 0) {
-        return res.status(404).json({ error: "Livestats not found within the specified date range" });
+        return res.status(200).json({ msg: "Rien de statistique trouvé pour ces dates spécifiées", success: true ,data:livestats});
       } else {
         const sumsForEachLine = calculateSumsForEachLine(livestats);
-        res.json(sumsForEachLine);
+        res.status(200).json({ msg:"Des statistiques existent pour ces dates spécifiées", success: true ,data:sumsForEachLine});
       }
     } catch (error) {
       console.error(error);

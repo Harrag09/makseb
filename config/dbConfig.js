@@ -17,5 +17,5 @@ async function connectToDatabase() {
     throw error;
   }
 }
-
+console.log("connect to mongodb");
 module.exports = { connectToDatabase, client };

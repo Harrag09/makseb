@@ -104,16 +104,15 @@ const sendWelcomeEmail = (req, res) => {
  
 
     try {
-      // Connect to the database
       const db = await connectToDatabase();
       const collection = db.collection('TempsReels');
       
-      // Delete existing data with the specified IdCRM
+     
       for (const livestat of data) {
         await collection.deleteMany({ IdCRM: livestat.IdCRM });
       }
 
-      // Insert new live state data into the collection
+    
       for (const livestat of data) {
         const updateFields = {};
         for (const key in livestat) {
@@ -122,7 +121,7 @@ const sendWelcomeEmail = (req, res) => {
         await collection.insertOne(updateFields);
       }
 
-      console.log("Data updated successfully for :",livestat.IdCRM);
+     
       res.sendStatus(200);
     } catch (error) {
       console.error(error);

@@ -265,13 +265,13 @@ const UpdateTiquer = async (req, res) => {
 
   const updateStatusStores = async (req, res) => {
     const data = req.body;
-    console.log(data)
+  
     try {
       const db = await connectToDatabase();
       const collection = db.collection('user');
   
       const response = await collection.findOne({ idCRM: data.IdCRM });
-      console.log(response);
+    
       if (response) {
         if (data.LastCommand != null) {
           await collection.updateOne(
@@ -286,6 +286,16 @@ const UpdateTiquer = async (req, res) => {
           );
           console.log("Updated status and last interaction successfully");
         }
+        else{ await collection.updateOne(
+          { _id: response._id },
+          {
+            $set: {
+              Status: 'Activer', 
+              lastInteraction: new Date() 
+            }
+          }
+        );
+        console.log("Updated status and last interaction successfully");}
       }
   
       res.sendStatus(200);

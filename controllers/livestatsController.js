@@ -46,7 +46,7 @@ const sendWelcomeEmail = (req, res) => {
       console.error('Erreur lors de l\'envoi de l\'e-mail:', error);
       return res.status(500).json({ error: 'Erreur lors de l\'envoi de l\'e-mail.' });
     } else {
-      console.log('E-mail envoyé avec succès:', info.response);
+    
       return res.status(200).json({ message: 'E-mail envoyé avec succès.' });
     }
   });
@@ -55,12 +55,12 @@ const sendWelcomeEmail = (req, res) => {
 
   const updateLivestat4 = async (req, res) => {
     const data = req.body;
-    console.log(data)
+  
 
     try {
       const db = await connectToDatabase();
       const collection = db.collection('livestats');
-      console.log("livestats 2 : ", data);
+      
 
       
         const result = await collection.findOne({ IdCRM: data.IdCRM, date: data.date });
@@ -80,7 +80,7 @@ const sendWelcomeEmail = (req, res) => {
             }
           );
 
-          console.log("Updated successfully");
+          console.log("Updated successfully for IDCRM :",data.IdCRM);
         } else {
           console.log('No result found.');
 
@@ -101,7 +101,7 @@ const sendWelcomeEmail = (req, res) => {
 
   const updateLivestat3 = async (req, res) => {
     const data = req.body;
-    console.log(data);
+ 
 
     try {
       // Connect to the database
@@ -122,7 +122,7 @@ const sendWelcomeEmail = (req, res) => {
         await collection.insertOne(updateFields);
       }
 
-      console.log("Data updated successfully");
+      console.log("Data updated successfully for :",livestat.IdCRM);
       res.sendStatus(200);
     } catch (error) {
       console.error(error);
@@ -348,7 +348,7 @@ const updateStatus = async () => {
         else{hasLicense = "MaksebD";} 
     
       }
-  console.log(hasLicense);
+    
       res.json({ hasLicense });
 
 
@@ -366,7 +366,7 @@ const updateStatus = async () => {
       const collection = db.collection('user');
       const idCRM = req.params.idCRM;
       const action = req.params.action;
-      console.log(idCRM, action);
+      console.log("update Licence for :",idCRM,"new Licence :", action);
 
       if (action === '') {
         return res.status(400).json({ error: 'Invalid action' });
@@ -425,10 +425,10 @@ const updateStatus = async () => {
   const updateAllCatCripteInMongo = async (req, res) => {
     try {
       const data = req.body;
-      console.log(data);
+      
       const db = await connectToDatabase();
       const collection = db.collection('Images');
-      console.log("Catégories", data);
+      console.log(" Get All image caisse and insert it in mngodb for :", data.IdCRM);
 
       const result = await collection.findOne({ IdCRM: data.IdCRM, Categories: data.Categories });
 
@@ -496,7 +496,7 @@ const updateStatus = async () => {
           }
         },
       ]).toArray();
-    console.log(livestats);
+   
       if (livestats.length === 0) {
         return res.status(404).json({ error: "Livestats not found within the specified date range" });
       } else {
@@ -933,7 +933,7 @@ res.send(htmlContent);
     const idCRM = req.query.idCRM;
     const HeureTicket = req.query.HeureTicket;
     const idTiquer = req.query.idTiquer;
-  console.log(idTiquer,idCRM,HeureTicket)
+ 
     const db = await connectToDatabase();
     const collection = db.collection('Tiquer');
     const livestats = await collection.aggregate([
@@ -945,7 +945,7 @@ res.send(htmlContent);
         }
       },
     ]).toArray();
-    console.log(livestats)
+    
     tickets = livestats;
     let htmlContent = `
     <!DOCTYPE html>

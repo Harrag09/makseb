@@ -124,7 +124,7 @@ const modifyUser = async (req, res) => {
     const response = await collection.findOne({ _id });
     
     if (!response) {
-      console.log("User not found");
+      console.log("User not found.........");
       return res.status(404).json({
         msg: "User not found.",
         success: false,
@@ -145,6 +145,42 @@ const modifyUser = async (req, res) => {
 };
 
 
+
+
+const getUserByIDcrm = async (req, res) => {
+
+  const  idCRM  =  req.params.idCRM;
+  console.log(idCRM);
+   const db = await connectToDatabase();
+  const collection = db.collection('user');
+
+  try {
+
+
+
+    const response = await collection.findOne({ idCRM: idCRM});
+    
+    
+    if (!response) {
+      console.log("User not found......");
+      return res.status(500).json({
+        msg: "User not found.",
+        success: false,
+      });
+    }
+
+    const user = response;
+
+    return res.status(200).json({
+      msg: "User found.",
+      success: true,
+      data: user,
+    });
+  } catch (err) {
+    console.error("Error fetching user by ID:", err);
+    res.status(500).json({ msg: err?.message, success: false });
+  }
+};
 
 
  const signup = async (req, res) => {
@@ -237,4 +273,4 @@ const modifyUser = async (req, res) => {
 
  
 
-module.exports = { signin, getUserById, signup, getUserByRole, getAllUsers,deleteIdUser,modifyUser };
+module.exports = { signin, getUserById, signup, getUserByRole, getAllUsers,deleteIdUser,modifyUser,getUserByIDcrm};

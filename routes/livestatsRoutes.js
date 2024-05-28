@@ -15,6 +15,7 @@ livestatsRoutes.post("/sendemail", sendWelcomeEmail);
 
 livestatsRoutes.get("/SumData", getLivestatByIdandDate);
 livestatsRoutes.get("/SumData2", getLivestatByIdandDate2);
+
 livestatsRoutes.get("/GetTiquer", getTiquerId);
 
 livestatsRoutes.post("/statusStores", updateStatusStores);

@@ -102,7 +102,7 @@ app.get('/images', (req, res) => {
 
 
 
-const PORT = 8002;
+const PORT = 8031;
 
 // Start the server
 const server = app.listen(PORT, () => {

@@ -107,7 +107,10 @@ const PORT = 8002;
 // Start the server
 const server = app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
-  console.log(io);
+  const httpServer = io.httpServer;
+  const addressInfo = httpServer.address();
+  console.log("io",io)
+ // console.log("httpServer2",addressInfo)
 });
 const io = socketIo(server, {
   cors: {
@@ -116,6 +119,8 @@ const io = socketIo(server, {
     credentials: true
   }
 });
+
+
 const db = client.db('statistiques');
 const collection = db.collection('TempsReels');
 const changeStream = collection.watch();
@@ -125,11 +130,14 @@ changeStream.on('change', async (change) => {
  if(response!=null){ 
   
   const aa = response;
-  
+
  io.emit(`UpdateTempsReels${aa.IdCRM}`, {  _id: documentKey._id, objectUpdate: response}); 
 //  io.emit(`UpdateTempsReelss`, {_id: documentKey._id, objectUpdate: response}); 
 }
 });
+
+
+
 
 
 // changeStream.on('change', async (change) => {

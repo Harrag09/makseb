@@ -52,7 +52,7 @@ const sendWelcomeEmail = (req, res) => {
   });
 };
 
-
+//cloturer
   const updateLivestat4 = async (req, res) => {
     const data = req.body;
   
@@ -98,7 +98,7 @@ const sendWelcomeEmail = (req, res) => {
       res.status(500).json({ error: "Internal Server Error" });
     }
   };
-
+//GetReglement()
   const updateLivestat3 = async (req, res) => {
     const data = req.body;
  
@@ -341,12 +341,11 @@ const updateStatus = async () => {
       const idCRM = req.params.idCRM;
       const user = await collection.findOne({ idCRM: idCRM });
 
-      let hasLicense = false;
+      let hasLicense = "EMakseb";
     
       if (user) {
         if(user.Licence==="Enable"){   hasLicense = "EMakseb";}
         else{hasLicense = "MaksebD";} 
-    
       }
     
       res.json({ hasLicense });

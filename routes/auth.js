@@ -2,7 +2,7 @@ const express = require("express");
 const authController = require("../controllers/authController.js");
 const verifyToken = require("../utils/verifyToken.js");
 
-const { getAllUsers, getUserById, signin, signup,deleteIdUser,modifyUser } = authController;
+const { getAllUsers, getUserById, signin, signup,deleteIdUser,modifyUser,getUserByIDcrm } = authController;
 const { verifyAccessToken } = verifyToken;
 
 const authRoutes = express.Router();
@@ -25,6 +25,8 @@ const signout = (req, res) => {
   });
 };
 authRoutes.post("/auth/logout", signout);
-authRoutes.get("/auth/user",  getUserById); // New route for getting user by ID
+authRoutes.get("/auth/user",  getUserById); 
+authRoutes.get("/auth/getUserByIdcrm/:idCRM",  getUserByIDcrm); 
+// New route for getting user by ID
 
 module.exports = authRoutes; // Updated line to use module.exports

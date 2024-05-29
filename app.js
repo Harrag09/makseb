@@ -102,19 +102,19 @@ app.get('/images', (req, res) => {
 
 
 
-const PORT = 8031;
+const PORT = 8002;
 
 // Start the server
 const server = app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
-  const httpServer = io.httpServer;
-  const addressInfo = httpServer.address();
-  console.log("io",io)
+  // const httpServer = io.httpServer;
+  // const addressInfo = httpServer.address();
+  // console.log("io",io)
  // console.log("httpServer2",addressInfo)
 });
 const io = socketIo(server, {
   cors: {
-    origin: ['https://harrag09.github.io', 'http://localhost:3002', 'http://localhost:3001', 'https://statistics.sc3makseb.universe.wf', 'http://localhost:3000', 'http://192.168.1.2:3001', 'http://192.168.1.45:3001'],
+    origin: ['https://harrag09.github.io', 'http://localhost:3002', 'http://localhost:3001', 'http://statistics.sc3makseb.universe.wf', 'https://statistics.sc3makseb.universe.wf','http://localhost:3000', 'http://192.168.1.2:3001', 'http://192.168.1.45:3001'],
     methods: ['GET', 'POST'],
     credentials: true
   }

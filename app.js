@@ -107,10 +107,10 @@ const PORT = 8002;
 // Start the server
 const server = app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
-  // const httpServer = io.httpServer;
-  // const addressInfo = httpServer.address();
-  // console.log("io",io)
- // console.log("httpServer2",addressInfo)
+  const httpServer = io.httpServer;
+  const addressInfo = httpServer.address();
+  console.log("io",io)
+ console.log("httpServer2",addressInfo)
 });
 const io = socketIo(server, {
   cors: {

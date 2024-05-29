@@ -17,7 +17,7 @@ const { MongoClient } = require('mongodb');
 
 // Enable CORS for the specific origin
 app.use(cors({
-  origin: ['https://harrag09.github.io','http://localhost:3002','http://localhost:3001','http://statistics.sc3makseb.universe.wf','http://localhost:3000','http://192.168.1.2:3001','http://192.168.1.45:3001'],
+  origin: ['https://harrag09.github.io','http://localhost:3002','http://localhost:3001','http://statistics.sc3makseb.universe.wf','https://statistics.sc3makseb.universe.wf/','http://localhost:3000','http://192.168.1.2:3001','http://192.168.1.45:3001'],
   methods: 'GET, POST, OPTIONS, PUT, PATCH, DELETE',
   credentials: true,
 }));

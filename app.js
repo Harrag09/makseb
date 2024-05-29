@@ -114,7 +114,7 @@ const server = app.listen(PORT, () => {
 });
 const io = socketIo(server, {
   cors: {
-    origin: ['https://harrag09.github.io', 'http://localhost:3002', 'http://localhost:3001', 'http://statistics.sc3makseb.universe.wf', 'http://localhost:3000', 'http://192.168.1.2:3001', 'http://192.168.1.45:3001'],
+    origin: ['https://harrag09.github.io', 'http://localhost:3002', 'http://localhost:3001', 'https://statistics.sc3makseb.universe.wf', 'http://localhost:3000', 'http://192.168.1.2:3001', 'http://192.168.1.45:3001'],
     methods: ['GET', 'POST'],
     credentials: true
   }

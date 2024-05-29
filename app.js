@@ -107,6 +107,7 @@ const PORT = 8002;
 // Start the server
 const server = app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
+  console.log("io1");
   const httpServer = io.httpServer;
   const addressInfo = httpServer.address();
   console.log("io",io)

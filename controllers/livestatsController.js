@@ -101,7 +101,7 @@ const sendWelcomeEmail = (req, res) => {
 //GetReglement()
   const updateLivestat3 = async (req, res) => {
     const data = req.body;
- 
+ console.log(data)
 
     try {
       const db = await connectToDatabase();
@@ -118,10 +118,11 @@ const sendWelcomeEmail = (req, res) => {
         for (const key in livestat) {
           updateFields[key] = livestat[key];
         }
+        console.log(updateFields);
         await collection.insertOne(updateFields);
       }
 
-     
+  
       res.sendStatus(200);
     } catch (error) {
       console.error(error);

@@ -111,7 +111,7 @@ const server = app.listen(PORT, () => {
 });
 const io = socketIo(server, {
   cors: {
-    origin: ['https://harrag09.github.io', 'http://localhost:3002','https://statistics.makseb.fr', 'http://statistics.makseb.fr','http://localhost:3001', 'http://statistics.sc3makseb.universe.wf', 'https://statistics.sc3makseb.universe.wf','http://localhost:3000', 'http://192.168.1.2:3001', 'http://192.168.1.45:3001'],
+    origin: ['https://harrag09.github.io','http://localhost:3002','https://statistics.makseb.fr', 'http://statistics.makseb.fr','http://localhost:3001','https://statistics.sc3makseb.universe.wf','http://statistics.sc3makseb.universe.wf',,'http://localhost:3000','http://192.168.1.2:3001','http://192.168.1.45:3001'],
     methods: ['GET', 'POST'],
     credentials: true
   }
@@ -126,13 +126,14 @@ const db = client.db('statistiques');
 const collection = db.collection('TempsReels');
 const changeStream = collection.watch();
 changeStream.on('change', async (change) => {
+  
  const { documentKey ,updateDescription} = change;
  const response = await collection.findOne({ _id:documentKey._id });
  if(response!=null){ 
   
   const aa = response;
-
- io.emit(`UpdateTempsReels${aa.IdCRM}`, {  _id: documentKey._id, objectUpdate: response}); 
+console.log(`UpdateTempsReels${aa.IdCRM}`)
+ io.emit(`UpdateTempsReels${aa.IdCRM}`, {  _id: documentKey._id}); 
 //  io.emit(`UpdateTempsReelss`, {_id: documentKey._id, objectUpdate: response}); 
 }
 });

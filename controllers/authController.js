@@ -5,6 +5,7 @@ const { ObjectId } = require('mongodb');
 const mongoose = require("mongoose");
 
 const UsersModel = require('../models/UsersModel.js');
+const { io } = require("../app.js");
 
 dotenv.config();
 
@@ -37,7 +38,7 @@ const signin = async (req, res) => {
       }
       
       const user = response;
-      const user2 = {access_token:access_token,idCRM: user.idCRM,userid:user._id,Nom:user.Nom}
+      const user2 = {access_token:access_token,idCRM: user.idCRM,userid:user._id,Nom:user.Nom,Setting:user.Setting}
 
       return res.status(200).json({
         msg: "User found.",
@@ -95,9 +96,13 @@ const modifyUser = async (req, res) => {
         success: false,
       });
     }
-    const { Nom, Login, Password, idCRM ,Email,Tel} = req.body;
+
+    const { Nom, Login, Password, idCRM ,Email,Tel,Setting} = req.body;
    
-    const resaa = await collection.updateOne({ _id: id }, { $set: { Nom, Login, Password, idCRM ,Email,Tel } });
+// if(existingUser.Setting!=Setting){ req.io.emit(`UpdateSettingFor${idCRM}`, {  _id: existingUser._id}); 
+// console.log(`UpdateSettingFor${idCRM}`);
+// }
+    const resaa = await collection.updateOne({ _id: id }, { $set: { Nom, Login, Password, idCRM ,Email,Tel,Setting} });
 
     return res.status(200).json({
       msg: "User modified successfully.",
@@ -186,7 +191,7 @@ const getUserByIDcrm = async (req, res) => {
  const signup = async (req, res) => {
   try {
     
-    const { Nom, Login, Password, Tel, idCRM ,Prenom,Email,Address } = req.body;
+    const { Nom, Login, Password, Tel, idCRM ,Prenom,Email,Address ,Setting} = req.body;
     const db = await connectToDatabase();
     const collection = db.collection('user');
 
@@ -203,8 +208,9 @@ const getUserByIDcrm = async (req, res) => {
 
     const Role = "store";
     const LastCommand = ""
-    const newUser = { Nom, Login, Password, Tel, idCRM, Role,Prenom,Email,Address,Licence,LastCommand };
-    const response = await collection.insertOne(newUser);
+    
+    const newUser = { Nom, Login, Password, Tel, idCRM, Role,Prenom,Email,Address,Licence,LastCommand,Setting,BaseName:"DefaultBase" };
+    await collection.insertOne(newUser);
     const ss= await collection.findOne({ Login, idCRM});
     return res.status(200).json({
       msg: "User created successfully.",
@@ -221,7 +227,7 @@ const getUserByIDcrm = async (req, res) => {
  const getUserByRole = async (req, res) => {
   const db = await connectToDatabase();
   const collection = db.collection('user');
-  
+  console.log(collection)
   try {
     const user = await collection.find({ Role: "store" }).toArray();;
 

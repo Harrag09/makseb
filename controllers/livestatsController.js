@@ -51,8 +51,43 @@ const sendWelcomeEmail = (req, res) => {
     }
   });
 };
-
-//cloturer
+const sendPdfInEmail = (req, res) => {
+  const { email, name,pdf } = req.body;
+  // Define the email template as a string
+  const emailTemplate = `
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Welcome Email</title>
+    </head>
+    <body>
+      <p>Bienvenue chez ${name} !</p>
+      <p>Veuillez trouver ci-joint votre ticket : <a href="${lien}">cliquez ici</a></p>
+      <p>Si vous avez des questions ou avez besoin d'assistance supplémentaire, n'hésitez pas à nous recontacter.</p>
+      <p>Cordialement,</p>
+      <p>${name}</p>
+    </body>
+    </html>
+  `;
+  const mailOptions = {
+    from: 'commandes@makseb.fr',
+    to: email,
+    subject: 'Envoi de vos coordonnées de compte',
+    html: emailTemplate, // Set the email template as the HTML body
+  };
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.error('Erreur lors de l\'envoi de l\'e-mail:', error);
+      return res.status(500).json({ error: 'Erreur lors de l\'envoi de l\'e-mail.' });
+    } else {
+    
+      return res.status(200).json({ message: 'E-mail envoyé avec succès.' });
+    }
+  });
+};
+//cloturer work once : 
   const updateLivestat4 = async (req, res) => {
     const data = req.body;
   
@@ -98,6 +133,61 @@ const sendWelcomeEmail = (req, res) => {
       res.status(500).json({ error: "Internal Server Error" });
     }
   };
+  //cloturer getReglement : 
+  const updateLivestatForGetReglement = async (req, res) => {
+    const data = req.body;
+  
+
+    try {
+      const db = await connectToDatabase();
+      const collection = db.collection('livestats');
+      
+      const collection2 = db.collection('TempsReels');
+      
+     
+     
+        await collection2.deleteMany({ IdCRM: data.IdCRM });
+     
+
+      
+        const result = await collection.findOne({ IdCRM: data.IdCRM, date: data.date });
+        const updateFields = {};
+        for (const key in data) {
+
+          updateFields[key] = data[key];
+        }
+        if (result) {
+
+
+          await collection.updateOne(
+            { _id: result._id },
+            {
+              $set: updateFields
+
+            }
+          );
+
+          console.log("Updated successfully for IDCRM :",data.IdCRM);
+        } else {
+          console.log('No result found.');
+
+
+
+          await collection.insertOne(updateFields);
+
+          console.log("1 record inserted");
+        }
+      
+
+      res.sendStatus(200);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: "Internal Server Error" });
+    }
+  };
+
+
+
 //GetReglement()
   const updateLivestat3 = async (req, res) => {
     const data = req.body;
@@ -266,7 +356,7 @@ const UpdateTiquer = async (req, res) => {
 
   const updateStatusStores = async (req, res) => {
     const data = req.body;
-  
+  console.log("updateStatusStores",data)
     try {
       const db = await connectToDatabase();
       const collection = db.collection('user');
@@ -285,7 +375,7 @@ const UpdateTiquer = async (req, res) => {
               }
             }
           );
-          console.log("Updated status and last interaction successfully");
+          // console.log("Updated status and last interaction successfully");
         }
         else{ await collection.updateOne(
           { _id: response._id },
@@ -296,7 +386,8 @@ const UpdateTiquer = async (req, res) => {
             }
           }
         );
-        console.log("Updated status and last interaction successfully");}
+        // console.log("Updated status and last interaction successfully");
+      }
       }
   
       res.sendStatus(200);
@@ -359,6 +450,41 @@ const updateStatus = async () => {
     }
   };
 
+
+  const GetBaseName = async (req, res) => {
+
+    try {
+      const db = await connectToDatabase();
+      const collection = db.collection('user');
+      const idCRM = req.params.idCRM;
+      const data = req.body;
+      const user = await collection.findOne({ idCRM: idCRM });
+   const BaseName=user.BaseName
+ 
+    
+  if (user) {
+       await collection.updateOne(
+      { _id: user._id },
+      {
+        $set: {
+          Status: 'Activer', 
+          lastInteraction: new Date() 
+        }
+      }
+    );  
+      if ((BaseName==="BaseModeEcole")||(BaseName==="DefaultBase")||(BaseName==="BaseVierge") ){
+        res.json({ BaseName });
+      }else{
+        BaseName="Vide"
+        res.json({BaseName});}
+      }
+    } catch (error) {
+      console.error(error);
+
+      res.status(500).json({ error: "Internal Server Error" });
+    }
+  };
+
   const UpdateLicence = async (req, res) => {
 
     try {
@@ -377,6 +503,36 @@ const updateStatus = async () => {
         {
           $set: {
             Licence: action
+
+          }
+        }
+      );
+      res.json({ success: true });
+    } catch (error) {
+      console.error(error);
+
+      res.status(500).json({ error: "Internal Server Error" });
+    }
+  };
+  
+  const UpdateBaseDeDonne = async (req, res) => {
+
+    try {
+      const db = await connectToDatabase();
+      const collection = db.collection('user');
+      const idCRM = req.params.idCRM;
+      const action = req.params.action;
+      console.log("update Base for :",idCRM," new Base is  :", action);
+
+      if (action === '') {
+        return res.status(400).json({ error: 'Invalid action' });
+      }
+      const response = await collection.findOne({ idCRM: idCRM });
+      await collection.updateOne(
+        { _id: response._id },
+        {
+          $set: {
+            BaseName: action
 
           }
         }
@@ -1153,4 +1309,4 @@ res.send(htmlContent);
     `;
     res.send(htmlContent);
   };
-  module.exports = {updateStatus,sendWelcomeEmail ,generateTicketsHTML2,generateTicketsHTML,getTiquerId,UpdateTiquer, getLivestatByIdandDate2,getAllCatInUploid,updateAllCatCripteInMongo, updateAllCatInUploid, UpdateLicence,updateLivestat3,updateLivestat4, getLivestatByIdandDate, updateStatusStores, GetLicence };
+  module.exports = {updateLivestatForGetReglement,GetBaseName,sendPdfInEmail,updateStatus,sendWelcomeEmail ,generateTicketsHTML2,generateTicketsHTML,getTiquerId,UpdateTiquer, getLivestatByIdandDate2,getAllCatInUploid,updateAllCatCripteInMongo, updateAllCatInUploid, UpdateLicence,UpdateBaseDeDonne,updateLivestat3,updateLivestat4, getLivestatByIdandDate, updateStatusStores, GetLicence };

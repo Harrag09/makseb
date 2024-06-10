@@ -13,11 +13,23 @@ const { updateStatus } = require('./controllers/livestatsController.js');
 const CronJob = require('cron').CronJob;
 const socketIo = require('socket.io');
 const { MongoClient } = require('mongodb');
+const { attachIO } = require('./utils/attachIO.js');
 
 
 // Enable CORS for the specific origin
 app.use(cors({
-  origin: ['https://harrag09.github.io','http://localhost:3002','https://statistics.makseb.fr', 'http://statistics.makseb.fr','http://localhost:3001','https://statistics.sc3makseb.universe.wf','http://statistics.sc3makseb.universe.wf',,'http://localhost:3000','http://192.168.1.2:3001','http://192.168.1.45:3001'],
+  origin: [
+    'https://harrag09.github.io',
+    'http://localhost:3002',
+    'https://statistics.makseb.fr',
+    'http://statistics.makseb.fr',
+    'http://localhost:3001',
+    'https://statistics.sc3makseb.universe.wf',
+    'http://statistics.sc3makseb.universe.wf',
+    'http://localhost:3000',
+    'http://192.168.1.2:3001',
+    'http://192.168.1.45:3001'
+  ],
   methods: 'GET, POST, OPTIONS, PUT, PATCH, DELETE',
   credentials: true,
 }));
@@ -33,10 +45,7 @@ app.use(cookieParser());
 // Connect to the database
 connectToDatabase();
 
-// Routes
-app.use('/', livestatsRoutes);
-app.use('/', authRoutes);
-app.use('/api', usersRoutes);
+
 
 
 const storage = multer.diskStorage({
@@ -109,91 +118,51 @@ const server = app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
  
 });
-const io = socketIo(server, {
-  cors: {
-    origin: ['https://harrag09.github.io','http://localhost:3002','https://statistics.makseb.fr', 'http://statistics.makseb.fr','http://localhost:3001','https://statistics.sc3makseb.universe.wf','http://statistics.sc3makseb.universe.wf',,'http://localhost:3000','http://192.168.1.2:3001','http://192.168.1.45:3001'],
-    methods: ['GET', 'POST'],
-    credentials: true
-  }
-});
-console.log("io1");
-const httpServer = io.httpServer;
-const addressInfo = httpServer.address();
-console.log("io",io)
-console.log("httpServer2",addressInfo)
-
-const db = client.db('statistiques');
-const collection = db.collection('TempsReels');
-const changeStream = collection.watch();
-changeStream.on('change', async (change) => {
-  
- const { documentKey ,updateDescription} = change;
- const response = await collection.findOne({ _id:documentKey._id });
- if(response!=null){ 
-  
-  const aa = response;
-console.log(`UpdateTempsReels${aa.IdCRM}`)
- io.emit(`UpdateTempsReels${aa.IdCRM}`, {  _id: documentKey._id}); 
-//  io.emit(`UpdateTempsReelss`, {_id: documentKey._id, objectUpdate: response}); 
-}
-});
-
-
-
-
-
-// changeStream.on('change', async (change) => {
-//   const { documentKey ,updateDescription} = change;
-//   const response = await collection.findOne({ _id:documentKey._id });
-//   // console.log("Update for  :",response.Nom," with IDCRM  ",response.idCRM ," and ID ",documentKey._id ," IN :  ",updateDescription.updatedFields)
-// if(updateDescription.updatedFields.Status!=undefined)
-// { io.emit(`UpdateStatusWithIDCRM${response.idCRM}`, {  _id: documentKey._id, objectUpdate: updateDescription.updatedFields,response:response }); }
-// else if (updateDescription.updatedFields.Licence!=undefined)
-// { io.emit(`UpdateLicenceWithIDCRM${response.idCRM}`, {  _id: documentKey._id, objectUpdate: updateDescription.updatedFields,response:response });}
-// else  (updateDescription.updatedFields.Nom!=undefined||updateDescription.updatedFields.Nom!=undefined||updateDescription.updatedFields.Nom!=undefined||updateDescription.updatedFields.Nom!=undefined)
-// { console.log("Update: ",response.idCRM ," and ID ",documentKey._id ," IN :  ",updateDescription.updatedFields)
-//   io.emit(`UpdatewithIDCRM${response.idCRM}`, {  _id: documentKey._id, objectUpdate: updateDescription.updatedFields,response:response });} 
- 
-// console.log("Update User With IDCRM: ",response.idCRM ," and ID ",documentKey._id ," IN :  ",updateDescription.updatedFields);
+// const io = socketIo(server, {
+//   cors: {
+//     origin: [
+//       'https://harrag09.github.io',
+//       'http://localhost:3002',
+//       'https://statistics.makseb.fr',
+//       'http://statistics.makseb.fr',
+//       'http://localhost:3001',
+//       'https://statistics.sc3makseb.universe.wf',
+//       'http://statistics.sc3makseb.universe.wf',
+//       'http://localhost:3000',
+//       'http://192.168.1.2:3001',
+//       'http://192.168.1.45:3001'
+//     ],
+//     methods: ['GET', 'POST'],
+//     credentials: true
+//   }
 // });
 
+// Routes
+app.use('/', livestatsRoutes);
+// app.use('/', attachIO(io),authRoutes);
+app.use('/', authRoutes);
+app.use('/api', usersRoutes);
 
 
-
-
-
-
-
+// const db = client.db('statistiques');
+// const collection = db.collection('TempsReels');
+// const changeStream = collection.watch();
 // changeStream.on('change', async (change) => {
-//   const { documentKey ,updateDescription} = change;
-//   const response = await collection.findOne({ _id:documentKey._id });
-//   // console.log("Update for  :",response.Nom," with IDCRM  ",response.idCRM ," and ID ",documentKey._id ," IN :  ",updateDescription.updatedFields)
-// if(updateDescription.updatedFields.Status!=undefined)
-// { io.emit(`UpdateStatusWithIDCRM${response.idCRM}`, {  _id: documentKey._id, objectUpdate: updateDescription.updatedFields,response:response }); }
-// else if (updateDescription.updatedFields.Licence!=undefined)
-// { io.emit(`UpdateLicenceWithIDCRM${response.idCRM}`, {  _id: documentKey._id, objectUpdate: updateDescription.updatedFields,response:response });}
-// else  (updateDescription.updatedFields.Nom!=undefined||updateDescription.updatedFields.Nom!=undefined||updateDescription.updatedFields.Nom!=undefined||updateDescription.updatedFields.Nom!=undefined)
-// { console.log("Update: ",response.idCRM ," and ID ",documentKey._id ," IN :  ",updateDescription.updatedFields)
-//   io.emit(`UpdatewithIDCRM${response.idCRM}`, {  _id: documentKey._id, objectUpdate: updateDescription.updatedFields,response:response });} 
- 
-// console.log("Update User With IDCRM: ",response.idCRM ," and ID ",documentKey._id ," IN :  ",updateDescription.updatedFields);
-// });
-
-
-// const collection2 = db.collection('TempsReels');
-// const changeStream2 = collection2.watch();
-// changeStream2.on('change', async (change) => {
+  
 //  const { documentKey ,updateDescription} = change;
-//  const response = await collection2.findOne({ _id:documentKey._id });
+//  const response = await collection.findOne({ _id:documentKey._id });
 //  if(response!=null){ 
   
 //   const aa = response;
-  
-//  io.emit(`UpdateTempsReels${aa.IdCRM}`, {  _id: documentKey._id, objectUpdate: response}); 
-
+// console.log(`UpdateTempsReels${aa.IdCRM}`)
+//  io.emit(`UpdateTempsReels${aa.IdCRM}`, {  _id: documentKey._id}); 
 // //  io.emit(`UpdateTempsReelss`, {_id: documentKey._id, objectUpdate: response}); 
 // }
 // });
+
+
+
+
 
 
 
